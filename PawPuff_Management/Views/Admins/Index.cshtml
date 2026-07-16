@@ -1,0 +1,553 @@
+﻿@{
+    ViewData["Title"] = "管理員管理";
+    ViewData["CurrentScreen"] = "admin-management";
+}
+
+<div class="dashboard-content management-screen" id="managementScreen" data-screen-panel="management">
+    <section class="soft-panel management-panel">
+        <span class="screen-kicker">
+            <span class="tiny-paw" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+            PawPuff Admin
+        </span>
+        <h2 class="screen-title" id="managementTitle">管理員管理</h2>
+        <p class="screen-desc" id="managementDescription">
+            管理後台管理員帳號與權限。
+        </p>
+        <div class="member-management-view" id="memberManagementView" data-screen="admin-management" data-entity-type="admin" data-detail-title="管理員詳情" data-detail-description-template="查看「{nickname}」的管理員完整資料與帳號狀態。" data-create-success-message="已新增管理員資料" data-actor-admin-account="admin01" data-actor-admin-id="admin01">
+            <div class="member-page-actions">
+                <button class="member-create-open-btn" id="memberCreateOpen" type="button" data-bs-toggle="modal" data-bs-target="#memberCreateModal">
+                    <i class="bi bi-person-plus me-1"></i>新增管理員資料
+                </button>
+                <button class="permission-switch-btn" id="permissionManageOpen" type="button">
+                    <i class="bi bi-shield-check me-1"></i>權限管理
+                </button>
+            </div>
+            <form class="member-search-panel" id="memberSearchForm">
+                <div class="member-search-row">
+                    <div class="member-search-field">
+                        <label class="form-label" for="memberFilterId">編號</label>
+                        <input class="form-control" id="memberFilterId" type="text" data-member-filter="id" placeholder="輸入編號">
+                    </div>
+                    <div class="member-search-field">
+                        <label class="form-label" for="memberFilterAccount">帳號</label>
+                        <input class="form-control" id="memberFilterAccount" type="text" data-member-filter="account" placeholder="輸入帳號">
+                    </div>
+                    <div class="member-search-field">
+                        <label class="form-label" for="memberFilterNickname">暱稱</label>
+                        <input class="form-control" id="memberFilterNickname" type="text" data-member-filter="nickname" placeholder="輸入暱稱">
+                    </div>
+                    <div class="member-search-field is-wide">
+                        <label class="form-label" for="memberFilterEmail">電子信箱</label>
+                        <input class="form-control" id="memberFilterEmail" type="text" data-member-filter="email" placeholder="輸入電子信箱">
+                    </div>
+                    <div class="member-search-field">
+                        <button class="member-reset-btn px-3" id="memberFilterReset" type="button">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i>重設
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="member-table-card">
+                <div class="member-table-toolbar">
+                    <strong><i class="bi bi-people me-2"></i>管理員帳號資料表</strong>
+                    <span class="member-count" id="memberResultCount">共 0 筆</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover member-table align-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-member-sort="id">編號 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-member-sort="account">帳號 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-member-sort="nickname">暱稱 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-member-sort="email">電子信箱 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <span class="sort-static-label">查看詳情</span>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-member-sort="enabled">停用/啟用 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="memberTableBody" data-table-columns="id,account,nickname,email">
+                            <tr data-member-row data-id="1" data-account="admin01" data-password-hash="123456" data-nickname="蓉蓉" data-email="admin01@pawpuff.com" data-is-active="1" data-enabled="true" data-created-at="2025-01-02 9:00:00" data-admin-comment="NULL" data-admin-updated-at="2025-01-02 9:00:00" data-modified-by-admin-id="NULL">
+                                <td data-member-cell="id">1</td>
+                                <td data-member-cell="account">admin01</td>
+                                <td data-member-cell="nickname">蓉蓉</td>
+                                <td data-member-cell="email">admin01@pawpuff.com</td>
+                                <td><button class="member-detail-btn" type="button" data-member-detail="1">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch"><input class="form-check-input" id="memberStatus1" type="checkbox" role="switch" data-member-status="1" checked><label class="member-status-text" for="memberStatus1">啟用</label></div></td>
+                            </tr>
+                            <tr data-member-row data-id="2" data-account="admin02" data-password-hash="123456" data-nickname="小賀" data-email="admin02@pawpuff.com" data-is-active="1" data-enabled="true" data-created-at="2025-01-03 9:20:00" data-admin-comment="NULL" data-admin-updated-at="2025-01-03 9:20:00" data-modified-by-admin-id="admin01">
+                                <td data-member-cell="id">2</td>
+                                <td data-member-cell="account">admin02</td>
+                                <td data-member-cell="nickname">小賀</td>
+                                <td data-member-cell="email">admin02@pawpuff.com</td>
+                                <td><button class="member-detail-btn" type="button" data-member-detail="2">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch"><input class="form-check-input" id="memberStatus2" type="checkbox" role="switch" data-member-status="2" checked><label class="member-status-text" for="memberStatus2">啟用</label></div></td>
+                            </tr>
+                            <tr data-member-row data-id="3" data-account="admin03" data-password-hash="123456" data-nickname="冷冷" data-email="admin03@pawpuff.com" data-is-active="1" data-enabled="true" data-created-at="2025-01-04 10:10:00" data-admin-comment="NULL" data-admin-updated-at="2025-01-04 10:10:00" data-modified-by-admin-id="admin02">
+                                <td data-member-cell="id">3</td>
+                                <td data-member-cell="account">admin03</td>
+                                <td data-member-cell="nickname">冷冷</td>
+                                <td data-member-cell="email">admin03@pawpuff.com</td>
+                                <td><button class="member-detail-btn" type="button" data-member-detail="3">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch"><input class="form-check-input" id="memberStatus3" type="checkbox" role="switch" data-member-status="3" checked><label class="member-status-text" for="memberStatus3">啟用</label></div></td>
+                            </tr>
+                            <tr data-member-row data-id="4" data-account="admin04" data-password-hash="123456" data-nickname="蛋餅" data-email="admin04@pawpuff.com" data-is-active="1" data-enabled="true" data-created-at="2025-01-05 11:00:00" data-admin-comment="NULL" data-admin-updated-at="2025-01-05 11:00:00" data-modified-by-admin-id="admin01">
+                                <td data-member-cell="id">4</td>
+                                <td data-member-cell="account">admin04</td>
+                                <td data-member-cell="nickname">蛋餅</td>
+                                <td data-member-cell="email">admin04@pawpuff.com</td>
+                                <td><button class="member-detail-btn" type="button" data-member-detail="4">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch"><input class="form-check-input" id="memberStatus4" type="checkbox" role="switch" data-member-status="4" checked><label class="member-status-text" for="memberStatus4">啟用</label></div></td>
+                            </tr>
+                            <tr data-member-row data-id="5" data-account="admin05" data-password-hash="123456" data-nickname="米米" data-email="admin05@pawpuff.com" data-is-active="1" data-enabled="true" data-created-at="2025-01-06 9:30:00" data-admin-comment="NULL" data-admin-updated-at="2025-01-06 9:30:00" data-modified-by-admin-id="admin01">
+                                <td data-member-cell="id">5</td>
+                                <td data-member-cell="account">admin05</td>
+                                <td data-member-cell="nickname">米米</td>
+                                <td data-member-cell="email">admin05@pawpuff.com</td>
+                                <td><button class="member-detail-btn" type="button" data-member-detail="5">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch"><input class="form-check-input" id="memberStatus5" type="checkbox" role="switch" data-member-status="5" checked><label class="member-status-text" for="memberStatus5">啟用</label></div></td>
+                            </tr>
+                            <tr data-member-row data-id="6" data-account="admin06" data-password-hash="123456" data-nickname="樂樂" data-email="admin06@pawpuff.com" data-is-active="1" data-enabled="true" data-created-at="2025-01-07 13:20:00" data-admin-comment="NULL" data-admin-updated-at="2025-01-07 13:20:00" data-modified-by-admin-id="admin02">
+                                <td data-member-cell="id">6</td>
+                                <td data-member-cell="account">admin06</td>
+                                <td data-member-cell="nickname">樂樂</td>
+                                <td data-member-cell="email">admin06@pawpuff.com</td>
+                                <td><button class="member-detail-btn" type="button" data-member-detail="6">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch"><input class="form-check-input" id="memberStatus6" type="checkbox" role="switch" data-member-status="6" checked><label class="member-status-text" for="memberStatus6">啟用</label></div></td>
+                            </tr>
+                            <tr data-member-row data-id="7" data-account="admin07" data-password-hash="123456" data-nickname="安安" data-email="admin07@pawpuff.com" data-is-active="1" data-enabled="true" data-created-at="2025-01-08 14:00:00" data-admin-comment="NULL" data-admin-updated-at="2025-01-08 14:00:00" data-modified-by-admin-id="admin01">
+                                <td data-member-cell="id">7</td>
+                                <td data-member-cell="account">admin07</td>
+                                <td data-member-cell="nickname">安安</td>
+                                <td data-member-cell="email">admin07@pawpuff.com</td>
+                                <td><button class="member-detail-btn" type="button" data-member-detail="7">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch"><input class="form-check-input" id="memberStatus7" type="checkbox" role="switch" data-member-status="7" checked><label class="member-status-text" for="memberStatus7">啟用</label></div></td>
+                            </tr>
+                            <tr data-member-row data-id="8" data-account="admin08" data-password-hash="123456" data-nickname="可可" data-email="admin08@pawpuff.com" data-is-active="1" data-enabled="true" data-created-at="2025-01-09 10:40:00" data-admin-comment="NULL" data-admin-updated-at="2025-01-09 10:40:00" data-modified-by-admin-id="admin02">
+                                <td data-member-cell="id">8</td>
+                                <td data-member-cell="account">admin08</td>
+                                <td data-member-cell="nickname">可可</td>
+                                <td data-member-cell="email">admin08@pawpuff.com</td>
+                                <td><button class="member-detail-btn" type="button" data-member-detail="8">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch"><input class="form-check-input" id="memberStatus8" type="checkbox" role="switch" data-member-status="8" checked><label class="member-status-text" for="memberStatus8">啟用</label></div></td>
+                            </tr>
+                            <tr data-member-row data-id="9" data-account="admin09" data-password-hash="123456" data-nickname="多多" data-email="admin09@pawpuff.com" data-is-active="0" data-enabled="false" data-created-at="2025-01-10 15:10:00" data-admin-comment="已離職，停用管理員帳號" data-admin-updated-at="2026-06-15 9:00:00" data-modified-by-admin-id="admin02">
+                                <td data-member-cell="id">9</td>
+                                <td data-member-cell="account">admin09</td>
+                                <td data-member-cell="nickname">多多</td>
+                                <td data-member-cell="email">admin09@pawpuff.com</td>
+                                <td><button class="member-detail-btn" type="button" data-member-detail="9">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch"><input class="form-check-input" id="memberStatus9" type="checkbox" role="switch" data-member-status="9"><label class="member-status-text" for="memberStatus9">停用</label></div></td>
+                            </tr>
+                            <tr data-member-row data-id="10" data-account="admin10" data-password-hash="123456" data-nickname="皮皮" data-email="admin10@pawpuff.com" data-is-active="0" data-enabled="false" data-created-at="2025-01-11 16:30:00" data-admin-comment="已離職，停用管理員帳號" data-admin-updated-at="2026-06-30 17:00:00" data-modified-by-admin-id="admin01">
+                                <td data-member-cell="id">10</td>
+                                <td data-member-cell="account">admin10</td>
+                                <td data-member-cell="nickname">皮皮</td>
+                                <td data-member-cell="email">admin10@pawpuff.com</td>
+                                <td><button class="member-detail-btn" type="button" data-member-detail="10">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch"><input class="form-check-input" id="memberStatus10" type="checkbox" role="switch" data-member-status="10"><label class="member-status-text" for="memberStatus10">停用</label></div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="member-pagination-wrap">
+                    <span class="member-page-info" id="memberPageInfo">第 1 頁</span>
+                    <nav aria-label="管理員表格分頁">
+                        <ul class="pagination member-pagination" id="memberPagination"></ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <div class="permission-management-view d-none" id="permissionManagementView">
+            <div class="permission-page-actions">
+                <button class="member-back-btn px-3" id="permissionBackToAdmin" type="button">
+                    <i class="bi bi-arrow-left me-1"></i>返回管理員管理
+                </button>
+                <button class="permission-save-btn" id="permissionSaveButton" type="button" disabled>
+                    <i class="bi bi-save me-1"></i>儲存權限
+                </button>
+            </div>
+
+            <form class="member-search-panel permission-search-panel" id="permissionSearchForm">
+                <div class="member-search-row">
+                    <div class="member-search-field">
+                        <label class="form-label" for="permissionFilterId">編號</label>
+                        <input class="form-control" id="permissionFilterId" type="text" data-permission-filter="id" placeholder="輸入編號">
+                    </div>
+                    <div class="member-search-field">
+                        <label class="form-label" for="permissionFilterAccount">帳號</label>
+                        <input class="form-control" id="permissionFilterAccount" type="text" data-permission-filter="account" placeholder="輸入帳號">
+                    </div>
+                    <div class="member-search-field">
+                        <label class="form-label" for="permissionFilterNickname">暱稱</label>
+                        <input class="form-control" id="permissionFilterNickname" type="text" data-permission-filter="nickname" placeholder="輸入暱稱">
+                    </div>
+                    <div class="member-search-field is-wide">
+                        <label class="form-label" for="permissionFilterName">權限名稱</label>
+                        <select class="form-select" id="permissionFilterName" data-permission-filter="permission">
+                            <option value="">全部權限</option>
+                            <option value="儀錶板">儀錶板</option>
+                            <option value="帳號">帳號</option>
+                            <option value="文章">文章</option>
+                            <option value="商城">商城</option>
+                            <option value="點數">點數</option>
+                            <option value="紙娃娃">紙娃娃</option>
+                            <option value="通知">通知</option>
+                            <option value="客服">客服</option>
+                        </select>
+                    </div>
+                    <div class="member-search-field">
+                        <button class="member-reset-btn px-3" id="permissionFilterReset" type="button">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i>重設
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="member-table-card permission-table-card">
+                <div class="member-table-toolbar">
+                    <strong><i class="bi bi-shield-check me-2"></i>管理員權限資料表</strong>
+                    <span class="member-count" id="permissionResultCount">共 0 筆</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover member-table permission-table align-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-permission-sort="id">編號 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-permission-sort="account">帳號 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-permission-sort="nickname">暱稱 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <span class="sort-static-label">權限</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="permissionTableBody">
+                            <tr data-permission-row data-id="1" data-account="admin01" data-nickname="蓉蓉">
+                                <td data-permission-cell="id">1</td>
+                                <td data-permission-cell="account">admin01</td>
+                                <td data-permission-cell="nickname">蓉蓉</td>
+                                <td class="permission-cell">
+                                    <div class="permission-check-grid" aria-label="admin01 權限">
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="儀錶板" checked>儀錶板</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="帳號" checked>帳號</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="文章" checked>文章</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="商城" checked>商城</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="點數" checked>點數</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="紙娃娃" checked>紙娃娃</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="通知" checked>通知</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="客服" checked>客服</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-permission-row data-id="2" data-account="admin02" data-nickname="小賀">
+                                <td data-permission-cell="id">2</td>
+                                <td data-permission-cell="account">admin02</td>
+                                <td data-permission-cell="nickname">小賀</td>
+                                <td class="permission-cell">
+                                    <div class="permission-check-grid" aria-label="admin02 權限">
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="儀錶板" checked>儀錶板</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="帳號" checked>帳號</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="文章">文章</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="商城">商城</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="點數">點數</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="紙娃娃">紙娃娃</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="通知" checked>通知</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="客服" checked>客服</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-permission-row data-id="3" data-account="admin03" data-nickname="冷冷">
+                                <td data-permission-cell="id">3</td>
+                                <td data-permission-cell="account">admin03</td>
+                                <td data-permission-cell="nickname">冷冷</td>
+                                <td class="permission-cell">
+                                    <div class="permission-check-grid" aria-label="admin03 權限">
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="儀錶板" checked>儀錶板</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="帳號">帳號</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="文章" checked>文章</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="商城">商城</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="點數">點數</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="紙娃娃">紙娃娃</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="通知" checked>通知</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="客服" checked>客服</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-permission-row data-id="4" data-account="admin04" data-nickname="蛋餅">
+                                <td data-permission-cell="id">4</td>
+                                <td data-permission-cell="account">admin04</td>
+                                <td data-permission-cell="nickname">蛋餅</td>
+                                <td class="permission-cell">
+                                    <div class="permission-check-grid" aria-label="admin04 權限">
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="儀錶板" checked>儀錶板</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="帳號">帳號</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="文章">文章</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="商城" checked>商城</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="點數" checked>點數</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="紙娃娃">紙娃娃</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="通知" checked>通知</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="客服" checked>客服</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-permission-row data-id="5" data-account="admin05" data-nickname="米米">
+                                <td data-permission-cell="id">5</td>
+                                <td data-permission-cell="account">admin05</td>
+                                <td data-permission-cell="nickname">米米</td>
+                                <td class="permission-cell">
+                                    <div class="permission-check-grid" aria-label="admin05 權限">
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="儀錶板" checked>儀錶板</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="帳號">帳號</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="文章">文章</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="商城">商城</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="點數" checked>點數</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="紙娃娃">紙娃娃</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="通知" checked>通知</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="客服" checked>客服</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-permission-row data-id="6" data-account="admin06" data-nickname="樂樂">
+                                <td data-permission-cell="id">6</td>
+                                <td data-permission-cell="account">admin06</td>
+                                <td data-permission-cell="nickname">樂樂</td>
+                                <td class="permission-cell">
+                                    <div class="permission-check-grid" aria-label="admin06 權限">
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="儀錶板" checked>儀錶板</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="帳號">帳號</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="文章">文章</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="商城">商城</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="點數">點數</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="紙娃娃">紙娃娃</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="通知" checked>通知</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="客服">客服</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-permission-row data-id="7" data-account="admin07" data-nickname="安安">
+                                <td data-permission-cell="id">7</td>
+                                <td data-permission-cell="account">admin07</td>
+                                <td data-permission-cell="nickname">安安</td>
+                                <td class="permission-cell">
+                                    <div class="permission-check-grid" aria-label="admin07 權限">
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="儀錶板" checked>儀錶板</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="帳號" checked>帳號</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="文章">文章</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="商城">商城</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="點數">點數</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="紙娃娃">紙娃娃</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="通知" checked>通知</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="客服" checked>客服</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-permission-row data-id="8" data-account="admin08" data-nickname="可可">
+                                <td data-permission-cell="id">8</td>
+                                <td data-permission-cell="account">admin08</td>
+                                <td data-permission-cell="nickname">可可</td>
+                                <td class="permission-cell">
+                                    <div class="permission-check-grid" aria-label="admin08 權限">
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="儀錶板" checked>儀錶板</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="帳號">帳號</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="文章">文章</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="商城">商城</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="點數">點數</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="紙娃娃" checked>紙娃娃</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="通知">通知</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="客服" checked>客服</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-permission-row data-id="9" data-account="admin09" data-nickname="多多">
+                                <td data-permission-cell="id">9</td>
+                                <td data-permission-cell="account">admin09</td>
+                                <td data-permission-cell="nickname">多多</td>
+                                <td class="permission-cell">
+                                    <div class="permission-check-grid" aria-label="admin09 權限">
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="儀錶板" checked>儀錶板</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="帳號">帳號</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="文章">文章</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="商城" checked>商城</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="點數" checked>點數</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="紙娃娃">紙娃娃</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="通知" checked>通知</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="客服" checked>客服</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-permission-row data-id="10" data-account="admin10" data-nickname="皮皮">
+                                <td data-permission-cell="id">10</td>
+                                <td data-permission-cell="account">admin10</td>
+                                <td data-permission-cell="nickname">皮皮</td>
+                                <td class="permission-cell">
+                                    <div class="permission-check-grid" aria-label="admin10 權限">
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="儀錶板" checked>儀錶板</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="帳號">帳號</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="文章" checked>文章</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="商城">商城</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="點數">點數</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="紙娃娃">紙娃娃</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="通知" checked>通知</label>
+                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="客服" checked>客服</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="member-pagination-wrap permission-table-footer">
+                    <span class="member-page-info" id="permissionPageInfo">顯示 10 筆</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="member-detail-view d-none" id="memberDetailView">
+            <div class="member-detail-card">
+                <div class="member-detail-head">
+                    <strong><i class="bi bi-person-vcard me-2"></i><span id="memberDetailTitle">管理員詳情</span></strong>
+                    <button class="member-back-btn px-3" id="memberDetailBack" type="button">
+                        <i class="bi bi-arrow-left me-1"></i>返回管理員管理
+                    </button>
+                </div>
+                <div class="member-detail-grid" id="memberDetailGrid">
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">編號</div>
+                        <div class="member-detail-value" data-member-detail-value="id"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">帳號</div>
+                        <div class="member-detail-value" data-member-detail-value="account"></div>
+                    </div>
+                    <div class="member-detail-field is-wide">
+                        <div class="member-detail-label">密碼雜湊</div>
+                        <div class="member-detail-value member-password-mask" data-member-detail-value="passwordMasked"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">暱稱</div>
+                        <div class="member-detail-value" data-member-detail-value="nickname"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">信箱</div>
+                        <div class="member-detail-value" data-member-detail-value="email"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">帳號狀態</div>
+                        <div class="form-check form-switch member-status-switch member-detail-status-switch">
+                            <input class="form-check-input" id="memberDetailStatus" type="checkbox" role="switch">
+                            <label class="member-status-text" id="memberDetailStatusLabel" for="memberDetailStatus">啟用</label>
+                        </div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">註冊日期</div>
+                        <div class="member-detail-value" data-member-detail-value="createdAt"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">帳號啟用/停用說明</div>
+                        <div class="member-detail-value" data-member-detail-value="adminComment"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">啟用/停用變更日期</div>
+                        <div class="member-detail-value" data-member-detail-value="adminUpdatedAt"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">操作啟用/停用管理員帳號</div>
+                        <div class="member-detail-value" data-member-detail-value="modifiedByAdminId"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="modal fade" id="memberCreateModal" tabindex="-1" aria-labelledby="memberCreateModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content member-form-modal">
+            <form id="memberCreateForm" novalidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="memberCreateModalTitle">新增管理員資料</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-bold" for="memberCreateAccount">帳號</label>
+                            <input class="form-control" id="memberCreateAccount" type="text" autocomplete="off" required>
+                            <div class="invalid-feedback">請輸入帳號。</div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-bold" for="memberCreatePassword">密碼</label>
+                            <input class="form-control" id="memberCreatePassword" type="password" autocomplete="new-password" required>
+                            <div class="invalid-feedback">請輸入密碼。</div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-bold" for="memberCreatePasswordConfirm">確認密碼</label>
+                            <input class="form-control" id="memberCreatePasswordConfirm" type="password" autocomplete="new-password" required>
+                            <div class="invalid-feedback">請再次輸入相同密碼。</div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-bold" for="memberCreateNickname">暱稱</label>
+                            <input class="form-control" id="memberCreateNickname" type="text" autocomplete="off" required>
+                            <div class="invalid-feedback">請輸入暱稱。</div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold" for="memberCreateEmail">電子信箱</label>
+                            <input class="form-control" id="memberCreateEmail" type="email" autocomplete="email" required>
+                            <div class="invalid-feedback">請輸入有效的電子信箱。</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-warning fw-bold text-brown" id="memberCreateSubmit">新增管理員</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="memberStatusModal" tabindex="-1" aria-labelledby="memberStatusModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content member-status-modal">
+            <div class="modal-header">
+                <h5 class="modal-title" id="memberStatusModalTitle">啟用/停用說明</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+            </div>
+            <div class="modal-body">
+                <p class="member-status-modal-desc" id="memberStatusModalDescription">請輸入啟用/停用說明。</p>
+                <label class="form-label fw-bold" for="memberStatusReason">啟用/停用說明</label>
+                <textarea class="form-control" id="memberStatusReason" rows="4" placeholder="請輸入此次啟用/停用原因"></textarea>
+                <div class="invalid-feedback d-none" id="memberStatusReasonError">請輸入啟用/停用說明後再確認。</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-warning fw-bold text-brown" id="memberStatusConfirm">確認切換</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link href="~/css/admin-permissions.css" rel="stylesheet">
+}
+
+@section Scripts {
+    <script src="~/js/admin-permissions.js"></script>
+}

@@ -37,8 +37,10 @@
                         <i class="bi bi-chevron-down chevron"></i>
                     </button>
                     <ul class="side-nav collapse" id="menuAccount" data-bs-parent="#sidebarAccordion">
-                        <li><a href="./member-management.html" data-screen="member-management" data-screen-title="會員管理"><i class="bi bi-person-circle"></i>會員管理</a></li>
-                        <li><a href="./admin-management.html" data-screen="admin-management" data-screen-title="管理員管理"><i class="bi bi-people"></i>管理員管理</a></li>
+                        @* <li><a href="./member-management.html" data-screen="member-management" data-screen-title="會員管理"><i class="bi bi-person-circle"></i>會員管理</a></li> *@
+                        <li><a asp-controller="Users" asp-action="Index" data-screen="member-management" data-screen-title="會員管理"><i class="bi bi-person-circle"></i>會員管理</a></li>
+                        @* <li><a href="./admin-management.html" data-screen="admin-management" data-screen-title="管理員管理"><i class="bi bi-people"></i>管理員管理</a></li> *@
+                        <li><a asp-controller="Admins" asp-action="Index" data-screen="admin-management" data-screen-title="管理員管理"><i class="bi bi-people"></i>管理員管理</a></li>
                     </ul>
                 </section>
 
@@ -49,8 +51,10 @@
                         <i class="bi bi-chevron-down chevron"></i>
                     </button>
                     <ul class="side-nav collapse" id="menuArticle" data-bs-parent="#sidebarAccordion">
-                        <li><a href="./article-category-management.html" data-screen="article-category-management" data-screen-title="文章分類管理"><i class="bi bi-folder2-open"></i>文章分類管理</a></li>
-                        <li><a href="./article-management.html" data-screen="article-management" data-screen-title="文章管理"><i class="bi bi-file-earmark-text"></i>文章管理</a></li>
+                        @* <li><a href="./article-category-management.html" data-screen="article-category-management" data-screen-title="文章分類管理"><i class="bi bi-folder2-open"></i>文章分類管理</a></li> *@
+                        <li><a asp-controller="ArticleCategories" asp-action="Index" data-screen="article-category-management" data-screen-title="文章分類管理"><i class="bi bi-folder2-open"></i>文章分類管理</a></li>
+                        @* <li><a href="./article-management.html" data-screen="article-management" data-screen-title="文章管理"><i class="bi bi-file-earmark-text"></i>文章管理</a></li> *@
+                        <li><a asp-controller="Articles" asp-action="Index" data-screen="article-management" data-screen-title="文章管理"><i class="bi bi-file-earmark-text"></i>文章管理</a></li>
                     </ul>
                 </section>
 
@@ -61,8 +65,10 @@
                         <i class="bi bi-chevron-down chevron"></i>
                     </button>
                     <ul class="side-nav collapse" id="menuShop" data-bs-parent="#sidebarAccordion">
-                        <li><a href="./shop-management.html" data-screen="product-list" data-screen-title="商城管理"><i class="bi bi-shop"></i>商城管理</a></li>
-                        <li><a href="./owned-product-list.html" data-screen="owned-product-list" data-screen-title="持有商品一覽"><i class="bi bi-bag-heart"></i>持有商品一覽</a></li>
+                        @* <li><a href="./shop-management.html" data-screen="product-list" data-screen-title="商城管理"><i class="bi bi-shop"></i>商城管理</a></li> *@
+                        <li><a asp-controller="Shop" asp-action="Index" data-screen="product-list" data-screen-title="商城管理"><i class="bi bi-shop"></i>商城管理</a></li>
+                        @* <li><a href="./owned-product-list.html" data-screen="owned-product-list" data-screen-title="持有商品一覽"><i class="bi bi-bag-heart"></i>持有商品一覽</a></li> *@
+                        <li><a asp-controller="OwnedProducts" asp-action="Index" data-screen="owned-product-list" data-screen-title="持有商品一覽"><i class="bi bi-bag-heart"></i>持有商品一覽</a></li>
                     </ul>
                 </section>
 
@@ -73,8 +79,10 @@
                         <i class="bi bi-chevron-down chevron"></i>
                     </button>
                     <ul class="side-nav collapse" id="menuPoints" data-bs-parent="#sidebarAccordion">
-                        <li><a href="./point-rule-management.html" data-screen="point-rule-management" data-screen-title="規則管理"><i class="bi bi-coin"></i>規則管理</a></li>
-                        <li><a href="./point-management.html" data-screen="point-management" data-screen-title="點數管理"><i class="bi bi-plus-slash-minus"></i>點數管理</a></li>
+                        @* <li><a href="./point-rule-management.html" data-screen="point-rule-management" data-screen-title="規則管理"><i class="bi bi-coin"></i>規則管理</a></li> *@
+                        <li><a asp-controller="PointRules" asp-action="Index" data-screen="point-rule-management" data-screen-title="規則管理"><i class="bi bi-coin"></i>規則管理</a></li>
+                        @* <li><a href="./point-management.html" data-screen="point-management" data-screen-title="點數管理"><i class="bi bi-plus-slash-minus"></i>點數管理</a></li> *@
+                        <li><a asp-controller="Points" asp-action="Index" data-screen="point-management" data-screen-title="點數管理"><i class="bi bi-plus-slash-minus"></i>點數管理</a></li>
                     </ul>
                 </section>
 
@@ -85,8 +93,10 @@
                         <i class="bi bi-chevron-down chevron"></i>
                     </button>
                     <ul class="side-nav collapse" id="menuDoll" data-bs-parent="#sidebarAccordion">
-                        <li><a href="./owned-combination-list.html" data-screen="owned-combination-list" data-screen-title="持有組合一覽"><i class="bi bi-layers"></i>持有組合一覽</a></li>
-                        <li><a href="./combination-preview.html" data-screen="combination-preview" data-screen-title="組合預覽"><i class="bi bi-person-standing-dress"></i>組合預覽</a></li>
+                        @* <li><a href="./owned-combination-list.html" data-screen="owned-combination-list" data-screen-title="持有組合一覽"><i class="bi bi-layers"></i>持有組合一覽</a></li> *@
+                        <li><a asp-controller="OwnedCombinations" asp-action="Index" data-screen="owned-combination-list" data-screen-title="持有組合一覽"><i class="bi bi-layers"></i>持有組合一覽</a></li>
+                        @* <li><a href="./combination-preview.html" data-screen="combination-preview" data-screen-title="組合預覽"><i class="bi bi-person-standing-dress"></i>組合預覽</a></li> *@
+                        <li><a asp-controller="CombinationPreview" asp-action="Index" data-screen="combination-preview" data-screen-title="組合預覽"><i class="bi bi-person-standing-dress"></i>組合預覽</a></li>
                     </ul>
                 </section>
 
@@ -97,7 +107,8 @@
                         <i class="bi bi-chevron-down chevron"></i>
                     </button>
                     <ul class="side-nav collapse" id="menuNotice" data-bs-parent="#sidebarAccordion">
-                        <li><a href="./send-notification.html" data-screen="send-notification" data-screen-title="發送通知"><i class="bi bi-send"></i>發送通知</a></li>
+                        @* <li><a href="./send-notification.html" data-screen="send-notification" data-screen-title="發送通知"><i class="bi bi-send"></i>發送通知</a></li> *@
+                        <li><a asp-controller="Notifications" asp-action="Index" data-screen="send-notification" data-screen-title="發送通知"><i class="bi bi-send"></i>發送通知</a></li>
                     </ul>
                 </section>
 
@@ -108,8 +119,9 @@
                         <i class="bi bi-chevron-down chevron"></i>
                     </button>
                     <ul class="side-nav collapse" id="menuSupport" data-bs-parent="#sidebarAccordion">
-                        <li><a href="./faq.html" data-screen="faq" data-screen-title="問與答"><i class="bi bi-question-circle"></i>問與答</a></li>
-                        <li><a href="./support-ticket.html" data-screen="support-ticket" data-screen-title="客服工單"><i class="bi bi-headset"></i>客服工單</a></li>
+                        @* <li><a href="./faq.html" data-screen="faq" data-screen-title="問與答"><i class="bi bi-question-circle"></i>問與答</a></li> *@
+                        <li><a asp-controller="Faq" asp-action="Index" data-screen="faq" data-screen-title="問與答"><i class="bi bi-question-circle"></i>問與答</a></li>
+                        @* <li><a href="./support-ticket.html" data-screen="support-ticket" data-screen-title="客服工單"><i class="bi bi-headset"></i>客服工單</a></li> *@
                     </ul>
                 </section>
             </nav>
@@ -137,7 +149,8 @@
                     <div class="notification-wrap">
                         <button class="icon-btn" type="button" id="notificationToggle" aria-label="通知" aria-expanded="false" aria-controls="notificationPanel">
                             <i class="bi bi-bell"></i>
-                            <span class="notice-badge" id="notificationBadge">5</span>
+                            @* <span class="notice-badge" id="notificationBadge">5</span> *@
+                            <span class="notice-badge" id="notificationBadge">1</span>
                         </button>
 
                         <div class="notification-panel d-none" id="notificationPanel">
@@ -148,6 +161,14 @@
 
                             <ul class="notification-list" aria-label="通知列表">
                                 <li>
+                                    <a class="notification-item is-unread" data-notification asp-controller="Articles" asp-action="Index">
+                                        <span class="notification-dot" aria-hidden="true"></span>
+                                        <span class="notification-meta"><span>文章</span><span>25 分鐘前</span></span>
+                                        <span class="notification-name">有 3 篇文章尚未檢查</span>
+                                        <span class="notification-jump">前往文章管理 <i class="bi bi-chevron-right"></i></span>
+                                    </a>
+                                </li>
+                                @* <li>
                                     <button class="notification-item is-unread" type="button" data-notification data-screen-target="support-ticket">
                                         <span class="notification-dot" aria-hidden="true"></span>
                                         <span class="notification-meta"><span>客服</span><span>剛剛</span></span>
@@ -167,7 +188,7 @@
                                     <button class="notification-item is-unread" type="button" data-notification data-screen-target="article-management">
                                         <span class="notification-dot" aria-hidden="true"></span>
                                         <span class="notification-meta"><span>文章</span><span>25 分鐘前</span></span>
-                                        <span class="notification-name">有 3 篇文章草稿尚未檢查</span>
+                                        <span class="notification-name">有 3 篇文章尚未檢查</span>
                                         <span class="notification-jump">前往文章管理 <i class="bi bi-chevron-right"></i></span>
                                     </button>
                                 </li>
@@ -186,7 +207,7 @@
                                         <span class="notification-name">夏季活動通知尚未完成發送設定</span>
                                         <span class="notification-jump">前往發送通知 <i class="bi bi-chevron-right"></i></span>
                                     </button>
-                                </li>
+                                </li> *@
                             </ul>
                         </div>
                     </div>

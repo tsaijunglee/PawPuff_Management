@@ -1,0 +1,410 @@
+﻿@{
+    ViewData["Title"] = "商城管理";
+    ViewData["CurrentScreen"] = "product-list";
+}
+
+<div class="dashboard-content management-screen" id="managementScreen" data-screen-panel="management">
+    <section class="soft-panel management-panel">
+        <span class="screen-kicker">
+            <span class="tiny-paw" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+            PawPuff Admin
+        </span>
+        <h2 class="screen-title" id="managementTitle">商城管理</h2>
+        <p class="screen-desc" id="managementDescription">
+            管理商城商品清單、上架狀態與新增商品素材。
+        </p>
+        <div class="screen-actions" id="shopManagementActions">
+            <button class="member-create-open-btn" type="button" data-shop-create-open="底圖"><i class="bi bi-image me-1"></i>新增底圖</button>
+            <button class="member-create-open-btn" type="button" data-shop-create-open="配件"><i class="bi bi-gem me-1"></i>新增配件</button>
+            <button class="member-create-open-btn" type="button" data-shop-create-open="頭像框"><i class="bi bi-app-indicator me-1"></i>新增頭像框</button>
+            <button class="member-create-open-btn" type="button" data-shop-create-open="染劑"><i class="bi bi-palette me-1"></i>新增染劑</button>
+        </div>
+
+        <div class="shop-management-view" id="shopManagementView" data-actor-admin-account="admin01">
+            <form class="member-search-panel shop-search-panel" id="shopSearchForm">
+                <div class="member-search-row shop-search-row">
+                    <div class="member-search-field">
+                        <label class="form-label" for="shopFilterId">編號</label>
+                        <input class="form-control" id="shopFilterId" type="text" data-shop-filter="id" placeholder="輸入編號">
+                    </div>
+                    <div class="member-search-field is-wide">
+                        <label class="form-label" for="shopFilterName">商品名</label>
+                        <input class="form-control" id="shopFilterName" type="text" data-shop-filter="name" placeholder="輸入商品名">
+                    </div>
+                    <div class="member-search-field">
+                        <label class="form-label" for="shopFilterType">商品類型</label>
+                        <select class="form-select shop-filter-select" id="shopFilterType" data-shop-filter="type">
+                            <option value="">全部</option>
+                            <option value="底圖">底圖</option>
+                            <option value="配件">配件</option>
+                            <option value="頭像框">頭像框</option>
+                            <option value="染劑">染劑</option>
+                        </select>
+                    </div>
+                    <div class="member-search-field shop-price-range">
+                        <label class="form-label" for="shopFilterPriceMin">價格區間</label>
+                        <input class="form-control" id="shopFilterPriceMin" type="number" min="0" step="1" data-shop-filter="priceMin" placeholder="最小">
+                        <span class="shop-range-separator">~</span>
+                        <input class="form-control" id="shopFilterPriceMax" type="number" min="0" step="1" data-shop-filter="priceMax" placeholder="最大">
+                    </div>
+                    <div class="member-search-field">
+                        <button class="member-reset-btn px-3" id="shopFilterReset" type="button">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i>重設
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="member-table-card">
+                <div class="member-table-toolbar">
+                    <strong><i class="bi bi-shop me-2"></i>商城商品資料表</strong>
+                    <span class="member-count" id="shopResultCount">共 0 筆</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover member-table shop-table align-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-shop-sort="id">編號 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col"><span class="sort-static-label">商品圖</span></th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-shop-sort="name">商品名稱 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-shop-sort="type">商品類型 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-shop-sort="price">價格 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col"><span class="sort-static-label">查看詳情</span></th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-shop-sort="active">停用/啟用 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="shopTableBody">
+                            <tr data-shop-row data-id="1" data-product-type="底圖" data-body-id="1" data-accessory-id="NULL" data-frames-id="NULL" data-colors-id="NULL" data-name="底圖1" data-image-name="b1.png" data-line-image-name="NULL" data-mask-image-name="NULL" data-sort-order="NULL" data-is-square="NULL" data-hex-code="NULL" data-price="2000" data-active="true" data-admin-comment="上架" data-admin-updated-at="2026-06-05 13:03:12" data-modified-by-admin="admin01">
+                                <td data-shop-cell="id">1</td>
+                                <td><div class="shop-product-thumb" data-shop-thumb><span>b1.png</span></div></td>
+                                <td data-shop-cell="name">底圖1</td>
+                                <td data-shop-cell="type">底圖</td>
+                                <td data-shop-cell="price">2,000</td>
+                                <td><button class="member-detail-btn" type="button" data-shop-detail="1">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch shop-status-switch"><input class="form-check-input" id="shopStatus1" type="checkbox" role="switch" data-shop-status="1" checked><label class="member-status-text" for="shopStatus1">啟用</label></div></td>
+                            </tr>
+                            <tr data-shop-row data-id="2" data-product-type="配件" data-body-id="NULL" data-accessory-id="1" data-frames-id="NULL" data-colors-id="NULL" data-name="配件1" data-image-name="NULL" data-line-image-name="al1.png" data-mask-image-name="am1.png" data-sort-order="1" data-is-square="NULL" data-hex-code="NULL" data-price="1000" data-active="true" data-admin-comment="上架" data-admin-updated-at="2026-06-05 13:03:12" data-modified-by-admin="admin01">
+                                <td data-shop-cell="id">2</td>
+                                <td><div class="shop-product-thumb" data-shop-thumb><span>al1.png</span></div></td>
+                                <td data-shop-cell="name">配件1</td>
+                                <td data-shop-cell="type">配件</td>
+                                <td data-shop-cell="price">1,000</td>
+                                <td><button class="member-detail-btn" type="button" data-shop-detail="2">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch shop-status-switch"><input class="form-check-input" id="shopStatus2" type="checkbox" role="switch" data-shop-status="2" checked><label class="member-status-text" for="shopStatus2">啟用</label></div></td>
+                            </tr>
+                            <tr data-shop-row data-id="3" data-product-type="頭像框" data-body-id="NULL" data-accessory-id="NULL" data-frames-id="1" data-colors-id="NULL" data-name="頭像框1" data-image-name="f1.png" data-line-image-name="NULL" data-mask-image-name="NULL" data-sort-order="NULL" data-is-square="1" data-hex-code="NULL" data-price="1500" data-active="true" data-admin-comment="上架" data-admin-updated-at="2026-06-05 13:03:12" data-modified-by-admin="admin01">
+                                <td data-shop-cell="id">3</td>
+                                <td><div class="shop-product-thumb" data-shop-thumb><span>f1.png</span></div></td>
+                                <td data-shop-cell="name">頭像框1</td>
+                                <td data-shop-cell="type">頭像框</td>
+                                <td data-shop-cell="price">1,500</td>
+                                <td><button class="member-detail-btn" type="button" data-shop-detail="3">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch shop-status-switch"><input class="form-check-input" id="shopStatus3" type="checkbox" role="switch" data-shop-status="3" checked><label class="member-status-text" for="shopStatus3">啟用</label></div></td>
+                            </tr>
+                            <tr data-shop-row data-id="4" data-product-type="染劑" data-body-id="NULL" data-accessory-id="NULL" data-frames-id="NULL" data-colors-id="1" data-name="染劑1" data-image-name="NULL" data-line-image-name="NULL" data-mask-image-name="NULL" data-sort-order="NULL" data-is-square="NULL" data-hex-code="#FF44AA" data-price="500" data-active="true" data-admin-comment="上架" data-admin-updated-at="2026-06-05 13:03:12" data-modified-by-admin="admin01">
+                                <td data-shop-cell="id">4</td>
+                                <td><div class="shop-product-thumb is-color" data-shop-thumb><span>#FF44AA</span></div></td>
+                                <td data-shop-cell="name">染劑1</td>
+                                <td data-shop-cell="type">染劑</td>
+                                <td data-shop-cell="price">500</td>
+                                <td><button class="member-detail-btn" type="button" data-shop-detail="4">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch shop-status-switch"><input class="form-check-input" id="shopStatus4" type="checkbox" role="switch" data-shop-status="4" checked><label class="member-status-text" for="shopStatus4">啟用</label></div></td>
+                            </tr>
+                            <tr data-shop-row data-id="5" data-product-type="底圖" data-body-id="2" data-accessory-id="NULL" data-frames-id="NULL" data-colors-id="NULL" data-name="底圖2" data-image-name="b2.png" data-line-image-name="NULL" data-mask-image-name="NULL" data-sort-order="NULL" data-is-square="NULL" data-hex-code="NULL" data-price="1000" data-active="true" data-admin-comment="半價特惠" data-admin-updated-at="2026-06-12 13:03:12" data-modified-by-admin="admin01">
+                                <td data-shop-cell="id">5</td>
+                                <td><div class="shop-product-thumb" data-shop-thumb><span>b2.png</span></div></td>
+                                <td data-shop-cell="name">底圖2</td>
+                                <td data-shop-cell="type">底圖</td>
+                                <td data-shop-cell="price">1,000</td>
+                                <td><button class="member-detail-btn" type="button" data-shop-detail="5">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch shop-status-switch"><input class="form-check-input" id="shopStatus5" type="checkbox" role="switch" data-shop-status="5" checked><label class="member-status-text" for="shopStatus5">啟用</label></div></td>
+                            </tr>
+                            <tr data-shop-row data-id="6" data-product-type="配件" data-body-id="NULL" data-accessory-id="2" data-frames-id="NULL" data-colors-id="NULL" data-name="配件2" data-image-name="NULL" data-line-image-name="al2.png" data-mask-image-name="am2.png" data-sort-order="5" data-is-square="NULL" data-hex-code="NULL" data-price="500" data-active="true" data-admin-comment="半價特惠" data-admin-updated-at="2026-06-12 13:03:12" data-modified-by-admin="admin01">
+                                <td data-shop-cell="id">6</td>
+                                <td><div class="shop-product-thumb" data-shop-thumb><span>al2.png</span></div></td>
+                                <td data-shop-cell="name">配件2</td>
+                                <td data-shop-cell="type">配件</td>
+                                <td data-shop-cell="price">500</td>
+                                <td><button class="member-detail-btn" type="button" data-shop-detail="6">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch shop-status-switch"><input class="form-check-input" id="shopStatus6" type="checkbox" role="switch" data-shop-status="6" checked><label class="member-status-text" for="shopStatus6">啟用</label></div></td>
+                            </tr>
+                            <tr data-shop-row data-id="7" data-product-type="頭像框" data-body-id="NULL" data-accessory-id="NULL" data-frames-id="2" data-colors-id="NULL" data-name="頭像框2" data-image-name="f2.png" data-line-image-name="NULL" data-mask-image-name="NULL" data-sort-order="NULL" data-is-square="0" data-hex-code="NULL" data-price="750" data-active="true" data-admin-comment="半價特惠" data-admin-updated-at="2026-06-12 13:03:12" data-modified-by-admin="admin01">
+                                <td data-shop-cell="id">7</td>
+                                <td><div class="shop-product-thumb" data-shop-thumb><span>f2.png</span></div></td>
+                                <td data-shop-cell="name">頭像框2</td>
+                                <td data-shop-cell="type">頭像框</td>
+                                <td data-shop-cell="price">750</td>
+                                <td><button class="member-detail-btn" type="button" data-shop-detail="7">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch shop-status-switch"><input class="form-check-input" id="shopStatus7" type="checkbox" role="switch" data-shop-status="7" checked><label class="member-status-text" for="shopStatus7">啟用</label></div></td>
+                            </tr>
+                            <tr data-shop-row data-id="8" data-product-type="染劑" data-body-id="NULL" data-accessory-id="NULL" data-frames-id="NULL" data-colors-id="2" data-name="染劑2" data-image-name="NULL" data-line-image-name="NULL" data-mask-image-name="NULL" data-sort-order="NULL" data-is-square="NULL" data-hex-code="#5555FF" data-price="250" data-active="true" data-admin-comment="半價特惠" data-admin-updated-at="2026-06-12 13:03:12" data-modified-by-admin="admin01">
+                                <td data-shop-cell="id">8</td>
+                                <td><div class="shop-product-thumb is-color" data-shop-thumb><span>#5555FF</span></div></td>
+                                <td data-shop-cell="name">染劑2</td>
+                                <td data-shop-cell="type">染劑</td>
+                                <td data-shop-cell="price">250</td>
+                                <td><button class="member-detail-btn" type="button" data-shop-detail="8">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch shop-status-switch"><input class="form-check-input" id="shopStatus8" type="checkbox" role="switch" data-shop-status="8" checked><label class="member-status-text" for="shopStatus8">啟用</label></div></td>
+                            </tr>
+                            <tr data-shop-row data-id="9" data-product-type="底圖" data-body-id="3" data-accessory-id="NULL" data-frames-id="NULL" data-colors-id="NULL" data-name="底圖3" data-image-name="b3.png" data-line-image-name="NULL" data-mask-image-name="NULL" data-sort-order="NULL" data-is-square="NULL" data-hex-code="NULL" data-price="2000" data-active="false" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-shop-cell="id">9</td>
+                                <td><div class="shop-product-thumb" data-shop-thumb><span>b3.png</span></div></td>
+                                <td data-shop-cell="name">底圖3</td>
+                                <td data-shop-cell="type">底圖</td>
+                                <td data-shop-cell="price">2,000</td>
+                                <td><button class="member-detail-btn" type="button" data-shop-detail="9">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch shop-status-switch"><input class="form-check-input" id="shopStatus9" type="checkbox" role="switch" data-shop-status="9"><label class="member-status-text" for="shopStatus9">停用</label></div></td>
+                            </tr>
+                            <tr data-shop-row data-id="10" data-product-type="配件" data-body-id="NULL" data-accessory-id="3" data-frames-id="NULL" data-colors-id="NULL" data-name="配件3" data-image-name="NULL" data-line-image-name="al3.png" data-mask-image-name="am3.png" data-sort-order="6" data-is-square="NULL" data-hex-code="NULL" data-price="1000" data-active="false" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-shop-cell="id">10</td>
+                                <td><div class="shop-product-thumb" data-shop-thumb><span>al3.png</span></div></td>
+                                <td data-shop-cell="name">配件3</td>
+                                <td data-shop-cell="type">配件</td>
+                                <td data-shop-cell="price">1,000</td>
+                                <td><button class="member-detail-btn" type="button" data-shop-detail="10">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch shop-status-switch"><input class="form-check-input" id="shopStatus10" type="checkbox" role="switch" data-shop-status="10"><label class="member-status-text" for="shopStatus10">停用</label></div></td>
+                            </tr>
+                            <tr data-shop-row data-id="11" data-product-type="頭像框" data-body-id="NULL" data-accessory-id="NULL" data-frames-id="3" data-colors-id="NULL" data-name="頭像框3" data-image-name="f3.png" data-line-image-name="NULL" data-mask-image-name="NULL" data-sort-order="NULL" data-is-square="0" data-hex-code="NULL" data-price="1500" data-active="false" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-shop-cell="id">11</td>
+                                <td><div class="shop-product-thumb" data-shop-thumb><span>f3.png</span></div></td>
+                                <td data-shop-cell="name">頭像框3</td>
+                                <td data-shop-cell="type">頭像框</td>
+                                <td data-shop-cell="price">1,500</td>
+                                <td><button class="member-detail-btn" type="button" data-shop-detail="11">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch shop-status-switch"><input class="form-check-input" id="shopStatus11" type="checkbox" role="switch" data-shop-status="11"><label class="member-status-text" for="shopStatus11">停用</label></div></td>
+                            </tr>
+                            <tr data-shop-row data-id="12" data-product-type="染劑" data-body-id="NULL" data-accessory-id="NULL" data-frames-id="NULL" data-colors-id="3" data-name="染劑3" data-image-name="NULL" data-line-image-name="NULL" data-mask-image-name="NULL" data-sort-order="NULL" data-is-square="NULL" data-hex-code="#000000" data-price="500" data-active="false" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-shop-cell="id">12</td>
+                                <td><div class="shop-product-thumb is-color" data-shop-thumb><span>#000000</span></div></td>
+                                <td data-shop-cell="name">染劑3</td>
+                                <td data-shop-cell="type">染劑</td>
+                                <td data-shop-cell="price">500</td>
+                                <td><button class="member-detail-btn" type="button" data-shop-detail="12">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch shop-status-switch"><input class="form-check-input" id="shopStatus12" type="checkbox" role="switch" data-shop-status="12"><label class="member-status-text" for="shopStatus12">停用</label></div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="member-pagination-wrap">
+                    <span class="member-page-info" id="shopPageInfo">第 1 頁</span>
+                    <nav aria-label="商城商品表格分頁">
+                        <ul class="pagination member-pagination" id="shopPagination"></ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <div class="member-detail-view d-none" id="shopDetailView">
+            <div class="member-detail-card">
+                <div class="member-detail-head">
+                    <strong><i class="bi bi-box-seam me-2"></i><span id="shopDetailTitle">商品詳情</span></strong>
+                    <button class="member-back-btn px-3" id="shopDetailBack" type="button">
+                        <i class="bi bi-arrow-left me-1"></i>返回商城管理
+                    </button>
+                </div>
+                <div class="shop-detail-visual" id="shopDetailVisual"></div>
+                <div class="member-detail-grid shop-detail-grid" id="shopDetailGrid">
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">編號</div>
+                        <div class="member-detail-value" data-shop-detail-value="id"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">商品名稱</div>
+                        <div class="member-detail-value" data-shop-detail-value="name"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">商品類型</div>
+                        <div class="member-detail-value" data-shop-detail-value="type"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">價格</div>
+                        <div class="shop-price-detail">
+                            <div class="member-detail-value" data-shop-detail-value="priceFormatted"></div>
+                            <button class="member-detail-btn" id="shopPriceEditOpen" type="button"><i class="bi bi-pencil-square"></i>修改價格</button>
+                        </div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">停用/啟用</div>
+                        <div class="form-check form-switch member-status-switch member-detail-status-switch">
+                            <input class="form-check-input" id="shopDetailStatus" type="checkbox" role="switch">
+                            <label class="member-status-text" id="shopDetailStatusLabel" for="shopDetailStatus">啟用</label>
+                        </div>
+                    </div>
+                    <div class="member-detail-field" id="shopSortOrderField">
+                        <div class="member-detail-label">圖層排序</div>
+                        <select class="form-select shop-modal-select" id="shopDetailSortOrder">
+                            <option value="0">0 最下層</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6 最上層</option>
+                        </select>
+                    </div>
+                    <div class="member-detail-field" id="shopFrameShapeField">
+                        <div class="member-detail-label">頭像框形狀</div>
+                        <div class="member-detail-value" data-shop-detail-value="frameShape"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">管理員修改說明</div>
+                        <div class="member-detail-value" data-shop-detail-value="adminComment"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">管理員更新日期</div>
+                        <div class="member-detail-value" data-shop-detail-value="adminUpdatedAt"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">操作修改管理員帳號</div>
+                        <div class="member-detail-value" data-shop-detail-value="modifiedByAdmin"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="modal fade" id="shopCreateModal" tabindex="-1" aria-labelledby="shopCreateModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content member-form-modal">
+            <form id="shopCreateForm" novalidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="shopCreateModalTitle">新增商品</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-bold" for="shopCreateName">商品名稱</label>
+                            <input class="form-control" id="shopCreateName" type="text" autocomplete="off" required>
+                            <div class="invalid-feedback">請輸入商品名稱。</div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-bold" for="shopCreatePrice">價格</label>
+                            <input class="form-control" id="shopCreatePrice" type="number" min="0" step="1" required>
+                            <div class="invalid-feedback">請輸入有效價格。</div>
+                        </div>
+
+                        <div class="col-12" data-shop-create-panel="底圖">
+                            <label class="form-label fw-bold" for="shopCreateBodyImage">上傳圖片</label>
+                            <input class="form-control" id="shopCreateBodyImage" type="file" accept="image/*">
+                            <div class="invalid-feedback">請上傳一張圖片。</div>
+                        </div>
+
+                        <div class="col-12 col-md-6" data-shop-create-panel="配件">
+                            <label class="form-label fw-bold" for="shopCreateAccessoryLineImage">上傳線稿圖片</label>
+                            <input class="form-control" id="shopCreateAccessoryLineImage" type="file" accept="image/*">
+                            <div class="invalid-feedback">請上傳一張線稿圖片。</div>
+                        </div>
+                        <div class="col-12 col-md-6" data-shop-create-panel="配件">
+                            <label class="form-label fw-bold" for="shopCreateAccessoryMaskImage">上傳遮罩圖片</label>
+                            <input class="form-control" id="shopCreateAccessoryMaskImage" type="file" accept="image/*">
+                            <div class="invalid-feedback">請上傳一張遮罩圖片。</div>
+                        </div>
+                        <div class="col-12 col-md-6" data-shop-create-panel="配件">
+                            <label class="form-label fw-bold" for="shopCreateAccessorySort">圖層排序</label>
+                            <select class="form-select shop-modal-select" id="shopCreateAccessorySort">
+                                <option value="">請選擇排序</option>
+                                <option value="0">0 最下層</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6 最上層</option>
+                            </select>
+                            <div class="invalid-feedback">請選擇圖層排序。</div>
+                        </div>
+
+                        <div class="col-12 col-md-6" data-shop-create-panel="頭像框">
+                            <label class="form-label fw-bold" for="shopCreateFrameImage">上傳圖片</label>
+                            <input class="form-control" id="shopCreateFrameImage" type="file" accept="image/*">
+                            <div class="invalid-feedback">請上傳一張圖片。</div>
+                        </div>
+                        <div class="col-12 col-md-6" data-shop-create-panel="頭像框">
+                            <label class="form-label fw-bold d-block">框型</label>
+                            <div class="shop-radio-row">
+                                <label><input class="form-check-input" type="radio" name="shopCreateFrameShape" value="1" checked>方形</label>
+                                <label><input class="form-check-input" type="radio" name="shopCreateFrameShape" value="0">圓形</label>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6" data-shop-create-panel="染劑">
+                            <label class="form-label fw-bold" for="shopCreateColorPicker">顏色選擇</label>
+                            <div class="shop-color-input-row">
+                                <input class="form-control form-control-color" id="shopCreateColorPicker" type="color" value="#FF44AA" title="選擇染劑顏色">
+                                <input class="form-control" id="shopCreateColorHex" type="text" value="#FF44AA" maxlength="7" placeholder="#RRGGBB">
+                            </div>
+                            <div class="invalid-feedback d-none" id="shopCreateColorError">請輸入有效色碼，例如 #FF44AA。</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-warning fw-bold text-brown">新增商品</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="shopStatusModal" tabindex="-1" aria-labelledby="shopStatusModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content member-status-modal">
+            <div class="modal-header">
+                <h5 class="modal-title" id="shopStatusModalTitle">上下架說明</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+            </div>
+            <div class="modal-body">
+                <p class="member-status-modal-desc" id="shopStatusModalDescription">請輸入上下架說明。</p>
+                <label class="form-label fw-bold" for="shopStatusReason">上下架說明</label>
+                <textarea class="form-control" id="shopStatusReason" rows="4" placeholder="請輸入此次變更原因"></textarea>
+                <div class="invalid-feedback d-none" id="shopStatusReasonError">請輸入說明後再確認。</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-warning fw-bold text-brown" id="shopStatusConfirm">確認切換</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="shopPriceModal" tabindex="-1" aria-labelledby="shopPriceModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content member-status-modal">
+            <div class="modal-header">
+                <h5 class="modal-title" id="shopPriceModalTitle">修改商品價格</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+            </div>
+            <div class="modal-body">
+                <p class="member-status-modal-desc" id="shopPriceModalDescription">請輸入新價格與修改說明。</p>
+                <label class="form-label fw-bold" for="shopPriceValue">新價格</label>
+                <input class="form-control" id="shopPriceValue" type="number" min="0" step="1">
+                <div class="invalid-feedback d-none" id="shopPriceValueError">請輸入有效價格。</div>
+                <label class="form-label fw-bold mt-3" for="shopPriceReason">修改說明</label>
+                <textarea class="form-control" id="shopPriceReason" rows="4" placeholder="請輸入此次修改原因"></textarea>
+                <div class="invalid-feedback d-none" id="shopPriceReasonError">請輸入修改說明後再確認。</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-warning fw-bold text-brown" id="shopPriceConfirm">儲存價格</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link href="~/css/shop-management.css" rel="stylesheet">
+}
+
+@section Scripts {
+    <script src="~/js/shop-management.js"></script>
+}

@@ -1,0 +1,283 @@
+﻿@{
+    ViewData["Title"] = "點數管理";
+    ViewData["CurrentScreen"] = "point-management";
+}
+
+<div class="dashboard-content management-screen" id="managementScreen" data-screen-panel="management">
+    <section class="soft-panel management-panel">
+        <span class="screen-kicker">
+            <span class="tiny-paw" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+            PawPuff Admin
+        </span>
+        <h2 class="screen-title" id="managementTitle">點數管理</h2>
+        <p class="screen-desc" id="managementDescription">
+            查詢與管理會員點數紀錄，並支援必要調整。
+        </p>
+        <div class="point-management-view" id="pointManagementView" data-actor-admin-account="admin01">
+            <div class="member-page-actions point-page-actions">
+                <button class="member-create-open-btn" id="pointCreateOpen" type="button" data-bs-toggle="modal" data-bs-target="#pointCreateModal">
+                    <i class="bi bi-plus-circle me-1"></i>新增點數變更
+                </button>
+            </div>
+
+            <form class="member-search-panel point-search-panel" id="pointSearchForm">
+                <div class="member-search-row point-search-row">
+                    <div class="member-search-field">
+                        <label class="form-label" for="pointFilterAccount">帳號</label>
+                        <input class="form-control" id="pointFilterAccount" type="text" data-point-filter="account" placeholder="輸入帳號">
+                    </div>
+                    <div class="member-search-field">
+                        <label class="form-label" for="pointFilterRule">規則名稱</label>
+                        <select class="form-select point-filter-select" id="pointFilterRule" data-point-filter="rule">
+                            <option value="">全部</option>
+                            <option value="每日登入打卡">每日登入打卡</option>
+                            <option value="每日發文">每日發文</option>
+                            <option value="每日回文">每日回文</option>
+                            <option value="每日點讚">每日點讚</option>
+                            <option value="發文收到讚">發文收到讚</option>
+                            <option value="發文被收藏">發文被收藏</option>
+                            <option value="贊助平台">贊助平台</option>
+                            <option value="管理員給予">管理員給予</option>
+                            <option value="管理員扣除">管理員扣除</option>
+                            <option value="商城消費">商城消費</option>
+                        </select>
+                    </div>
+                    <div class="member-search-field point-date-range">
+                        <label class="form-label" for="pointFilterDateStart">日期起/訖</label>
+                        <input class="form-control" id="pointFilterDateStart" type="date" data-point-filter="dateStart">
+                        <span class="point-range-separator">~</span>
+                        <input class="form-control" id="pointFilterDateEnd" type="date" data-point-filter="dateEnd">
+                    </div>
+                    <div class="member-search-field">
+                        <button class="member-reset-btn px-3" id="pointFilterReset" type="button">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i>重設
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="member-table-card">
+                <div class="member-table-toolbar">
+                    <strong><i class="bi bi-plus-slash-minus me-2"></i>點數異動資料表</strong>
+                    <span class="member-count" id="pointResultCount">共 0 筆</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover member-table point-table align-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-point-sort="account">帳號 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-point-sort="rule">規則名稱 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-point-sort="change">點數變化 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-point-sort="balance">變更後點數餘額 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-point-sort="description">描述 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-point-sort="changedAt">變更時間 <i class="bi bi-sort-down"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-point-sort="admin">操作管理員帳號 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-point-sort="order">對應訂單編號 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="pointTableBody">
+                            <tr data-point-row data-id="1" data-account="sunny01" data-rule="每日登入打卡" data-change="5" data-balance="15" data-description="每日登入打卡" data-changed-at="2026-05-25 13:03:12" data-admin="NULL" data-order="NULL">
+                                <td data-point-cell="account">sunny01</td>
+                                <td data-point-cell="rule">每日登入打卡</td>
+                                <td data-point-cell="change"><span class="point-change is-positive">+5</span></td>
+                                <td data-point-cell="balance">15</td>
+                                <td data-point-cell="description">每日登入打卡</td>
+                                <td data-point-cell="changedAt">2026-05-25 13:03:12</td>
+                                <td data-point-cell="admin"><span class="point-null" aria-label="NULL">—</span></td>
+                                <td data-point-cell="order"><span class="point-null" aria-label="NULL">—</span></td>
+                            </tr>
+                            <tr data-point-row data-id="2" data-account="sunny01" data-rule="每日發文" data-change="10" data-balance="25" data-description="每日發文" data-changed-at="2026-05-26 13:03:12" data-admin="NULL" data-order="NULL">
+                                <td data-point-cell="account">sunny01</td>
+                                <td data-point-cell="rule">每日發文</td>
+                                <td data-point-cell="change"><span class="point-change is-positive">+10</span></td>
+                                <td data-point-cell="balance">25</td>
+                                <td data-point-cell="description">每日發文</td>
+                                <td data-point-cell="changedAt">2026-05-26 13:03:12</td>
+                                <td data-point-cell="admin"><span class="point-null" aria-label="NULL">—</span></td>
+                                <td data-point-cell="order"><span class="point-null" aria-label="NULL">—</span></td>
+                            </tr>
+                            <tr data-point-row data-id="3" data-account="sunny01" data-rule="每日回文" data-change="5" data-balance="30" data-description="每日回文" data-changed-at="2026-05-27 13:03:12" data-admin="NULL" data-order="NULL">
+                                <td data-point-cell="account">sunny01</td>
+                                <td data-point-cell="rule">每日回文</td>
+                                <td data-point-cell="change"><span class="point-change is-positive">+5</span></td>
+                                <td data-point-cell="balance">30</td>
+                                <td data-point-cell="description">每日回文</td>
+                                <td data-point-cell="changedAt">2026-05-27 13:03:12</td>
+                                <td data-point-cell="admin"><span class="point-null" aria-label="NULL">—</span></td>
+                                <td data-point-cell="order"><span class="point-null" aria-label="NULL">—</span></td>
+                            </tr>
+                            <tr data-point-row data-id="4" data-account="sunny01" data-rule="每日點讚" data-change="5" data-balance="35" data-description="每日點讚" data-changed-at="2026-05-28 13:03:12" data-admin="NULL" data-order="NULL">
+                                <td data-point-cell="account">sunny01</td>
+                                <td data-point-cell="rule">每日點讚</td>
+                                <td data-point-cell="change"><span class="point-change is-positive">+5</span></td>
+                                <td data-point-cell="balance">35</td>
+                                <td data-point-cell="description">每日點讚</td>
+                                <td data-point-cell="changedAt">2026-05-28 13:03:12</td>
+                                <td data-point-cell="admin"><span class="point-null" aria-label="NULL">—</span></td>
+                                <td data-point-cell="order"><span class="point-null" aria-label="NULL">—</span></td>
+                            </tr>
+                            <tr data-point-row data-id="5" data-account="sunny01" data-rule="發文收到讚" data-change="5" data-balance="40" data-description="發文收到讚" data-changed-at="2026-05-29 13:03:12" data-admin="NULL" data-order="NULL">
+                                <td data-point-cell="account">sunny01</td>
+                                <td data-point-cell="rule">發文收到讚</td>
+                                <td data-point-cell="change"><span class="point-change is-positive">+5</span></td>
+                                <td data-point-cell="balance">40</td>
+                                <td data-point-cell="description">發文收到讚</td>
+                                <td data-point-cell="changedAt">2026-05-29 13:03:12</td>
+                                <td data-point-cell="admin"><span class="point-null" aria-label="NULL">—</span></td>
+                                <td data-point-cell="order"><span class="point-null" aria-label="NULL">—</span></td>
+                            </tr>
+                            <tr data-point-row data-id="6" data-account="sunny01" data-rule="發文收到讚" data-change="5" data-balance="45" data-description="發文收到讚" data-changed-at="2026-05-30 13:03:12" data-admin="NULL" data-order="NULL">
+                                <td data-point-cell="account">sunny01</td>
+                                <td data-point-cell="rule">發文收到讚</td>
+                                <td data-point-cell="change"><span class="point-change is-positive">+5</span></td>
+                                <td data-point-cell="balance">45</td>
+                                <td data-point-cell="description">發文收到讚</td>
+                                <td data-point-cell="changedAt">2026-05-30 13:03:12</td>
+                                <td data-point-cell="admin"><span class="point-null" aria-label="NULL">—</span></td>
+                                <td data-point-cell="order"><span class="point-null" aria-label="NULL">—</span></td>
+                            </tr>
+                            <tr data-point-row data-id="7" data-account="sunny01" data-rule="發文被收藏" data-change="5" data-balance="50" data-description="發文被收藏" data-changed-at="2026-05-31 13:03:12" data-admin="NULL" data-order="NULL">
+                                <td data-point-cell="account">sunny01</td>
+                                <td data-point-cell="rule">發文被收藏</td>
+                                <td data-point-cell="change"><span class="point-change is-positive">+5</span></td>
+                                <td data-point-cell="balance">50</td>
+                                <td data-point-cell="description">發文被收藏</td>
+                                <td data-point-cell="changedAt">2026-05-31 13:03:12</td>
+                                <td data-point-cell="admin"><span class="point-null" aria-label="NULL">—</span></td>
+                                <td data-point-cell="order"><span class="point-null" aria-label="NULL">—</span></td>
+                            </tr>
+                            <tr data-point-row data-id="8" data-account="milktea04" data-rule="每日登入打卡" data-change="5" data-balance="350" data-description="每日登入打卡" data-changed-at="2026-06-01 13:03:12" data-admin="NULL" data-order="NULL">
+                                <td data-point-cell="account">milktea04</td>
+                                <td data-point-cell="rule">每日登入打卡</td>
+                                <td data-point-cell="change"><span class="point-change is-positive">+5</span></td>
+                                <td data-point-cell="balance">350</td>
+                                <td data-point-cell="description">每日登入打卡</td>
+                                <td data-point-cell="changedAt">2026-06-01 13:03:12</td>
+                                <td data-point-cell="admin"><span class="point-null" aria-label="NULL">—</span></td>
+                                <td data-point-cell="order"><span class="point-null" aria-label="NULL">—</span></td>
+                            </tr>
+                            <tr data-point-row data-id="9" data-account="milktea04" data-rule="贊助平台" data-change="1000" data-balance="1350" data-description="贊助平台: 1000" data-changed-at="2026-06-02 13:03:12" data-admin="NULL" data-order="NULL">
+                                <td data-point-cell="account">milktea04</td>
+                                <td data-point-cell="rule">贊助平台</td>
+                                <td data-point-cell="change"><span class="point-change is-positive">+1,000</span></td>
+                                <td data-point-cell="balance">1,350</td>
+                                <td data-point-cell="description">贊助平台: 1000</td>
+                                <td data-point-cell="changedAt">2026-06-02 13:03:12</td>
+                                <td data-point-cell="admin"><span class="point-null" aria-label="NULL">—</span></td>
+                                <td data-point-cell="order"><span class="point-null" aria-label="NULL">—</span></td>
+                            </tr>
+                            <tr data-point-row data-id="10" data-account="milktea04" data-rule="管理員給予" data-change="1000" data-balance="2350" data-description="平台交易異常補給點數" data-changed-at="2026-06-03 13:03:12" data-admin="admin01" data-order="NULL">
+                                <td data-point-cell="account">milktea04</td>
+                                <td data-point-cell="rule">管理員給予</td>
+                                <td data-point-cell="change"><span class="point-change is-positive">+1,000</span></td>
+                                <td data-point-cell="balance">2,350</td>
+                                <td data-point-cell="description">平台交易異常補給點數</td>
+                                <td data-point-cell="changedAt">2026-06-03 13:03:12</td>
+                                <td data-point-cell="admin">admin01</td>
+                                <td data-point-cell="order"><span class="point-null" aria-label="NULL">—</span></td>
+                            </tr>
+                            <tr data-point-row data-id="11" data-account="milktea04" data-rule="管理員扣除" data-change="-1000" data-balance="1350" data-description="平台交易正常扣回點數" data-changed-at="2026-06-04 13:03:12" data-admin="admin01" data-order="NULL">
+                                <td data-point-cell="account">milktea04</td>
+                                <td data-point-cell="rule">管理員扣除</td>
+                                <td data-point-cell="change"><span class="point-change is-negative">-1,000</span></td>
+                                <td data-point-cell="balance">1,350</td>
+                                <td data-point-cell="description">平台交易正常扣回點數</td>
+                                <td data-point-cell="changedAt">2026-06-04 13:03:12</td>
+                                <td data-point-cell="admin">admin01</td>
+                                <td data-point-cell="order"><span class="point-null" aria-label="NULL">—</span></td>
+                            </tr>
+                            <tr data-point-row data-id="12" data-account="milktea04" data-rule="商城消費" data-change="-500" data-balance="850" data-description="商城消費: 染劑2" data-changed-at="2026-06-05 13:03:12" data-admin="NULL" data-order="11">
+                                <td data-point-cell="account">milktea04</td>
+                                <td data-point-cell="rule">商城消費</td>
+                                <td data-point-cell="change"><span class="point-change is-negative">-500</span></td>
+                                <td data-point-cell="balance">850</td>
+                                <td data-point-cell="description">商城消費: 染劑2</td>
+                                <td data-point-cell="changedAt">2026-06-05 13:03:12</td>
+                                <td data-point-cell="admin"><span class="point-null" aria-label="NULL">—</span></td>
+                                <td data-point-cell="order">11</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="member-pagination-wrap">
+                    <span class="member-page-info" id="pointPageInfo">第 1 頁</span>
+                    <nav aria-label="點數異動表格分頁">
+                        <ul class="pagination member-pagination" id="pointPagination"></ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="modal fade" id="pointCreateModal" tabindex="-1" aria-labelledby="pointCreateModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content member-form-modal">
+            <form id="pointCreateForm" novalidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pointCreateModalTitle">新增點數變更</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label" for="pointCreateAccount">帳號</label>
+                        <input class="form-control point-modal-input" id="pointCreateAccount" type="text" list="pointAccountOptions" placeholder="輸入帳號" autocomplete="off" required>
+                        <datalist id="pointAccountOptions">
+                            <option value="sunny01" data-balance="50">目前點數 50</option>
+                            <option value="milktea02" data-balance="850">目前點數 850</option>
+                            <option value="pudding03" data-balance="50">目前點數 50</option>
+                            <option value="afu04" data-balance="650">目前點數 650</option>
+                            <option value="cocoa05" data-balance="50">目前點數 50</option>
+                            <option value="millet06" data-balance="550">目前點數 550</option>
+                            <option value="xiaobai07" data-balance="900">目前點數 900</option>
+                            <option value="tofu08" data-balance="400">目前點數 400</option>
+                            <option value="happy09" data-balance="0">目前點數 0</option>
+                            <option value="anan10" data-balance="1000">目前點數 1000</option>
+                            <option value="yuzu11" data-balance="300">目前點數 300</option>
+                            <option value="mochi12" data-balance="350">目前點數 350</option>
+                        </datalist>
+                        <div class="invalid-feedback">請選擇假資料中存在的帳號。</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="pointCreateChange">點數變化</label>
+                        <input class="form-control point-modal-input" id="pointCreateChange" type="number" step="1" placeholder="輸入正數或負數，例如 100 或 -100" required>
+                        <div class="invalid-feedback">請輸入不可為 0 的點數變化。</div>
+                    </div>
+                    <div>
+                        <label class="form-label" for="pointCreateDescription">描述</label>
+                        <textarea class="form-control point-modal-textarea" id="pointCreateDescription" rows="4" placeholder="輸入本次點數變更說明" required></textarea>
+                        <div class="invalid-feedback">請輸入描述。</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-warning fw-bold text-brown">新增變更</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link href="~/css/point-management.css" rel="stylesheet">
+}
+
+@section Scripts {
+    <script src="~/js/point-management.js"></script>
+}

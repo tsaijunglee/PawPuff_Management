@@ -19,7 +19,8 @@
             </div>
 
             <div class="attendance-actions">
-                <a class="member-create-open-btn attendance-view-all-btn" href="./attendance-records.html">
+                @* <a class="member-create-open-btn attendance-view-all-btn" href="./attendance-records.html"> *@
+                <a asp-controller="AdminsClock" asp-action="Index" class="member-create-open-btn attendance-view-all-btn" data-screen="dashboard2">
                     <i class="bi bi-card-list me-1"></i>檢視所有打卡紀錄
                 </a>
                 <button class="attendance-btn" type="button" id="dashboardClockInBtn"><i class="bi bi-box-arrow-in-right"></i>打卡上班</button>

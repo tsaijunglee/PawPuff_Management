@@ -1,0 +1,203 @@
+﻿@{
+    ViewData["Title"] = "持有組合一覽";
+    ViewData["CurrentScreen"] = "owned-combination-list";
+}
+
+<div class="dashboard-content management-screen" id="managementScreen" data-screen-panel="management">
+    <section class="soft-panel management-panel">
+        <span class="screen-kicker">
+            <span class="tiny-paw" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+            PawPuff Admin
+        </span>
+        <h2 class="screen-title" id="managementTitle">持有組合一覽</h2>
+        <p class="screen-desc" id="managementDescription">
+            檢視帳號儲存的紙娃娃穿搭組合。
+        </p>
+        <div class="owned-combination-view" id="ownedCombinationView">
+            <form class="member-search-panel" id="ownedCombinationSearchForm">
+                <div class="member-search-row owned-combination-search-row">
+                    <div class="member-search-field">
+                        <label class="form-label" for="ownedCombinationFilterAccount">帳號</label>
+                        <input class="form-control" id="ownedCombinationFilterAccount" type="text" data-owned-combination-filter="account" placeholder="輸入帳號">
+                    </div>
+                    <div class="member-search-field">
+                        <label class="form-label" for="ownedCombinationFilterBody">底圖名</label>
+                        <input class="form-control" id="ownedCombinationFilterBody" type="text" data-owned-combination-filter="body" placeholder="輸入底圖名">
+                    </div>
+                    <div class="member-search-field">
+                        <label class="form-label" for="ownedCombinationFilterAccessory">配件圖名</label>
+                        <input class="form-control" id="ownedCombinationFilterAccessory" type="text" data-owned-combination-filter="accessory" placeholder="輸入配件圖名">
+                    </div>
+                    <div class="member-search-field">
+                        <label class="form-label" for="ownedCombinationFilterColor">染劑名</label>
+                        <input class="form-control" id="ownedCombinationFilterColor" type="text" data-owned-combination-filter="color" placeholder="輸入染劑名">
+                    </div>
+                    <div class="member-search-field">
+                        <button class="member-reset-btn px-3" id="ownedCombinationFilterReset" type="button">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i>重設
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="member-table-card">
+                <div class="member-table-toolbar">
+                    <strong><i class="bi bi-layers me-2"></i>持有組合資料表</strong>
+                    <span class="member-count" id="ownedCombinationResultCount">共 0 筆</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover member-table owned-combination-table align-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-owned-combination-sort="id">編號 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-owned-combination-sort="account">帳號 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col"><span class="sort-static-label">組合圖</span></th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-owned-combination-sort="body">底圖與染劑名 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-owned-combination-sort="accessory1">配件圖1與染劑名 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-owned-combination-sort="accessory2">配件圖2與染劑名 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-owned-combination-sort="accessory3">配件圖3與染劑名 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="ownedCombinationTableBody">
+                            <tr data-owned-combination-row data-id="1" data-account="sunny01" data-body="b1.png" data-accessory1="al1.png" data-accessory2="al2.png" data-accessory3="al3.png" data-body-color="NULL" data-accessory1-color="#FF44AA" data-accessory2-color="#FF44AA" data-accessory3-color="#FF44AA">
+                                <td data-owned-combination-cell="id">1</td>
+                                <td data-owned-combination-cell="account">sunny01</td>
+                                <td><div class="combination-thumb"><span>b1.png</span><span>al1.png</span><span>al2.png</span><span>al3.png</span></div></td>
+                                <td data-owned-combination-cell="body"><div class="combination-slot"><strong>b1.png</strong><span class="combination-null" aria-label="NULL">—</span></div></td>
+                                <td data-owned-combination-cell="accessory1"><div class="combination-slot"><strong>al1.png</strong><span>#FF44AA</span></div></td>
+                                <td data-owned-combination-cell="accessory2"><div class="combination-slot"><strong>al2.png</strong><span>#FF44AA</span></div></td>
+                                <td data-owned-combination-cell="accessory3"><div class="combination-slot"><strong>al3.png</strong><span>#FF44AA</span></div></td>
+                            </tr>
+                            <tr data-owned-combination-row data-id="2" data-account="sunny01" data-body="b1.png" data-accessory1="al1.png" data-accessory2="al2.png" data-accessory3="al3.png" data-body-color="NULL" data-accessory1-color="#FF44AA" data-accessory2-color="#FF44AA" data-accessory3-color="NULL">
+                                <td data-owned-combination-cell="id">2</td>
+                                <td data-owned-combination-cell="account">sunny01</td>
+                                <td><div class="combination-thumb"><span>b1.png</span><span>al1.png</span><span>al2.png</span><span>al3.png</span></div></td>
+                                <td data-owned-combination-cell="body"><div class="combination-slot"><strong>b1.png</strong><span class="combination-null" aria-label="NULL">—</span></div></td>
+                                <td data-owned-combination-cell="accessory1"><div class="combination-slot"><strong>al1.png</strong><span>#FF44AA</span></div></td>
+                                <td data-owned-combination-cell="accessory2"><div class="combination-slot"><strong>al2.png</strong><span>#FF44AA</span></div></td>
+                                <td data-owned-combination-cell="accessory3"><div class="combination-slot"><strong>al3.png</strong><span class="combination-null" aria-label="NULL">—</span></div></td>
+                            </tr>
+                            <tr data-owned-combination-row data-id="3" data-account="sunny01" data-body="b1.png" data-accessory1="al1.png" data-accessory2="al2.png" data-accessory3="al3.png" data-body-color="NULL" data-accessory1-color="NULL" data-accessory2-color="NULL" data-accessory3-color="#FF44AA">
+                                <td data-owned-combination-cell="id">3</td>
+                                <td data-owned-combination-cell="account">sunny01</td>
+                                <td><div class="combination-thumb"><span>b1.png</span><span>al1.png</span><span>al2.png</span><span>al3.png</span></div></td>
+                                <td data-owned-combination-cell="body"><div class="combination-slot"><strong>b1.png</strong><span class="combination-null" aria-label="NULL">—</span></div></td>
+                                <td data-owned-combination-cell="accessory1"><div class="combination-slot"><strong>al1.png</strong><span class="combination-null" aria-label="NULL">—</span></div></td>
+                                <td data-owned-combination-cell="accessory2"><div class="combination-slot"><strong>al2.png</strong><span class="combination-null" aria-label="NULL">—</span></div></td>
+                                <td data-owned-combination-cell="accessory3"><div class="combination-slot"><strong>al3.png</strong><span>#FF44AA</span></div></td>
+                            </tr>
+                            <tr data-owned-combination-row data-id="4" data-account="sunny01" data-body="b3.png" data-accessory1="al1.png" data-accessory2="al2.png" data-accessory3="al3.png" data-body-color="NULL" data-accessory1-color="NULL" data-accessory2-color="#FF44AA" data-accessory3-color="NULL">
+                                <td data-owned-combination-cell="id">4</td>
+                                <td data-owned-combination-cell="account">sunny01</td>
+                                <td><div class="combination-thumb"><span>b3.png</span><span>al1.png</span><span>al2.png</span><span>al3.png</span></div></td>
+                                <td data-owned-combination-cell="body"><div class="combination-slot"><strong>b3.png</strong><span class="combination-null" aria-label="NULL">—</span></div></td>
+                                <td data-owned-combination-cell="accessory1"><div class="combination-slot"><strong>al1.png</strong><span class="combination-null" aria-label="NULL">—</span></div></td>
+                                <td data-owned-combination-cell="accessory2"><div class="combination-slot"><strong>al2.png</strong><span>#FF44AA</span></div></td>
+                                <td data-owned-combination-cell="accessory3"><div class="combination-slot"><strong>al3.png</strong><span class="combination-null" aria-label="NULL">—</span></div></td>
+                            </tr>
+                            <tr data-owned-combination-row data-id="5" data-account="sunny01" data-body="b3.png" data-accessory1="al2.png" data-accessory2="al3.png" data-accessory3="NULL" data-body-color="NULL" data-accessory1-color="#FF44AA" data-accessory2-color="NULL" data-accessory3-color="NULL">
+                                <td data-owned-combination-cell="id">5</td>
+                                <td data-owned-combination-cell="account">sunny01</td>
+                                <td><div class="combination-thumb"><span>b3.png</span><span>al2.png</span><span>al3.png</span></div></td>
+                                <td data-owned-combination-cell="body"><div class="combination-slot"><strong>b3.png</strong><span class="combination-null" aria-label="NULL">—</span></div></td>
+                                <td data-owned-combination-cell="accessory1"><div class="combination-slot"><strong>al2.png</strong><span>#FF44AA</span></div></td>
+                                <td data-owned-combination-cell="accessory2"><div class="combination-slot"><strong>al3.png</strong><span class="combination-null" aria-label="NULL">—</span></div></td>
+                                <td data-owned-combination-cell="accessory3"><span class="combination-null" aria-label="NULL">—</span></td>
+                            </tr>
+                            <tr data-owned-combination-row data-id="6" data-account="sunny01" data-body="b3.png" data-accessory1="al3.png" data-accessory2="al2.png" data-accessory3="NULL" data-body-color="NULL" data-accessory1-color="NULL" data-accessory2-color="#FF44AA" data-accessory3-color="NULL">
+                                <td data-owned-combination-cell="id">6</td>
+                                <td data-owned-combination-cell="account">sunny01</td>
+                                <td><div class="combination-thumb"><span>b3.png</span><span>al3.png</span><span>al2.png</span></div></td>
+                                <td data-owned-combination-cell="body"><div class="combination-slot"><strong>b3.png</strong><span class="combination-null" aria-label="NULL">—</span></div></td>
+                                <td data-owned-combination-cell="accessory1"><div class="combination-slot"><strong>al3.png</strong><span class="combination-null" aria-label="NULL">—</span></div></td>
+                                <td data-owned-combination-cell="accessory2"><div class="combination-slot"><strong>al2.png</strong><span>#FF44AA</span></div></td>
+                                <td data-owned-combination-cell="accessory3"><span class="combination-null" aria-label="NULL">—</span></td>
+                            </tr>
+                            <tr data-owned-combination-row data-id="7" data-account="sunny01" data-body="b3.png" data-accessory1="NULL" data-accessory2="NULL" data-accessory3="NULL" data-body-color="#FF44AA" data-accessory1-color="NULL" data-accessory2-color="NULL" data-accessory3-color="NULL">
+                                <td data-owned-combination-cell="id">7</td>
+                                <td data-owned-combination-cell="account">sunny01</td>
+                                <td><div class="combination-thumb"><span>b3.png</span></div></td>
+                                <td data-owned-combination-cell="body"><div class="combination-slot"><strong>b3.png</strong><span>#FF44AA</span></div></td>
+                                <td data-owned-combination-cell="accessory1"><span class="combination-null" aria-label="NULL">—</span></td>
+                                <td data-owned-combination-cell="accessory2"><span class="combination-null" aria-label="NULL">—</span></td>
+                                <td data-owned-combination-cell="accessory3"><span class="combination-null" aria-label="NULL">—</span></td>
+                            </tr>
+                            <tr data-owned-combination-row data-id="8" data-account="sunny01" data-body="b3.png" data-accessory1="NULL" data-accessory2="NULL" data-accessory3="NULL" data-body-color="NULL" data-accessory1-color="NULL" data-accessory2-color="NULL" data-accessory3-color="NULL">
+                                <td data-owned-combination-cell="id">8</td>
+                                <td data-owned-combination-cell="account">sunny01</td>
+                                <td><div class="combination-thumb"><span>b3.png</span></div></td>
+                                <td data-owned-combination-cell="body"><div class="combination-slot"><strong>b3.png</strong><span class="combination-null" aria-label="NULL">—</span></div></td>
+                                <td data-owned-combination-cell="accessory1"><span class="combination-null" aria-label="NULL">—</span></td>
+                                <td data-owned-combination-cell="accessory2"><span class="combination-null" aria-label="NULL">—</span></td>
+                                <td data-owned-combination-cell="accessory3"><span class="combination-null" aria-label="NULL">—</span></td>
+                            </tr>
+                            <tr data-owned-combination-row data-id="9" data-account="milktea04" data-body="b1.png" data-accessory1="al3.png" data-accessory2="NULL" data-accessory3="NULL" data-body-color="NULL" data-accessory1-color="#5555FF" data-accessory2-color="NULL" data-accessory3-color="NULL">
+                                <td data-owned-combination-cell="id">9</td>
+                                <td data-owned-combination-cell="account">milktea04</td>
+                                <td><div class="combination-thumb"><span>b1.png</span><span>al3.png</span></div></td>
+                                <td data-owned-combination-cell="body"><div class="combination-slot"><strong>b1.png</strong><span class="combination-null" aria-label="NULL">—</span></div></td>
+                                <td data-owned-combination-cell="accessory1"><div class="combination-slot"><strong>al3.png</strong><span>#5555FF</span></div></td>
+                                <td data-owned-combination-cell="accessory2"><span class="combination-null" aria-label="NULL">—</span></td>
+                                <td data-owned-combination-cell="accessory3"><span class="combination-null" aria-label="NULL">—</span></td>
+                            </tr>
+                            <tr data-owned-combination-row data-id="10" data-account="milktea04" data-body="b1.png" data-accessory1="al3.png" data-accessory2="NULL" data-accessory3="NULL" data-body-color="#5555FF" data-accessory1-color="#000000" data-accessory2-color="NULL" data-accessory3-color="NULL">
+                                <td data-owned-combination-cell="id">10</td>
+                                <td data-owned-combination-cell="account">milktea04</td>
+                                <td><div class="combination-thumb"><span>b1.png</span><span>al3.png</span></div></td>
+                                <td data-owned-combination-cell="body"><div class="combination-slot"><strong>b1.png</strong><span>#5555FF</span></div></td>
+                                <td data-owned-combination-cell="accessory1"><div class="combination-slot"><strong>al3.png</strong><span>#000000</span></div></td>
+                                <td data-owned-combination-cell="accessory2"><span class="combination-null" aria-label="NULL">—</span></td>
+                                <td data-owned-combination-cell="accessory3"><span class="combination-null" aria-label="NULL">—</span></td>
+                            </tr>
+                            <tr data-owned-combination-row data-id="11" data-account="milktea04" data-body="b1.png" data-accessory1="NULL" data-accessory2="NULL" data-accessory3="NULL" data-body-color="#5555FF" data-accessory1-color="NULL" data-accessory2-color="NULL" data-accessory3-color="NULL">
+                                <td data-owned-combination-cell="id">11</td>
+                                <td data-owned-combination-cell="account">milktea04</td>
+                                <td><div class="combination-thumb"><span>b1.png</span></div></td>
+                                <td data-owned-combination-cell="body"><div class="combination-slot"><strong>b1.png</strong><span>#5555FF</span></div></td>
+                                <td data-owned-combination-cell="accessory1"><span class="combination-null" aria-label="NULL">—</span></td>
+                                <td data-owned-combination-cell="accessory2"><span class="combination-null" aria-label="NULL">—</span></td>
+                                <td data-owned-combination-cell="accessory3"><span class="combination-null" aria-label="NULL">—</span></td>
+                            </tr>
+                            <tr data-owned-combination-row data-id="12" data-account="milktea04" data-body="b1.png" data-accessory1="NULL" data-accessory2="NULL" data-accessory3="NULL" data-body-color="NULL" data-accessory1-color="NULL" data-accessory2-color="NULL" data-accessory3-color="NULL">
+                                <td data-owned-combination-cell="id">12</td>
+                                <td data-owned-combination-cell="account">milktea04</td>
+                                <td><div class="combination-thumb"><span>b1.png</span></div></td>
+                                <td data-owned-combination-cell="body"><div class="combination-slot"><strong>b1.png</strong><span class="combination-null" aria-label="NULL">—</span></div></td>
+                                <td data-owned-combination-cell="accessory1"><span class="combination-null" aria-label="NULL">—</span></td>
+                                <td data-owned-combination-cell="accessory2"><span class="combination-null" aria-label="NULL">—</span></td>
+                                <td data-owned-combination-cell="accessory3"><span class="combination-null" aria-label="NULL">—</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="member-pagination-wrap">
+                    <span class="member-page-info" id="ownedCombinationPageInfo">第 1 頁</span>
+                    <nav aria-label="持有組合表格分頁">
+                        <ul class="pagination member-pagination" id="ownedCombinationPagination"></ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+@section Styles {
+    <link href="~/css/owned-combination-list.css" rel="stylesheet">
+}
+
+@section Scripts {
+    <script src="~/js/owned-combination-list.js"></script>
+}

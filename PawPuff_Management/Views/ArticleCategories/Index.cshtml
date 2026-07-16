@@ -1,0 +1,194 @@
+﻿@{
+    ViewData["Title"] = "文章分類管理";
+    ViewData["CurrentScreen"] = "article-category-management";
+}
+
+<div class="dashboard-content management-screen" id="managementScreen" data-screen-panel="management">
+    <section class="soft-panel management-panel">
+        <span class="screen-kicker">
+            <span class="tiny-paw" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+            PawPuff Admin
+        </span>
+        <h2 class="screen-title" id="managementTitle">文章分類管理</h2>
+        <p class="screen-desc" id="managementDescription">
+            維護文章分類、排序與分類啟用狀態。
+        </p>
+
+        <div class="article-category-view" id="articleCategoryView">
+            <div class="member-page-actions">
+                <button class="member-create-open-btn" id="categoryCreateOpen" type="button" data-bs-toggle="modal" data-bs-target="#categoryCreateModal">
+                    <i class="bi bi-folder-plus me-1"></i>新增分類名稱
+                </button>
+            </div>
+
+            <form class="member-search-panel" id="categorySearchForm">
+                <div class="member-search-row article-category-search-row">
+                    <div class="member-search-field">
+                        <label class="form-label" for="categoryFilterId">編號</label>
+                        <input class="form-control" id="categoryFilterId" type="text" data-category-filter="id" placeholder="輸入編號">
+                    </div>
+                    <div class="member-search-field is-wide">
+                        <label class="form-label" for="categoryFilterName">分類名稱</label>
+                        <input class="form-control" id="categoryFilterName" type="text" data-category-filter="name" placeholder="輸入分類名稱">
+                    </div>
+                    <div class="member-search-field">
+                        <button class="member-reset-btn px-3" id="categoryFilterReset" type="button">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i>重設
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="member-table-card article-category-table-card">
+                <div class="member-table-toolbar">
+                    <strong><i class="bi bi-folder2-open me-2"></i>文章分類資料表</strong>
+                    <span class="member-count" id="categoryResultCount">共 0 筆</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover member-table article-category-table align-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-category-sort="id">編號 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-category-sort="name">分類名稱 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-category-sort="active">停用/啟用 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryTableBody">
+                            <tr data-category-row data-id="1" data-name="官方公告" data-active="true">
+                                <td data-category-cell="id">1</td>
+                                <td data-category-cell="name">官方公告</td>
+                                <td>
+                                    <div class="form-check form-switch member-status-switch category-status-switch">
+                                        <input class="form-check-input" id="categoryStatus1" type="checkbox" role="switch" data-category-status="1" checked>
+                                        <label class="member-status-text" for="categoryStatus1">啟用</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-category-row data-id="2" data-name="醫療養護" data-active="true">
+                                <td data-category-cell="id">2</td>
+                                <td data-category-cell="name">醫療養護</td>
+                                <td>
+                                    <div class="form-check form-switch member-status-switch category-status-switch">
+                                        <input class="form-check-input" id="categoryStatus2" type="checkbox" role="switch" data-category-status="2" checked>
+                                        <label class="member-status-text" for="categoryStatus2">啟用</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-category-row data-id="3" data-name="飲食營養" data-active="true">
+                                <td data-category-cell="id">3</td>
+                                <td data-category-cell="name">飲食營養</td>
+                                <td>
+                                    <div class="form-check form-switch member-status-switch category-status-switch">
+                                        <input class="form-check-input" id="categoryStatus3" type="checkbox" role="switch" data-category-status="3" checked>
+                                        <label class="member-status-text" for="categoryStatus3">啟用</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-category-row data-id="4" data-name="行為訓練" data-active="true">
+                                <td data-category-cell="id">4</td>
+                                <td data-category-cell="name">行為訓練</td>
+                                <td>
+                                    <div class="form-check form-switch member-status-switch category-status-switch">
+                                        <input class="form-check-input" id="categoryStatus4" type="checkbox" role="switch" data-category-status="4" checked>
+                                        <label class="member-status-text" for="categoryStatus4">啟用</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-category-row data-id="5" data-name="寵物認養" data-active="true">
+                                <td data-category-cell="id">5</td>
+                                <td data-category-cell="name">寵物認養</td>
+                                <td>
+                                    <div class="form-check form-switch member-status-switch category-status-switch">
+                                        <input class="form-check-input" id="categoryStatus5" type="checkbox" role="switch" data-category-status="5" checked>
+                                        <label class="member-status-text" for="categoryStatus5">啟用</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-category-row data-id="6" data-name="美容美體" data-active="true">
+                                <td data-category-cell="id">6</td>
+                                <td data-category-cell="name">美容美體</td>
+                                <td>
+                                    <div class="form-check form-switch member-status-switch category-status-switch">
+                                        <input class="form-check-input" id="categoryStatus6" type="checkbox" role="switch" data-category-status="6" checked>
+                                        <label class="member-status-text" for="categoryStatus6">啟用</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-category-row data-id="7" data-name="走失求助" data-active="true">
+                                <td data-category-cell="id">7</td>
+                                <td data-category-cell="name">走失求助</td>
+                                <td>
+                                    <div class="form-check form-switch member-status-switch category-status-switch">
+                                        <input class="form-check-input" id="categoryStatus7" type="checkbox" role="switch" data-category-status="7" checked>
+                                        <label class="member-status-text" for="categoryStatus7">啟用</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="member-pagination-wrap">
+                    <span class="member-page-info" id="categoryPageInfo">第 1 頁</span>
+                    <nav aria-label="文章分類表格分頁">
+                        <ul class="pagination member-pagination" id="categoryPagination"></ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<div class="modal fade" id="categoryCreateModal" tabindex="-1" aria-labelledby="categoryCreateModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content member-form-modal">
+            <form id="categoryCreateForm" novalidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="categoryCreateModalTitle">新增文章分類</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label fw-bold" for="categoryCreateName">分類名稱</label>
+                    <input class="form-control" id="categoryCreateName" type="text" autocomplete="off" required>
+                    <div class="invalid-feedback">請輸入分類名稱。</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-warning fw-bold text-brown">新增分類</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="categoryStatusModal" tabindex="-1" aria-labelledby="categoryStatusModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content member-status-modal">
+            <div class="modal-header">
+                <h5 class="modal-title" id="categoryStatusModalTitle">確認變更狀態</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+            </div>
+            <div class="modal-body">
+                <p class="member-status-modal-desc mb-0" id="categoryStatusModalDescription">確定要變更分類狀態嗎？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-warning fw-bold text-brown" id="categoryStatusConfirm">確認變更</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link href="~/css/article-category-management.css" rel="stylesheet">
+}
+
+@section Scripts {
+    <script src="~/js/article-category-management.js"></script>
+}

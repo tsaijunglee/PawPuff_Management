@@ -1,0 +1,452 @@
+﻿@{
+    ViewData["Title"] = "會員管理";
+    ViewData["CurrentScreen"] = "member-management";
+}
+
+
+<div class="dashboard-content management-screen" id="managementScreen" data-screen-panel="management">
+    <section class="soft-panel management-panel">
+        <span class="screen-kicker">
+            <span class="tiny-paw" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+            PawPuff Admin
+        </span>
+        <h2 class="screen-title" id="managementTitle">會員管理</h2>
+        <p class="screen-desc" id="managementDescription">
+            管理會員帳號與啟用狀態。
+        </p>
+        <div class="member-management-view" id="memberManagementView" data-screen="member-management" data-entity-type="member" data-detail-title="會員詳情" data-detail-description-template="查看「{nickname}」的會員完整資料、點數與帳號狀態。" data-create-success-message="已新增會員資料" data-actor-admin-account="admin01" data-actor-admin-id="1">
+            <div class="member-page-actions">
+                <button class="member-create-open-btn" id="memberCreateOpen" type="button" data-bs-toggle="modal" data-bs-target="#memberCreateModal">
+                    <i class="bi bi-person-plus me-1"></i>新增會員資料
+                </button>
+            </div>
+            <form class="member-search-panel" id="memberSearchForm">
+                <div class="member-search-row">
+                    <div class="member-search-field">
+                        <label class="form-label" for="memberFilterId">編號</label>
+                        <input class="form-control" id="memberFilterId" type="text" data-member-filter="id" placeholder="輸入編號">
+                    </div>
+                    <div class="member-search-field">
+                        <label class="form-label" for="memberFilterAccount">帳號</label>
+                        <input class="form-control" id="memberFilterAccount" type="text" data-member-filter="account" placeholder="輸入帳號">
+                    </div>
+                    <div class="member-search-field">
+                        <label class="form-label" for="memberFilterNickname">暱稱</label>
+                        <input class="form-control" id="memberFilterNickname" type="text" data-member-filter="nickname" placeholder="輸入暱稱">
+                    </div>
+                    <div class="member-search-field">
+                        <label class="form-label" for="memberFilterPhone">電話</label>
+                        <input class="form-control" id="memberFilterPhone" type="text" data-member-filter="phone" placeholder="輸入電話">
+                    </div>
+                    <div class="member-search-field is-wide">
+                        <label class="form-label" for="memberFilterEmail">電子信箱</label>
+                        <input class="form-control" id="memberFilterEmail" type="text" data-member-filter="email" placeholder="輸入電子信箱">
+                    </div>
+                    <div class="member-search-field">
+                        <button class="member-reset-btn px-3" id="memberFilterReset" type="button">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i>重設
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="member-table-card">
+                <div class="member-table-toolbar">
+                    <strong><i class="bi bi-people me-2"></i>會員帳號資料表</strong>
+                    <span class="member-count" id="memberResultCount">共 0 筆</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover member-table align-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-member-sort="id">編號 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-member-sort="account">帳號 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-member-sort="nickname">暱稱 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-member-sort="phone">電話 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-member-sort="email">電子信箱 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-member-sort="points">點數 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                                <th scope="col">
+                                    <span class="sort-static-label">查看詳情</span>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn" type="button" data-member-sort="enabled">停用/啟用 <i class="bi bi-arrow-down-up"></i></button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="memberTableBody" data-table-columns="id,account,nickname,phone,email,points">
+                            <tr data-member-row data-id="1" data-account="sunny01" data-password-hash="069edcc63a6a9b47e5b22b27a3c3fbc6776b2512f4efeb38a6a12ff31405e3f5" data-nickname="小晴" data-email="sunny01@gmail.com" data-phone="0932649915" data-active-doll-configs-id="NULL" data-active-doll-frame-id="NULL" data-point-balance="50" data-points="50" data-is-active="1" data-enabled="true" data-created-at="2026-03-16 8:35:00" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-member-cell="id">1</td>
+                                <td data-member-cell="account">sunny01</td>
+                                <td data-member-cell="nickname">小晴</td>
+                                <td data-member-cell="phone">0932649915</td>
+                                <td data-member-cell="email">sunny01@gmail.com</td>
+                                <td class="text-nowrap" data-member-cell="points">50</td>
+                                <td>
+                                    <button class="member-detail-btn" type="button" data-member-detail="1">查看 <i class="bi bi-chevron-right"></i></button>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch member-status-switch">
+                                        <input class="form-check-input" id="memberStatus1" type="checkbox" role="switch" data-member-status="1" checked>
+                                        <label class="member-status-text" for="memberStatus1">啟用</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-member-row data-id="2" data-account="milktea02" data-password-hash="069edcc63a6a9b47e5b22b27a3c3fbc6776b2512f4efeb38a6a12ff31405e3f5" data-nickname="奶茶" data-email="milktea02@gmail.com" data-phone="0982662624" data-active-doll-configs-id="NULL" data-active-doll-frame-id="NULL" data-point-balance="850" data-points="850" data-is-active="1" data-enabled="true" data-created-at="2025-09-01 7:25:00" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-member-cell="id">2</td>
+                                <td data-member-cell="account">milktea02</td>
+                                <td data-member-cell="nickname">奶茶</td>
+                                <td data-member-cell="phone">0982662624</td>
+                                <td data-member-cell="email">milktea02@gmail.com</td>
+                                <td class="text-nowrap" data-member-cell="points">850</td>
+                                <td>
+                                    <button class="member-detail-btn" type="button" data-member-detail="2">查看 <i class="bi bi-chevron-right"></i></button>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch member-status-switch">
+                                        <input class="form-check-input" id="memberStatus2" type="checkbox" role="switch" data-member-status="2" checked>
+                                        <label class="member-status-text" for="memberStatus2">啟用</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-member-row data-id="3" data-account="pudding03" data-password-hash="069edcc63a6a9b47e5b22b27a3c3fbc6776b2512f4efeb38a6a12ff31405e3f5" data-nickname="布丁" data-email="pudding03@gmail.com" data-phone="0922465520" data-active-doll-configs-id="NULL" data-active-doll-frame-id="NULL" data-point-balance="50" data-points="50" data-is-active="1" data-enabled="true" data-created-at="2026-06-14 11:04:00" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-member-cell="id">3</td>
+                                <td data-member-cell="account">pudding03</td>
+                                <td data-member-cell="nickname">布丁</td>
+                                <td data-member-cell="phone">0922465520</td>
+                                <td data-member-cell="email">pudding03@gmail.com</td>
+                                <td class="text-nowrap" data-member-cell="points">50</td>
+                                <td>
+                                    <button class="member-detail-btn" type="button" data-member-detail="3">查看 <i class="bi bi-chevron-right"></i></button>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch member-status-switch">
+                                        <input class="form-check-input" id="memberStatus3" type="checkbox" role="switch" data-member-status="3" checked>
+                                        <label class="member-status-text" for="memberStatus3">啟用</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-member-row data-id="4" data-account="afu04" data-password-hash="069edcc63a6a9b47e5b22b27a3c3fbc6776b2512f4efeb38a6a12ff31405e3f5" data-nickname="阿福" data-email="afu04@gmail.com" data-phone="0920980759" data-active-doll-configs-id="NULL" data-active-doll-frame-id="NULL" data-point-balance="650" data-points="650" data-is-active="1" data-enabled="true" data-created-at="2025-12-10 5:01:00" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-member-cell="id">4</td>
+                                <td data-member-cell="account">afu04</td>
+                                <td data-member-cell="nickname">阿福</td>
+                                <td data-member-cell="phone">0920980759</td>
+                                <td data-member-cell="email">afu04@gmail.com</td>
+                                <td class="text-nowrap" data-member-cell="points">650</td>
+                                <td>
+                                    <button class="member-detail-btn" type="button" data-member-detail="4">查看 <i class="bi bi-chevron-right"></i></button>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch member-status-switch">
+                                        <input class="form-check-input" id="memberStatus4" type="checkbox" role="switch" data-member-status="4" checked>
+                                        <label class="member-status-text" for="memberStatus4">啟用</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-member-row data-id="5" data-account="cocoa05" data-password-hash="069edcc63a6a9b47e5b22b27a3c3fbc6776b2512f4efeb38a6a12ff31405e3f5" data-nickname="可可" data-email="cocoa05@gmail.com" data-phone="0967443257" data-active-doll-configs-id="NULL" data-active-doll-frame-id="NULL" data-point-balance="50" data-points="50" data-is-active="1" data-enabled="true" data-created-at="2026-02-28 6:57:00" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-member-cell="id">5</td>
+                                <td data-member-cell="account">cocoa05</td>
+                                <td data-member-cell="nickname">可可</td>
+                                <td data-member-cell="phone">0967443257</td>
+                                <td data-member-cell="email">cocoa05@gmail.com</td>
+                                <td class="text-nowrap" data-member-cell="points">50</td>
+                                <td>
+                                    <button class="member-detail-btn" type="button" data-member-detail="5">查看 <i class="bi bi-chevron-right"></i></button>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch member-status-switch">
+                                        <input class="form-check-input" id="memberStatus5" type="checkbox" role="switch" data-member-status="5" checked>
+                                        <label class="member-status-text" for="memberStatus5">啟用</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-member-row data-id="6" data-account="millet06" data-password-hash="069edcc63a6a9b47e5b22b27a3c3fbc6776b2512f4efeb38a6a12ff31405e3f5" data-nickname="米粒" data-email="millet06@gmail.com" data-phone="0918932737" data-active-doll-configs-id="NULL" data-active-doll-frame-id="NULL" data-point-balance="550" data-points="550" data-is-active="1" data-enabled="true" data-created-at="2026-01-13 10:14:00" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-member-cell="id">6</td>
+                                <td data-member-cell="account">millet06</td>
+                                <td data-member-cell="nickname">米粒</td>
+                                <td data-member-cell="phone">0918932737</td>
+                                <td data-member-cell="email">millet06@gmail.com</td>
+                                <td class="text-nowrap" data-member-cell="points">550</td>
+                                <td>
+                                    <button class="member-detail-btn" type="button" data-member-detail="6">查看 <i class="bi bi-chevron-right"></i></button>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch member-status-switch">
+                                        <input class="form-check-input" id="memberStatus6" type="checkbox" role="switch" data-member-status="6" checked>
+                                        <label class="member-status-text" for="memberStatus6">啟用</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-member-row data-id="7" data-account="xiaobai07" data-password-hash="069edcc63a6a9b47e5b22b27a3c3fbc6776b2512f4efeb38a6a12ff31405e3f5" data-nickname="小白" data-email="xiaobai07@gmail.com" data-phone="0981627666" data-active-doll-configs-id="NULL" data-active-doll-frame-id="NULL" data-point-balance="900" data-points="900" data-is-active="1" data-enabled="true" data-created-at="2025-04-19 2:38:00" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-member-cell="id">7</td>
+                                <td data-member-cell="account">xiaobai07</td>
+                                <td data-member-cell="nickname">小白</td>
+                                <td data-member-cell="phone">0981627666</td>
+                                <td data-member-cell="email">xiaobai07@gmail.com</td>
+                                <td class="text-nowrap" data-member-cell="points">900</td>
+                                <td>
+                                    <button class="member-detail-btn" type="button" data-member-detail="7">查看 <i class="bi bi-chevron-right"></i></button>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch member-status-switch">
+                                        <input class="form-check-input" id="memberStatus7" type="checkbox" role="switch" data-member-status="7" checked>
+                                        <label class="member-status-text" for="memberStatus7">啟用</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-member-row data-id="8" data-account="tofu08" data-password-hash="069edcc63a6a9b47e5b22b27a3c3fbc6776b2512f4efeb38a6a12ff31405e3f5" data-nickname="豆花" data-email="tofu08@gmail.com" data-phone="0922409033" data-active-doll-configs-id="NULL" data-active-doll-frame-id="NULL" data-point-balance="400" data-points="400" data-is-active="1" data-enabled="true" data-created-at="2025-06-07 5:31:00" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-member-cell="id">8</td>
+                                <td data-member-cell="account">tofu08</td>
+                                <td data-member-cell="nickname">豆花</td>
+                                <td data-member-cell="phone">0922409033</td>
+                                <td data-member-cell="email">tofu08@gmail.com</td>
+                                <td class="text-nowrap" data-member-cell="points">400</td>
+                                <td>
+                                    <button class="member-detail-btn" type="button" data-member-detail="8">查看 <i class="bi bi-chevron-right"></i></button>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch member-status-switch">
+                                        <input class="form-check-input" id="memberStatus8" type="checkbox" role="switch" data-member-status="8" checked>
+                                        <label class="member-status-text" for="memberStatus8">啟用</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-member-row data-id="9" data-account="happy09" data-password-hash="069edcc63a6a9b47e5b22b27a3c3fbc6776b2512f4efeb38a6a12ff31405e3f5" data-nickname="樂樂" data-email="happy09@gmail.com" data-phone="0920995825" data-active-doll-configs-id="NULL" data-active-doll-frame-id="NULL" data-point-balance="0" data-points="0" data-is-active="1" data-enabled="true" data-created-at="2026-04-22 3:51:00" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-member-cell="id">9</td>
+                                <td data-member-cell="account">happy09</td>
+                                <td data-member-cell="nickname">樂樂</td>
+                                <td data-member-cell="phone">0920995825</td>
+                                <td data-member-cell="email">happy09@gmail.com</td>
+                                <td class="text-nowrap" data-member-cell="points">0</td>
+                                <td>
+                                    <button class="member-detail-btn" type="button" data-member-detail="9">查看 <i class="bi bi-chevron-right"></i></button>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch member-status-switch">
+                                        <input class="form-check-input" id="memberStatus9" type="checkbox" role="switch" data-member-status="9" checked>
+                                        <label class="member-status-text" for="memberStatus9">啟用</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-member-row data-id="10" data-account="anan10" data-password-hash="069edcc63a6a9b47e5b22b27a3c3fbc6776b2512f4efeb38a6a12ff31405e3f5" data-nickname="安安" data-email="anan10@gmail.com" data-phone="0980499238" data-active-doll-configs-id="NULL" data-active-doll-frame-id="NULL" data-point-balance="1000" data-points="1000" data-is-active="0" data-enabled="false" data-created-at="2026-05-27 6:30:00" data-admin-comment="多次發布廣告內容" data-admin-updated-at="2026-06-08 9:30:00" data-modified-by-admin="admin01">
+                                <td data-member-cell="id">10</td>
+                                <td data-member-cell="account">anan10</td>
+                                <td data-member-cell="nickname">安安</td>
+                                <td data-member-cell="phone">0980499238</td>
+                                <td data-member-cell="email">anan10@gmail.com</td>
+                                <td class="text-nowrap" data-member-cell="points">1,000</td>
+                                <td>
+                                    <button class="member-detail-btn" type="button" data-member-detail="10">查看 <i class="bi bi-chevron-right"></i></button>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch member-status-switch">
+                                        <input class="form-check-input" id="memberStatus10" type="checkbox" role="switch" data-member-status="10">
+                                        <label class="member-status-text" for="memberStatus10">停用</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-member-row data-id="11" data-account="yuzu11" data-password-hash="069edcc63a6a9b47e5b22b27a3c3fbc6776b2512f4efeb38a6a12ff31405e3f5" data-nickname="柚子" data-email="yuzu11@gmail.com" data-phone="0970518656" data-active-doll-configs-id="NULL" data-active-doll-frame-id="NULL" data-point-balance="300" data-points="300" data-is-active="1" data-enabled="true" data-created-at="2026-05-30 8:40:00" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-member-cell="id">11</td>
+                                <td data-member-cell="account">yuzu11</td>
+                                <td data-member-cell="nickname">柚子</td>
+                                <td data-member-cell="phone">0970518656</td>
+                                <td data-member-cell="email">yuzu11@gmail.com</td>
+                                <td class="text-nowrap" data-member-cell="points">300</td>
+                                <td>
+                                    <button class="member-detail-btn" type="button" data-member-detail="11">查看 <i class="bi bi-chevron-right"></i></button>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch member-status-switch">
+                                        <input class="form-check-input" id="memberStatus11" type="checkbox" role="switch" data-member-status="11" checked>
+                                        <label class="member-status-text" for="memberStatus11">啟用</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-member-row data-id="12" data-account="mochi12" data-password-hash="069edcc63a6a9b47e5b22b27a3c3fbc6776b2512f4efeb38a6a12ff31405e3f5" data-nickname="麻糬" data-email="mochi12@gmail.com" data-phone="0965658887" data-active-doll-configs-id="NULL" data-active-doll-frame-id="NULL" data-point-balance="350" data-points="350" data-is-active="1" data-enabled="true" data-created-at="2026-07-01 9:58:00" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-member-cell="id">12</td>
+                                <td data-member-cell="account">mochi12</td>
+                                <td data-member-cell="nickname">麻糬</td>
+                                <td data-member-cell="phone">0965658887</td>
+                                <td data-member-cell="email">mochi12@gmail.com</td>
+                                <td class="text-nowrap" data-member-cell="points">350</td>
+                                <td>
+                                    <button class="member-detail-btn" type="button" data-member-detail="12">查看 <i class="bi bi-chevron-right"></i></button>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch member-status-switch">
+                                        <input class="form-check-input" id="memberStatus12" type="checkbox" role="switch" data-member-status="12" checked>
+                                        <label class="member-status-text" for="memberStatus12">啟用</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="member-pagination-wrap">
+                    <span class="member-page-info" id="memberPageInfo">第 1 頁</span>
+                    <nav aria-label="會員表格分頁">
+                        <ul class="pagination member-pagination" id="memberPagination"></ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <div class="member-detail-view d-none" id="memberDetailView">
+            <div class="member-detail-card">
+                <div class="member-detail-head">
+                    <strong><i class="bi bi-person-vcard me-2"></i><span id="memberDetailTitle">會員詳情</span></strong>
+                    <button class="member-back-btn px-3" id="memberDetailBack" type="button">
+                        <i class="bi bi-arrow-left me-1"></i>返回會員管理
+                    </button>
+                </div>
+                <div class="member-detail-grid" id="memberDetailGrid">
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">編號</div>
+                        <div class="member-detail-value" data-member-detail-value="id"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">帳號</div>
+                        <div class="member-detail-value" data-member-detail-value="account"></div>
+                    </div>
+                    <div class="member-detail-field is-wide">
+                        <div class="member-detail-label">密碼雜湊</div>
+                        <div class="member-detail-value member-password-mask" data-member-detail-value="passwordMasked"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">暱稱</div>
+                        <div class="member-detail-value" data-member-detail-value="nickname"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">信箱</div>
+                        <div class="member-detail-value" data-member-detail-value="email"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">電話</div>
+                        <div class="member-detail-value" data-member-detail-value="phone"></div>
+                    </div>
+                    <div class="member-detail-field is-wide">
+                        <div class="member-detail-label">目前頭像</div>
+                        <div class="member-avatar-preview" data-member-avatar-preview aria-label="目前頭像預覽">
+                            <div class="member-avatar-layer" data-member-avatar-layer="doll"></div>
+                            <div class="member-avatar-layer" data-member-avatar-layer="frame"></div>
+                        </div>
+                        <div class="member-avatar-meta">
+                            <span>頭像編號：<span data-member-detail-value="activeDollConfigsId"></span></span>
+                            <span>頭像框編號：<span data-member-detail-value="activeDollFrameId"></span></span>
+                        </div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">點數</div>
+                        <div class="member-detail-value" data-member-detail-value="pointsFormatted"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">帳號狀態</div>
+                        <div class="form-check form-switch member-status-switch member-detail-status-switch">
+                            <input class="form-check-input" id="memberDetailStatus" type="checkbox" role="switch">
+                            <label class="member-status-text" id="memberDetailStatusLabel" for="memberDetailStatus">啟用</label>
+                        </div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">註冊日期</div>
+                        <div class="member-detail-value" data-member-detail-value="createdAt"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">帳號啟用/停用說明</div>
+                        <div class="member-detail-value" data-member-detail-value="adminComment"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">啟用/停用變更日期</div>
+                        <div class="member-detail-value" data-member-detail-value="adminUpdatedAt"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">操作啟用/停用管理員帳號</div>
+                        <div class="member-detail-value" data-member-detail-value="modifiedByAdmin"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="modal fade" id="memberCreateModal" tabindex="-1" aria-labelledby="memberCreateModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content member-form-modal">
+            <form id="memberCreateForm" novalidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="memberCreateModalTitle">新增會員資料</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-bold" for="memberCreateAccount">帳號</label>
+                            <input class="form-control" id="memberCreateAccount" type="text" autocomplete="off" required>
+                            <div class="invalid-feedback">請輸入帳號。</div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-bold" for="memberCreatePassword">密碼</label>
+                            <input class="form-control" id="memberCreatePassword" type="password" autocomplete="new-password" required>
+                            <div class="invalid-feedback">請輸入密碼。</div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-bold" for="memberCreatePasswordConfirm">確認密碼</label>
+                            <input class="form-control" id="memberCreatePasswordConfirm" type="password" autocomplete="new-password" required>
+                            <div class="invalid-feedback">請再次輸入相同密碼。</div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-bold" for="memberCreateNickname">暱稱</label>
+                            <input class="form-control" id="memberCreateNickname" type="text" autocomplete="off" required>
+                            <div class="invalid-feedback">請輸入暱稱。</div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-bold" for="memberCreatePhone">電話</label>
+                            <input class="form-control" id="memberCreatePhone" type="tel" autocomplete="tel" required>
+                            <div class="invalid-feedback">請輸入電話。</div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-bold" for="memberCreateEmail">電子信箱</label>
+                            <input class="form-control" id="memberCreateEmail" type="email" autocomplete="email" required>
+                            <div class="invalid-feedback">請輸入有效的電子信箱。</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-warning fw-bold text-brown" id="memberCreateSubmit">新增會員</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="memberStatusModal" tabindex="-1" aria-labelledby="memberStatusModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content member-status-modal">
+            <div class="modal-header">
+                <h5 class="modal-title" id="memberStatusModalTitle">啟用/停用說明</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+            </div>
+            <div class="modal-body">
+                <p class="member-status-modal-desc" id="memberStatusModalDescription">請輸入啟用/停用說明。</p>
+                <label class="form-label fw-bold" for="memberStatusReason">啟用/停用說明</label>
+                <textarea class="form-control" id="memberStatusReason" rows="4" placeholder="請輸入此次啟用/停用原因"></textarea>
+                <div class="invalid-feedback d-none" id="memberStatusReasonError">請輸入啟用/停用說明後再確認。</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-warning fw-bold text-brown" id="memberStatusConfirm">確認切換</button>
+            </div>
+        </div>
+    </div>
+</div>

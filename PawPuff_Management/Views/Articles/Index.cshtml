@@ -1,0 +1,517 @@
+﻿@{
+    ViewData["Title"] = "文章管理";
+    ViewData["CurrentScreen"] = "article-management";
+}
+
+<div class="dashboard-content management-screen" id="managementScreen" data-screen-panel="management">
+    <section class="soft-panel management-panel">
+        <span class="screen-kicker">
+            <span class="tiny-paw" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+            PawPuff Admin
+        </span>
+        <h2 class="screen-title" id="managementTitle">文章管理</h2>
+        <p class="screen-desc" id="managementDescription">
+            檢視、建立、編輯與上下架文章內容。
+        </p>
+
+        <div class="article-management-view" id="articleManagementView">
+            <div class="member-page-actions">
+                <button class="member-create-open-btn" id="articleCreateOpen" type="button" data-bs-toggle="modal" data-bs-target="#articleCreateModal">
+                    <i class="bi bi-file-earmark-plus me-1"></i>新增文章
+                </button>
+            </div>
+
+            <form class="member-search-panel" id="articleSearchForm">
+                <div class="member-search-row article-search-row">
+                    <div class="member-search-field">
+                        <label class="form-label" for="articleFilterId">編號</label>
+                        <input class="form-control" id="articleFilterId" type="text" data-article-filter="id" placeholder="輸入編號">
+                    </div>
+                    <div class="member-search-field">
+                        <label class="form-label" for="articleFilterAccount">發文者帳號</label>
+                        <input class="form-control" id="articleFilterAccount" type="text" data-article-filter="account" placeholder="輸入帳號">
+                    </div>
+                    <div class="member-search-field is-wide">
+                        <label class="form-label" for="articleFilterCategory">文章分類</label>
+                        <select class="form-select article-filter-select" id="articleFilterCategory" data-article-filter="category">
+                            <option value="">全部分類</option>
+                            <option value="官方公告">官方公告</option>
+                            <option value="醫療養護">醫療養護</option>
+                            <option value="飲食營養">飲食營養</option>
+                            <option value="行為訓練">行為訓練</option>
+                            <option value="寵物認養">寵物認養</option>
+                            <option value="美容美體">美容美體</option>
+                            <option value="走失求助">走失求助</option>
+                        </select>
+                    </div>
+                    <div class="member-search-field is-wide">
+                        <label class="form-label" for="articleFilterTitle">文章標題</label>
+                        <input class="form-control" id="articleFilterTitle" type="text" data-article-filter="title" placeholder="輸入文章標題">
+                    </div>
+                    <div class="member-search-field">
+                        <button class="member-reset-btn px-3" id="articleFilterReset" type="button">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i>重設
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="member-table-card article-table-card">
+                <div class="member-table-toolbar">
+                    <strong><i class="bi bi-file-earmark-text me-2"></i>文章資料表</strong>
+                    <span class="member-count" id="articleResultCount">共 0 筆</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover member-table article-table align-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col"><button class="sort-btn" type="button" data-article-sort="id">編號 <i class="bi bi-arrow-down-up"></i></button></th>
+                                <th scope="col"><button class="sort-btn" type="button" data-article-sort="account">發文者帳號 <i class="bi bi-arrow-down-up"></i></button></th>
+                                <th scope="col"><button class="sort-btn" type="button" data-article-sort="category">文章分類 <i class="bi bi-arrow-down-up"></i></button></th>
+                                <th scope="col"><button class="sort-btn" type="button" data-article-sort="title">文章標題 <i class="bi bi-arrow-down-up"></i></button></th>
+                                <th scope="col"><span class="sort-static-label">查看詳情</span></th>
+                                <th scope="col"><button class="sort-btn" type="button" data-article-sort="active">停用/啟用 <i class="bi bi-arrow-down-up"></i></button></th>
+                            </tr>
+                        </thead>
+                        <tbody id="articleTableBody">
+                            <tr data-article-row data-id="1" data-account="sunny01" data-category-name="醫療養護" data-title="幼貓剛帶回家需要注意什麼？新手醫療與環境適應求助" data-article-content="今天剛領養了一隻兩個月大的小浪貓。目前牠一直躲在籠子角落發抖，不吃不喝。請問我應該主動抱牠，還是先讓牠自己靜靜呢？有沒有需要先帶去獸醫院做什麼傳染病篩檢？" data-image-names="kitten_adaptation_01.jpg|kitten_adaptation_02.jpg" data-active="true" data-created-at="2026-06-01 10:00:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-article-cell="id">1</td>
+                                <td data-article-cell="account">sunny01</td>
+                                <td data-article-cell="category">醫療養護</td>
+                                <td data-article-cell="title">幼貓剛帶回家需要注意什麼？新手醫療與環境適應求助</td>
+                                <td><button class="member-detail-btn" type="button" data-article-detail="1">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus1" type="checkbox" role="switch" data-article-status="1" checked><label class="member-status-text" for="articleStatus1">啟用</label></div></td>
+                            </tr>
+                            <tr data-article-row data-id="2" data-account="milktea02" data-category-name="行為訓練" data-title="推薦這款超耐咬的柴犬抗憂鬱玩具！" data-article-content="我們家阿柴是破壞狂，市面上標榜耐咬的玩具通常撐不過三天。這次買了這款防爆咬骨頭，裡面還可以塞零食，竟然成功轉移牠撕咬沙發的注意力，大推！" data-image-names="shiba_chew_toy.jpg" data-active="true" data-created-at="2026-06-02 14:30:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-article-cell="id">2</td>
+                                <td data-article-cell="account">milktea02</td>
+                                <td data-article-cell="category">行為訓練</td>
+                                <td data-article-cell="title">推薦這款超耐咬的柴犬抗憂鬱玩具！</td>
+                                <td><button class="member-detail-btn" type="button" data-article-detail="2">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus2" type="checkbox" role="switch" data-article-status="2" checked><label class="member-status-text" for="articleStatus2">啟用</label></div></td>
+                            </tr>
+                            <tr data-article-row data-id="3" data-account="pudding03" data-category-name="寵物認養" data-title="【認養】台北信義區超親人棕色貴賓(多多)，尋找愛牠的溫暖家人！" data-article-content="名字：多多。品種：玩具貴賓。目前約兩歲，親人、親狗、不亂叫，已做好晶片登記與結紮。希望尋找有耐心、能定期帶牠散步的愛心家庭。意者請私訊！" data-image-names="poodle_adoption_todo.jpg" data-active="true" data-created-at="2026-06-03 18:15:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-article-cell="id">3</td>
+                                <td data-article-cell="account">pudding03</td>
+                                <td data-article-cell="category">寵物認養</td>
+                                <td data-article-cell="title">【認養】台北信義區超親人棕色貴賓(多多)，尋找愛牠的溫暖家人！</td>
+                                <td><button class="member-detail-btn" type="button" data-article-detail="3">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus3" type="checkbox" role="switch" data-article-status="3" checked><label class="member-status-text" for="articleStatus3">啟用</label></div></td>
+                            </tr>
+                            <tr data-article-row data-id="4" data-account="afu04" data-category-name="飲食營養" data-title="貓咪不愛喝水容易引發腎臟病？試試這三個神奇妙招" data-article-content="貓咪不喝水容易得尿道炎和腎臟病。我試過流動水機、湯罐、甚至在水杯放冰塊，最後發現這三個方法最有效，成功讓貓咪飲水量翻倍！" data-image-names="cat_drinking_water.jpg" data-active="true" data-created-at="2026-06-04 9:12:00" data-updated-at="2026-06-04 10:00:00" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-article-cell="id">4</td>
+                                <td data-article-cell="account">afu04</td>
+                                <td data-article-cell="category">飲食營養</td>
+                                <td data-article-cell="title">貓咪不愛喝水容易引發腎臟病？試試這三個神奇妙招</td>
+                                <td><button class="member-detail-btn" type="button" data-article-detail="4">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus4" type="checkbox" role="switch" data-article-status="4" checked><label class="member-status-text" for="articleStatus4">啟用</label></div></td>
+                            </tr>
+                            <tr data-article-row data-id="5" data-account="cocoa05" data-category-name="飲食營養" data-title="自製貓狗鮮食：超簡單「雞胸肉蔬菜凍」食譜分享" data-article-content="夏天到了，毛孩食慾變差嗎？今天教大家做無油無鹽、營養滿分的蔬菜凍，貓咪和狗狗都能安心享用。食材只要雞胸肉、紅蘿蔔和吉利丁，步驟超簡單！" data-image-names="diy_chicken_jelly.jpg|diy_chicken_jelly_details.jpg" data-active="true" data-created-at="2026-06-05 12:00:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-article-cell="id">5</td>
+                                <td data-article-cell="account">cocoa05</td>
+                                <td data-article-cell="category">飲食營養</td>
+                                <td data-article-cell="title">自製貓狗鮮食：超簡單「雞胸肉蔬菜凍」食譜分享</td>
+                                <td><button class="member-detail-btn" type="button" data-article-detail="5">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus5" type="checkbox" role="switch" data-article-status="5" checked><label class="member-status-text" for="articleStatus5">啟用</label></div></td>
+                            </tr>
+                            <tr data-article-row data-id="6" data-account="millet06" data-category-name="美容美體" data-title="鸚鵡羽毛保養秘訣：如何安全地幫鳥寶修剪飛羽與指甲" data-article-content="養鸚鵡的朋友一定常遇到指甲太長抓傷人的問題。這篇跟大家分享如何利用原木棲木自然磨指甲，以及非必要時如何進行安全修剪飛羽的心得。" data-image-names="bird_nail_trimming.jpg" data-active="true" data-created-at="2026-06-06 15:45:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-article-cell="id">6</td>
+                                <td data-article-cell="account">millet06</td>
+                                <td data-article-cell="category">美容美體</td>
+                                <td data-article-cell="title">鸚鵡羽毛保養秘訣：如何安全地幫鳥寶修剪飛羽與指甲</td>
+                                <td><button class="member-detail-btn" type="button" data-article-detail="6">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus6" type="checkbox" role="switch" data-article-status="6" checked><label class="member-status-text" for="articleStatus6">啟用</label></div></td>
+                            </tr>
+                            <tr data-article-row data-id="7" data-account="xiaobai07" data-category-name="醫療養護" data-title="狗狗拉肚子怎麼辦？專業獸醫預防與腸胃保健處理分享" data-article-content="最近換季，很多毛孩出現腸胃不適。其實輕微拉肚子可以先觀察，本文整理了幾種常見拉肚子的原因（如寄生蟲、消化不良），以及何時必須立即送醫！" data-image-names="dog_stomach_care.jpg" data-active="true" data-created-at="2026-06-07 20:30:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-article-cell="id">7</td>
+                                <td data-article-cell="account">xiaobai07</td>
+                                <td data-article-cell="category">醫療養護</td>
+                                <td data-article-cell="title">狗狗拉肚子怎麼辦？專業獸醫預防與腸胃保健處理分享</td>
+                                <td><button class="member-detail-btn" type="button" data-article-detail="7">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus7" type="checkbox" role="switch" data-article-status="7" checked><label class="member-status-text" for="articleStatus7">啟用</label></div></td>
+                            </tr>
+                            <tr data-article-row data-id="8" data-account="tofu08" data-category-name="醫療養護" data-title="貓咪結紮前後的照護重點全紀錄，術後傷口怎麼顧？" data-article-content="我們家咪咪上週剛做完結紮手術。從術前空腹、術後頭套選擇、到傷口照護與飲食調整，這篇文章詳細記錄了所有細節，給準備帶貓結紮的家長參考。" data-image-names="cat_neutering_care.jpg" data-active="true" data-created-at="2026-06-08 11:22:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-article-cell="id">8</td>
+                                <td data-article-cell="account">tofu08</td>
+                                <td data-article-cell="category">醫療養護</td>
+                                <td data-article-cell="title">貓咪結紮前後的照護重點全紀錄，術後傷口怎麼顧？</td>
+                                <td><button class="member-detail-btn" type="button" data-article-detail="8">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus8" type="checkbox" role="switch" data-article-status="8" checked><label class="member-status-text" for="articleStatus8">啟用</label></div></td>
+                            </tr>
+                            <tr data-article-row data-id="9" data-account="happy09" data-category-name="行為訓練" data-title="黃金獵犬幼犬暴衝、愛咬人？行為訓練師教你如何改善" data-article-content="大家都說黃金獵犬是天使，但牠們小時候根本是小惡魔（咬人、爆衝、體力怪獸）！本篇分享行為訓練師建議的減壓法，想養的朋友一定要做好訓練準備。" data-image-names="golden_retriever_training.jpg" data-active="true" data-created-at="2026-06-09 17:10:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-article-cell="id">9</td>
+                                <td data-article-cell="account">happy09</td>
+                                <td data-article-cell="category">行為訓練</td>
+                                <td data-article-cell="title">黃金獵犬幼犬暴衝、愛咬人？行為訓練師教你如何改善</td>
+                                <td><button class="member-detail-btn" type="button" data-article-detail="9">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus9" type="checkbox" role="switch" data-article-status="9" checked><label class="member-status-text" for="articleStatus9">啟用</label></div></td>
+                            </tr>
+                            <tr data-article-row data-id="10" data-account="sunny01" data-category-name="寵物認養" data-title="辦公室新來的親人浪浪小橘，求愛心領養！(已完成驅蟲與預防針)" data-article-content="這隻小橘貓大約三個月大，不怕人，一摸就呼嚕。目前寄住在我們辦公室，已經做完體內外驅蟲與第一劑疫苗。希望能幫牠找到一輩子的避風港。地點在台中。" data-image-names="cockatiel_safety_home.jpg" data-active="true" data-created-at="2026-06-11 8:30:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-article-cell="id">10</td>
+                                <td data-article-cell="account">sunny01</td>
+                                <td data-article-cell="category">寵物認養</td>
+                                <td data-article-cell="title">辦公室新來的親人浪浪小橘，求愛心領養！(已完成驅蟲與預防針)</td>
+                                <td><button class="member-detail-btn" type="button" data-article-detail="10">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus10" type="checkbox" role="switch" data-article-status="10" checked><label class="member-status-text" for="articleStatus10">啟用</label></div></td>
+                            </tr>
+                            <tr data-article-row data-id="11" data-account="admin" data-category-name="官方公告" data-title="【官方公告】 PawPuff 平台使用者條款更新" data-article-content="親愛的會員您好，本平台已更新隱私權條款，請詳閱..." data-active="true" data-created-at="2026-06-01 12:00:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
+                                <td data-article-cell="id">11</td>
+                                <td data-article-cell="account">admin</td>
+                                <td data-article-cell="category">官方公告</td>
+                                <td data-article-cell="title">【官方公告】 PawPuff 平台使用者條款更新</td>
+                                <td><button class="member-detail-btn" type="button" data-article-detail="11">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus11" type="checkbox" role="switch" data-article-status="11" checked><label class="member-status-text" for="articleStatus11">啟用</label></div></td>
+                            </tr>
+                            <tr data-article-row data-id="12" data-account="pudding03" data-category-name="美容美體" data-title="惡意攻擊文" data-article-content="這家寵物店爛死了..." data-active="false" data-created-at="2026-06-03 18:15:00" data-updated-at="2026-06-03 18:30:00" data-admin-comment="內容違反版規：惡意毀謗商家" data-admin-updated-at="2026-06-03 18:40:00" data-modified-by-admin="admin01">
+                                <td data-article-cell="id">12</td>
+                                <td data-article-cell="account">pudding03</td>
+                                <td data-article-cell="category">美容美體</td>
+                                <td data-article-cell="title">惡意攻擊文</td>
+                                <td><button class="member-detail-btn" type="button" data-article-detail="12">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus12" type="checkbox" role="switch" data-article-status="12"><label class="member-status-text" for="articleStatus12">停用</label></div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="member-pagination-wrap">
+                    <span class="member-page-info" id="articlePageInfo">第 1 頁</span>
+                    <nav aria-label="文章表格分頁">
+                        <ul class="pagination member-pagination" id="articlePagination"></ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <div class="member-detail-view d-none" id="articleDetailView">
+            <div class="member-detail-card">
+                <div class="member-detail-head">
+                    <strong><i class="bi bi-file-earmark-text me-2"></i><span id="articleDetailTitle">文章詳情</span></strong>
+                    <button class="member-back-btn px-3" id="articleDetailBack" type="button">
+                        <i class="bi bi-arrow-left me-1"></i>返回文章管理
+                    </button>
+                </div>
+                <div class="article-engagement-actions">
+                    <button class="article-engagement-btn d-none" id="articleEditOpen" type="button">
+                        <i class="bi bi-pencil-square me-1"></i>編輯文章
+                    </button>
+                    <button class="article-engagement-btn" id="articleLikeOpen" type="button" data-reaction-open="like">
+                        <i class="bi bi-hand-thumbs-up me-1"></i>檢視按讚 <span id="articleLikeCount">0</span>
+                    </button>
+                    <button class="article-engagement-btn" id="articleFavoriteOpen" type="button" data-reaction-open="favorite">
+                        <i class="bi bi-bookmark-heart me-1"></i>檢視收藏 <span id="articleFavoriteCount">0</span>
+                    </button>
+                </div>
+                <div class="member-detail-grid article-detail-grid" id="articleDetailGrid">
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">編號</div>
+                        <div class="member-detail-value" data-article-detail-value="id"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">發文者帳號</div>
+                        <div class="member-detail-value" data-article-detail-value="account"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">文章分類</div>
+                        <div class="member-detail-value" data-article-detail-value="categoryName"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">停用/啟用</div>
+                        <div class="form-check form-switch member-status-switch article-status-switch article-detail-status-switch">
+                            <input class="form-check-input" id="articleDetailStatus" type="checkbox" role="switch">
+                            <label class="member-status-text" id="articleDetailStatusLabel" for="articleDetailStatus">啟用</label>
+                        </div>
+                    </div>
+                    <div class="member-detail-field is-wide">
+                        <div class="member-detail-label">文章標題</div>
+                        <div class="member-detail-value" data-article-detail-value="title"></div>
+                    </div>
+                    <div class="member-detail-field is-wide">
+                        <div class="member-detail-label">文章內容</div>
+                        <div class="member-detail-value article-content-value" data-article-detail-value="articleContent"></div>
+                    </div>
+                    <div class="member-detail-field is-wide article-images-field">
+                        <div class="member-detail-label">文章附圖</div>
+                        <div class="article-image-viewer is-empty" id="articleImageViewer">
+                            <button class="article-image-nav" id="articleImagePrev" type="button" aria-label="上一張附圖">
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <div class="article-image-frame">
+                                <img class="article-detail-image" id="articleDetailImage" alt="文章附圖">
+                                <div class="article-image-fallback" id="articleImageFallback"></div>
+                            </div>
+                            <button class="article-image-nav" id="articleImageNext" type="button" aria-label="下一張附圖">
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div class="article-image-meta" id="articleImageMeta"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">文章建立時間</div>
+                        <div class="member-detail-value" data-article-detail-value="createdAt"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">作者更新文章時間</div>
+                        <div class="member-detail-value" data-article-detail-value="updatedAt"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">文章屏蔽說明</div>
+                        <div class="member-detail-value" data-article-detail-value="adminComment"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">文章屏蔽日期</div>
+                        <div class="member-detail-value" data-article-detail-value="adminUpdatedAt"></div>
+                    </div>
+                    <div class="member-detail-field">
+                        <div class="member-detail-label">操作屏蔽管理員帳號</div>
+                        <div class="member-detail-value" data-article-detail-value="modifiedByAdmin"></div>
+                    </div>
+                </div>
+                <div class="article-comments-panel">
+                    <div class="article-comments-head">
+                        <strong><i class="bi bi-chat-dots me-2"></i>留言一覽</strong>
+                        <span class="member-count" id="articleCommentCount">共 0 則</span>
+                    </div>
+                    <div class="article-comment-list" id="articleCommentList"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="d-none" id="articleReactionData" aria-hidden="true">
+    <span data-article-reaction="like" data-article-id="1" data-account="milktea02" data-created-at="2026-06-01 10:15:00"></span>
+    <span data-article-reaction="like" data-article-id="1" data-account="pudding03" data-created-at="2026-06-01 10:30:00"></span>
+    <span data-article-reaction="like" data-article-id="1" data-account="afu04" data-created-at="2026-06-01 11:00:00"></span>
+    <span data-article-reaction="like" data-article-id="2" data-account="sunny01" data-created-at="2026-06-02 15:00:00"></span>
+    <span data-article-reaction="like" data-article-id="2" data-account="cocoa05" data-created-at="2026-06-02 16:22:00"></span>
+    <span data-article-reaction="like" data-article-id="3" data-account="sunny01" data-created-at="2026-06-03 18:30:00"></span>
+    <span data-article-reaction="like" data-article-id="3" data-account="milktea02" data-created-at="2026-06-03 19:00:00"></span>
+    <span data-article-reaction="like" data-article-id="4" data-account="sunny01" data-created-at="2026-06-04 10:05:00"></span>
+    <span data-article-reaction="like" data-article-id="5" data-account="milktea02" data-created-at="2026-06-05 12:45:00"></span>
+    <span data-article-reaction="like" data-article-id="5" data-account="pudding03" data-created-at="2026-06-05 13:10:00"></span>
+    <span data-article-reaction="like" data-article-id="6" data-account="xiaobai07" data-created-at="2026-06-06 16:00:00"></span>
+    <span data-article-reaction="like" data-article-id="7" data-account="tofu08" data-created-at="2026-06-07 21:00:00"></span>
+    <span data-article-reaction="like" data-article-id="8" data-account="happy09" data-created-at="2026-06-08 12:00:00"></span>
+    <span data-article-reaction="like" data-article-id="9" data-account="anan10" data-created-at="2026-06-09 18:30:00"></span>
+    <span data-article-reaction="like" data-article-id="11" data-account="milktea02" data-created-at="2026-06-11 9:00:00"></span>
+    <span data-article-reaction="favorite" data-article-id="1" data-account="cocoa05" data-created-at="2026-06-01 12:00:00"></span>
+    <span data-article-reaction="favorite" data-article-id="2" data-account="pudding03" data-created-at="2026-06-02 17:00:00"></span>
+    <span data-article-reaction="favorite" data-article-id="4" data-account="sunny01" data-created-at="2026-06-04 10:10:00"></span>
+    <span data-article-reaction="favorite" data-article-id="5" data-account="sunny01" data-created-at="2026-06-05 12:30:00"></span>
+    <span data-article-reaction="favorite" data-article-id="5" data-account="milktea02" data-created-at="2026-06-05 13:00:00"></span>
+    <span data-article-reaction="favorite" data-article-id="5" data-account="millet06" data-created-at="2026-06-05 14:00:00"></span>
+    <span data-article-reaction="favorite" data-article-id="6" data-account="tofu08" data-created-at="2026-06-06 17:30:00"></span>
+    <span data-article-reaction="favorite" data-article-id="7" data-account="milktea02" data-created-at="2026-06-07 22:00:00"></span>
+    <span data-article-reaction="favorite" data-article-id="7" data-account="cocoa05" data-created-at="2026-06-07 22:15:00"></span>
+    <span data-article-reaction="favorite" data-article-id="8" data-account="pudding03" data-created-at="2026-06-08 13:00:00"></span>
+    <span data-article-reaction="favorite" data-article-id="8" data-account="afu04" data-created-at="2026-06-08 14:30:00"></span>
+    <span data-article-reaction="favorite" data-article-id="9" data-account="milktea02" data-created-at="2026-06-09 19:00:00"></span>
+</div>
+
+<div class="d-none" id="articleCommentData" aria-hidden="true">
+    <span data-article-comment data-comment-id="1" data-article-id="1" data-parent-comment-id="NULL" data-account="milktea02" data-comment-content="剛帶回家千萬不要強抱牠，一定要給牠獨立的安靜小空間適應。" data-active="true" data-created-at="2026-06-01 10:10:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
+    <span data-article-comment data-comment-id="2" data-article-id="1" data-parent-comment-id="1" data-account="sunny01" data-comment-content="好的，我已經把貓籠放在安靜角落了，也放了水跟乾乾，現在盡量不打擾牠。" data-active="true" data-created-at="2026-06-01 10:20:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
+    <span data-article-comment data-comment-id="3" data-article-id="1" data-parent-comment-id="NULL" data-account="pudding03" data-comment-content="等牠情緒穩定後，建議帶去獸醫那裡做個糞便檢查看看有沒有寄生蟲喔！" data-active="true" data-created-at="2026-06-01 10:45:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
+    <span data-article-comment data-comment-id="4" data-article-id="1" data-parent-comment-id="3" data-account="sunny01" data-comment-content="謝謝提醒，我已經預約了這週末的獸醫院，希望一切健康。" data-active="true" data-created-at="2026-06-01 11:05:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
+    <span data-article-comment data-comment-id="5" data-article-id="2" data-parent-comment-id="NULL" data-account="cocoa05" data-comment-content="我們家哈士奇也是破壞狂，借問一下這款在中大型犬身上也適用嗎？" data-active="true" data-created-at="2026-06-02 16:00:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
+    <span data-article-comment data-comment-id="6" data-article-id="2" data-parent-comment-id="5" data-account="milktea02" data-comment-content="這品牌有出 XL 號，對於大狗來說很安全，不容易被咬碎吞食！" data-active="true" data-created-at="2026-06-02 16:30:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
+    <span data-article-comment data-comment-id="7" data-article-id="3" data-parent-comment-id="NULL" data-account="afu04" data-comment-content="多多看起來太可愛了，好親人喔！幫高推，希望能快點找到好家庭！" data-active="true" data-created-at="2026-06-03 18:40:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
+    <span data-article-comment data-comment-id="8" data-article-id="3" data-parent-comment-id="NULL" data-account="cocoa05" data-comment-content="已轉發到台北認養相關社團，祝多多早日找到幸福新家！" data-active="true" data-created-at="2026-06-03 19:15:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
+    <span data-article-comment data-comment-id="9" data-article-id="4" data-parent-comment-id="NULL" data-account="sunny01" data-comment-content="聽說用馬克杯裝滿水放在桌上，貓咪特別愛偷喝，真的很神奇！" data-active="true" data-created-at="2026-06-04 9:30:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
+    <span data-article-comment data-comment-id="10" data-article-id="4" data-parent-comment-id="9" data-account="afu04" data-comment-content="真的！我們家那隻每天都來偷喝我杯子裡的水，乾脆直接給牠放一個專屬馬克杯。" data-active="true" data-created-at="2026-06-04 9:45:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
+    <span data-article-comment data-comment-id="11" data-article-id="5" data-parent-comment-id="NULL" data-account="millet06" data-comment-content="這週馬上來動手做做看，材料簡單又健康！夏天給狗狗吃超消暑。" data-active="true" data-created-at="2026-06-05 13:00:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
+    <span data-article-comment data-comment-id="12" data-article-id="6" data-parent-comment-id="NULL" data-account="tofu08" data-comment-content="這篇修剪指甲的教學太詳細了！每次幫我們家玄鳳剪指甲都像世界大戰，下次試試看你教的保定法。" data-active="true" data-created-at="2026-06-06 17:00:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
+    <span data-article-comment data-comment-id="13" data-article-id="7" data-parent-comment-id="NULL" data-account="milktea02" data-comment-content="很實用的科普文！先收藏了，免得遇到狀況時手忙腳亂。" data-active="true" data-created-at="2026-06-07 21:15:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
+    <span data-article-comment data-comment-id="14" data-article-id="11" data-parent-comment-id="NULL" data-account="pudding03" data-comment-content="好可愛的小橘！可惜家裡已經三隻貓了，幫推祝早日找到好主人。" data-active="true" data-created-at="2026-06-11 9:10:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
+    <span data-article-comment data-comment-id="15" data-article-id="5" data-parent-comment-id="NULL" data-account="millet06" data-comment-content="(廣告連結)" data-active="false" data-created-at="2026-06-05 13:00:00" data-updated-at="2026-06-05 13:03:12" data-admin-comment="留言含有廣告" data-admin-updated-at="2026-06-07 18:15:43" data-modified-by-admin="admin01"></span>
+</div>
+
+<div class="modal fade" id="articleCreateModal" tabindex="-1" aria-labelledby="articleCreateModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content member-form-modal">
+            <form id="articleCreateForm" novalidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="articleCreateModalTitle">新增文章</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-bold" for="articleCreateCategory">文章分類</label>
+                            <select class="form-select" id="articleCreateCategory" required>
+                                <option value="">請選擇分類</option>
+                                <option value="官方公告">官方公告</option>
+                                <option value="醫療養護">醫療養護</option>
+                                <option value="飲食營養">飲食營養</option>
+                                <option value="行為訓練">行為訓練</option>
+                                <option value="寵物認養">寵物認養</option>
+                                <option value="美容美體">美容美體</option>
+                                <option value="走失求助">走失求助</option>
+                            </select>
+                            <div class="invalid-feedback">請選擇文章分類。</div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold" for="articleCreateTitle">文章標題</label>
+                            <input class="form-control" id="articleCreateTitle" type="text" autocomplete="off" required>
+                            <div class="invalid-feedback">請輸入文章標題。</div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold" for="articleCreateContent">文章內容</label>
+                            <textarea class="form-control" id="articleCreateContent" rows="5" required></textarea>
+                            <div class="invalid-feedback">請輸入文章內容。</div>
+                        </div>
+                        <div class="col-12">
+                            <div class="article-upload-control">
+                                <label class="article-upload-button" for="articleCreateImages">
+                                    <i class="bi bi-images me-1"></i>上傳圖片
+                                </label>
+                                <input class="article-upload-input" id="articleCreateImages" type="file" accept="image/*" multiple>
+                                <span class="article-upload-hint">可不傳，也可選擇多張圖片後調整順序。</span>
+                            </div>
+                            <div class="article-image-preview-list" id="articleImagePreviewList" aria-label="已選擇圖片預覽"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-warning fw-bold text-brown">新增文章</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="articleEditModal" tabindex="-1" aria-labelledby="articleEditModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content member-form-modal">
+            <form id="articleEditForm" novalidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="articleEditModalTitle">編輯文章</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-bold" for="articleEditCategory">文章分類</label>
+                            <select class="form-select" id="articleEditCategory" required>
+                                <option value="">請選擇分類</option>
+                                <option value="官方公告">官方公告</option>
+                                <option value="醫療養護">醫療養護</option>
+                                <option value="飲食營養">飲食營養</option>
+                                <option value="行為訓練">行為訓練</option>
+                                <option value="寵物認養">寵物認養</option>
+                                <option value="美容美體">美容美體</option>
+                                <option value="走失求助">走失求助</option>
+                            </select>
+                            <div class="invalid-feedback">請選擇文章分類。</div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold" for="articleEditTitle">文章標題</label>
+                            <input class="form-control" id="articleEditTitle" type="text" autocomplete="off" required>
+                            <div class="invalid-feedback">請輸入文章標題。</div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold" for="articleEditContent">文章內容</label>
+                            <textarea class="form-control" id="articleEditContent" rows="5" required></textarea>
+                            <div class="invalid-feedback">請輸入文章內容。</div>
+                        </div>
+                        <div class="col-12">
+                            <div class="article-upload-control">
+                                <label class="article-upload-button" for="articleEditImages">
+                                    <i class="bi bi-images me-1"></i>加入圖片
+                                </label>
+                                <input class="article-upload-input" id="articleEditImages" type="file" accept="image/*" multiple>
+                                <span class="article-upload-hint">可調整順序、移除既有圖片，或加入多張新圖片。</span>
+                            </div>
+                            <div class="article-image-preview-list" id="articleEditImagePreviewList" aria-label="文章圖片預覽與排序"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-warning fw-bold text-brown">儲存修改</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="articleStatusModal" tabindex="-1" aria-labelledby="articleStatusModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content member-status-modal">
+            <div class="modal-header">
+                <h5 class="modal-title" id="articleStatusModalTitle">變更文章狀態</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+            </div>
+            <div class="modal-body">
+                <p class="member-status-modal-desc" id="articleStatusModalDescription">請輸入文章屏蔽說明。</p>
+                <label class="form-label fw-bold" for="articleStatusReason">文章屏蔽/解除屏蔽說明</label>
+                <textarea class="form-control" id="articleStatusReason" rows="4" placeholder="請輸入此次變更原因"></textarea>
+                <div class="invalid-feedback d-none" id="articleStatusReasonError">請輸入說明後再確認。</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-warning fw-bold text-brown" id="articleStatusConfirm">確認切換</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="commentStatusModal" tabindex="-1" aria-labelledby="commentStatusModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content member-status-modal">
+            <div class="modal-header">
+                <h5 class="modal-title" id="commentStatusModalTitle">變更留言狀態</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+            </div>
+            <div class="modal-body">
+                <p class="member-status-modal-desc" id="commentStatusModalDescription">請輸入留言屏蔽說明。</p>
+                <label class="form-label fw-bold" for="commentStatusReason">留言屏蔽/解除屏蔽說明</label>
+                <textarea class="form-control" id="commentStatusReason" rows="4" placeholder="請輸入此次變更原因"></textarea>
+                <div class="invalid-feedback d-none" id="commentStatusReasonError">請輸入說明後再確認。</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-warning fw-bold text-brown" id="commentStatusConfirm">確認切換</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="articleReactionModal" tabindex="-1" aria-labelledby="articleReactionModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content member-form-modal">
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title" id="articleReactionModalTitle">檢視按讚</h5>
+                    <div class="article-reaction-count" id="articleReactionModalCount">共 0 筆</div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-hover member-table article-reaction-table align-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col">帳號</th>
+                                <th scope="col" id="articleReactionTimeTitle">按讚時間</th>
+                            </tr>
+                        </thead>
+                        <tbody id="articleReactionTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning fw-bold text-brown" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link href="~/css/article-management.css" rel="stylesheet">
+}
+
+@section Scripts {
+    <script src="~/js/article-management.js"></script>
+}

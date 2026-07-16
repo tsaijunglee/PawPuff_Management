@@ -1,0 +1,104 @@
+﻿@{
+    ViewData["Title"] = "發送通知";
+    ViewData["CurrentScreen"] = "send-notification";
+}
+
+<div class="dashboard-content management-screen" id="managementScreen" data-screen-panel="management">
+    <section class="soft-panel management-panel">
+        <span class="screen-kicker">
+            <span class="tiny-paw" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+            PawPuff Admin
+        </span>
+        <h2 class="screen-title" id="managementTitle">發送通知</h2>
+        <p class="screen-desc" id="managementDescription">
+            建立並發送站內通知給指定會員或會員群組。
+        </p>
+        <div class="send-notification-view" id="sendNotificationView">
+            <form class="send-notification-form" id="sendNotificationForm" novalidate>
+                <div class="send-notification-card">
+                    <div class="send-notification-grid">
+                        <div class="send-notification-field">
+                            <label class="form-label" for="notificationAudience">訊息傳送對象</label>
+                            <select class="form-select send-notification-control" id="notificationAudience" required>
+                                <option value="">請選擇傳送對象</option>
+                                <option value="member" data-list="notificationMemberAccounts" data-label="會員">會員</option>
+                                <option value="admin" data-list="notificationAdminAccounts" data-label="管理員">管理員</option>
+                            </select>
+                            <div class="invalid-feedback">請選擇訊息傳送對象。</div>
+                        </div>
+                        <div class="send-notification-field is-hidden" id="notificationAccountField">
+                            <label class="form-label" for="notificationAccount">帳號</label>
+                            <input class="form-control send-notification-control" id="notificationAccount" type="text" placeholder="輸入帳號關鍵字" autocomplete="off" required disabled>
+                            <datalist id="notificationMemberAccounts">
+                                <option value="sunny01"></option>
+                                <option value="milktea02"></option>
+                                <option value="pudding03"></option>
+                                <option value="afu04"></option>
+                                <option value="cocoa05"></option>
+                                <option value="millet06"></option>
+                                <option value="xiaobai07"></option>
+                                <option value="tofu08"></option>
+                                <option value="happy09"></option>
+                                <option value="anan10"></option>
+                                <option value="yuzu11"></option>
+                                <option value="mochi12"></option>
+                            </datalist>
+                            <datalist id="notificationAdminAccounts">
+                                <option value="admin01"></option>
+                                <option value="admin02"></option>
+                                <option value="admin03"></option>
+                                <option value="admin04"></option>
+                                <option value="admin05"></option>
+                                <option value="admin06"></option>
+                                <option value="admin07"></option>
+                                <option value="admin08"></option>
+                                <option value="admin09"></option>
+                                <option value="admin10"></option>
+                            </datalist>
+                            <div class="invalid-feedback">請選擇假資料中存在的帳號。</div>
+                        </div>
+                    </div>
+                    <div class="send-notification-field">
+                        <label class="form-label" for="notificationMessage">通知內容</label>
+                        <textarea class="form-control send-notification-message" id="notificationMessage" rows="10" placeholder="請輸入要發送的訊息內容" required></textarea>
+                        <div class="invalid-feedback">請輸入通知內容。</div>
+                    </div>
+                    <div class="send-notification-actions">
+                        <button class="member-create-open-btn" type="submit">
+                            <i class="bi bi-send me-1"></i>發送訊息
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+
+<div class="modal fade" id="sendNotificationConfirmModal" tabindex="-1" aria-labelledby="sendNotificationConfirmTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content member-form-modal">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sendNotificationConfirmTitle">確認發送訊息</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+            </div>
+            <div class="modal-body">
+                <p class="send-confirm-text mb-3">
+                    確定要將訊息傳送給 <strong id="sendConfirmTarget">—</strong> 嗎？
+                </p>
+                <div class="send-confirm-message" id="sendConfirmMessage"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-warning fw-bold text-brown" id="sendNotificationConfirmButton">確定發送</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link href="~/css/send-notification.css" rel="stylesheet">
+}
+
+@section Scripts {
+    <script src="~/js/send-notification.js"></script>
+}
