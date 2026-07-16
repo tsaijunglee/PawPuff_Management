@@ -1,0 +1,99 @@
+.send-notification-view {
+  margin-top: 28px;
+}
+
+.send-notification-card {
+  display: grid;
+  gap: 20px;
+  padding: 24px;
+  border: 1px solid var(--line-soft);
+  border-radius: 20px;
+  background: rgba(255, 253, 248, .95);
+  box-shadow: 0 12px 30px rgba(124, 77, 34, .08);
+}
+
+.send-notification-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+.send-notification-field {
+  display: grid;
+  gap: 8px;
+}
+
+.send-notification-field.is-hidden {
+  display: none;
+}
+
+.send-notification-field .form-label {
+  margin: 0;
+  color: #7a4a2c;
+  font-weight: 900;
+}
+
+.send-notification-control,
+.send-notification-message {
+  border-color: #efd6ad;
+  border-radius: 14px;
+  color: var(--ink);
+  font-weight: 800;
+  background-color: #fffdf8;
+}
+
+.send-notification-control {
+  min-height: 44px;
+}
+
+.send-notification-message {
+  min-height: 300px;
+  resize: vertical;
+  line-height: 1.75;
+}
+
+.send-notification-control:disabled {
+  background-color: #f7efe4;
+  color: #b89e86;
+  opacity: 1;
+}
+
+.send-notification-control:focus,
+.send-notification-message:focus {
+  border-color: #e6ae4b;
+  box-shadow: 0 0 0 .2rem rgba(243, 182, 79, .2);
+}
+
+.send-notification-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.send-confirm-text {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.send-confirm-text strong {
+  color: var(--ink-dark);
+  font-weight: 900;
+}
+
+.send-confirm-message {
+  max-height: 220px;
+  overflow: auto;
+  padding: 14px;
+  border: 1px solid #efd6ad;
+  border-radius: 14px;
+  background: #fffdf8;
+  color: var(--ink);
+  font-weight: 700;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 760px) {
+  .send-notification-grid {
+    grid-template-columns: 1fr;
+  }
+}

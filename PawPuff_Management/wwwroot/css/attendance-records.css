@@ -1,0 +1,59 @@
+.attendance-dashboard-panel .attendance-actions {
+  grid-template-columns: repeat(2, minmax(140px, 1fr));
+}
+
+.attendance-view-all-btn {
+  grid-column: 1 / -1;
+  min-height: 52px;
+  text-decoration: none;
+}
+
+.attendance-dashboard-table-view,
+.attendance-records-view {
+  margin-top: 28px;
+}
+
+.attendance-table {
+  table-layout: fixed;
+  min-width: 720px;
+}
+
+.attendance-records-table {
+  min-width: 920px;
+}
+
+.attendance-search-row {
+  justify-content: space-between;
+}
+
+.attendance-date-input {
+  width: clamp(160px, 10vw, 190px);
+  min-height: 44px;
+  border-color: #efd6ad;
+  border-radius: 14px;
+  color: var(--ink);
+  font-weight: 700;
+  background-color: #fffdf8;
+}
+
+.attendance-date-input:focus {
+  border-color: #e6ae4b;
+  box-shadow: 0 0 0 .2rem rgba(243, 182, 79, .2);
+}
+
+.attendance-page-actions {
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.attendance-page-actions .member-create-open-btn {
+  gap: 8px;
+  text-decoration: none;
+}
+
+@media (max-width: 767.98px) {
+  .attendance-dashboard-panel .attendance-actions {
+    min-width: 0;
+    width: 100%;
+  }
+}

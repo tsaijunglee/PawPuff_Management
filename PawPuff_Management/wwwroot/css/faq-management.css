@@ -1,0 +1,127 @@
+.faq-management-view {
+  margin-top: 28px;
+}
+
+.faq-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.faq-search-row {
+  justify-content: space-between;
+}
+
+.faq-filter-select,
+.faq-modal-select {
+  min-height: 44px;
+  border-color: #efd6ad;
+  border-radius: 14px;
+  color: var(--ink);
+  font-weight: 700;
+  background-color: #fffdf8;
+}
+
+.faq-filter-select {
+  width: clamp(150px, 9vw, 180px);
+}
+
+.faq-text-filter-field .form-control {
+  width: clamp(210px, 14vw, 280px);
+}
+
+.faq-filter-select:focus,
+.faq-modal-select:focus {
+  border-color: #e6ae4b;
+  box-shadow: 0 0 0 .2rem rgba(243, 182, 79, .2);
+}
+
+.faq-table {
+  table-layout: fixed;
+  min-width: 1180px;
+}
+
+.faq-table th:nth-child(1),
+.faq-table td:nth-child(1) {
+  width: 96px;
+}
+
+.faq-table th:nth-child(2),
+.faq-table td:nth-child(2) {
+  width: 110px;
+}
+
+.faq-table th:nth-child(5),
+.faq-table td:nth-child(5) {
+  width: 170px;
+}
+
+.faq-table th:nth-child(6),
+.faq-table td:nth-child(6) {
+  width: 150px;
+}
+
+.faq-table th:nth-child(7),
+.faq-table td:nth-child(7) {
+  width: 118px;
+}
+
+.faq-table [data-faq-cell="question"],
+.faq-answer-cell {
+  text-align: left;
+  word-break: break-word;
+}
+
+.faq-answer-cell {
+  color: #755341;
+  font-size: .92rem;
+  line-height: 1.55;
+}
+
+.faq-answer-preview {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.faq-status-switch {
+  justify-content: center;
+}
+
+.faq-edit-btn {
+  justify-content: center;
+}
+
+.faq-answer-textarea {
+  min-height: 180px;
+  border-color: #efd6ad;
+  border-radius: 14px;
+  color: var(--ink);
+  font-weight: 700;
+  background-color: #fffdf8;
+}
+
+.faq-answer-textarea:focus {
+  border-color: #e6ae4b;
+  box-shadow: 0 0 0 .2rem rgba(243, 182, 79, .2);
+}
+
+.faq-modal-status-switch {
+  justify-content: flex-start;
+  min-height: 44px;
+}
+
+.faq-empty-row td {
+  padding: 42px 18px;
+  color: #9b806a;
+  font-weight: 900;
+  text-align: center;
+}
+
+@media (max-width: 575.98px) {
+  .faq-page-actions .member-create-open-btn {
+    flex: 1 1 100%;
+  }
+}

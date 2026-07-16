@@ -1,0 +1,70 @@
+.profile-detail-view {
+  margin-top: 24px;
+}
+
+.profile-detail-head {
+  flex-wrap: wrap;
+}
+
+.profile-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.profile-save-btn {
+  min-height: 44px;
+}
+
+.profile-edit-field .member-detail-label {
+  display: block;
+}
+
+.profile-edit-input {
+  min-height: 44px;
+  border: 1px solid #efd6ad;
+  border-radius: 14px;
+  background: #fffaf1;
+  color: var(--ink-dark);
+  font-weight: 800;
+}
+
+.profile-edit-input:focus {
+  border-color: #e3a746;
+  box-shadow: 0 0 0 .2rem rgba(243, 182, 79, .18);
+}
+
+.profile-confirm-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.profile-confirm-list li {
+  padding: 12px 14px;
+  border: 1px solid var(--line-soft);
+  border-radius: 14px;
+  background: #fffdf8;
+  color: var(--ink-dark);
+  font-weight: 900;
+}
+
+.profile-confirm-list span {
+  color: #9b806a;
+  font-weight: 800;
+}
+
+@media (max-width: 575.98px) {
+  .profile-detail-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .profile-detail-actions .member-back-btn,
+  .profile-detail-actions .profile-save-btn {
+    flex: 1 1 100%;
+  }
+}

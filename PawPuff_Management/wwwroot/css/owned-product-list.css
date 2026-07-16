@@ -1,0 +1,36 @@
+.owned-product-view {
+  margin-top: 28px;
+}
+
+.owned-product-search-row {
+  justify-content: space-between;
+}
+
+.owned-product-filter-select {
+  width: clamp(150px, 9vw, 180px);
+  min-height: 44px;
+  border-color: #efd6ad;
+  border-radius: 14px;
+  color: var(--ink);
+  font-weight: 700;
+  background-color: #fffdf8;
+}
+
+.owned-product-filter-select:focus {
+  border-color: #e6ae4b;
+  box-shadow: 0 0 0 .2rem rgba(243, 182, 79, .2);
+}
+
+.owned-product-table {
+  table-layout: fixed;
+  min-width: 1040px;
+}
+
+.owned-product-table th,
+.owned-product-table td {
+  width: auto;
+}
+
+.owned-product-table [data-owned-product-cell="name"] {
+  word-break: break-word;
+}
