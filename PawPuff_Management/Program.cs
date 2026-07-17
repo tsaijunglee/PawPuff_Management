@@ -17,6 +17,9 @@ namespace PawPuff_Management
 			builder.Services.AddDbContext<PawPuffContext>(options =>
 			options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+			// µù¥UR2¹Ï§É
+			builder.Services.AddSingleton<Models.Services.R2Service>();
+
 			//builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 			//builder.Services.AddScoped<AuthService>();
 

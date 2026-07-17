@@ -1,0 +1,231 @@
+﻿@model PawPuff_Management.Models.DTOs.LoginDto
+
+@{
+	Layout = null;
+	ViewData["Title"] = "登入";
+}
+
+<!DOCTYPE html>
+<html lang="zh-hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>噗爪後台管理系統</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f7f3ea 0%, #f3eadb 40%, #efe3d2 70%, #e8dcc8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            width: 420px;
+            padding: 50px 40px;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            z-index: 10;
+        }
+
+        .login-container * {
+            font-family: 'Inter', sans-serif;
+            color: #5b4636;
+            outline: none;
+            border: none;
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .logo-section img {
+            width: 210px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .system-subtitle {
+            font-size: 16px;
+            color: rgba(91, 70, 54, 0.7);
+            text-align: center;
+            line-height: 1.4;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-top: 24px;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(91, 70, 54, 0.8);
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input {
+            display: block;
+            height: 54px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            padding: 0 20px 0 50px;
+            font-size: 16px;
+            color: #5b4636;
+            transition: all 0.3s ease;
+        }
+
+        input::placeholder {
+            color: rgba(91, 70, 54, 0.4);
+        }
+
+        input:focus {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 0 3px rgba(139, 107, 76, 0.2);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(91, 70, 54, 0.6);
+            font-size: 20px;
+        }
+
+        .login-container button {
+            margin-top: 32px;
+            width: 100%;
+            height: 54px;
+            background: linear-gradient(135deg, #8b6b4c, #a67c52);
+            color: #FFFFFD;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 按鈕光澤效果 */
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(139, 107, 76, 0.25);
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            display: none;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="logo-section">
+            <img src="~/img/Login_pic.PNG" alt="PawPuff 噗爪">
+        </div>
+        <p class="system-subtitle">後台管理系統</p>
+        <form method="post">
+            <label asp-for="Account">管理員帳號</label>
+            <div class="input-wrapper">
+                <input asp-for="Account" id="Account" placeholder="請輸入管理員帳號" required />
+                <span asp-validation-for="Account" class="text-danger"></span>
+                <i class="fa-solid fa-user-astronaut input-icon"></i>
+            </div>
+            <label asp-for="Password">密碼</label>
+            <div class="input-wrapper">
+                <input asp-for="Password" id="Password" type="password" placeholder="請輸入密碼" required />
+                <span asp-validation-for="Password" class="text-danger"></span>
+                <i class="fa-solid fa-key input-icon"></i>
+            </div>
+            <button type="submit">登入系統</button>
+        </form>
+        <div id="message" class="message"></div>
+    </div>
+    <script>
+        //頁面載入完成後執行
+        // document.addEventListener('DOMContentLoaded', function () {
+        // 檢查是否有後端錯誤訊息需要顯示，可以通過後端 ViewBag 或其他方式傳遞錯誤訊息
+        //     const messageDiv = document.getElementById('message');
+
+        //表單提交前的客戶端驗證
+        //     const form = document.querySelector('form');
+        //     form.addEventListener('submit', function (e) {
+        //         const account = document.getElementById('Account').value.trim();
+        //         const password = document.getElementById('Password').value.trim();
+
+        //         if (!account || !password) {
+        //             e.preventDefault(); //只在驗證失敗時阻止提交
+        //             messageDiv.textContent = '請輸入帳號和密碼';
+        //             messageDiv.style.display = 'block';
+        //             messageDiv.style.background = 'rgba(239,68,68,0.1)';
+        //             messageDiv.style.borderColor = 'rgba(239,68,68,0.2)';
+        //             messageDiv.style.color = '#b45309';
+        //             return false;
+        //         }
+
+        //如果驗證通過，顯示載入狀態並允許表單提交
+        //         messageDiv.textContent = '登入中...';
+        //         messageDiv.style.display = 'block';
+        //         messageDiv.style.background = 'rgba(34,197,94,0.1)';
+        //         messageDiv.style.borderColor = 'rgba(34,197,94,0.2)';
+        //         messageDiv.style.color = '#166534';
+
+        //讓表單正常提交到後端
+        //         return true;
+        //     });
+        // });
+    </script>
+</body>
+
+</html>
