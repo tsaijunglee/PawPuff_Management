@@ -40,7 +40,7 @@ namespace PawPuff_Management.Models.Services
 				throw new ArgumentException("檔案無效。");
 
 			var fileExtension = Path.GetExtension(file.FileName).ToLower();
-			var newFileName = $"{DateTime.UtcNow:yyyyMMdd}_{Guid.NewGuid()}{fileExtension}";
+			var newFileName = $"{Guid.NewGuid()}{fileExtension}";
 
 			// 1. 【新增核心邏輯】處理資料夾前綴
 			// 如果有帶資料夾名稱，就整理成 "folder/"，否則保持空字串
