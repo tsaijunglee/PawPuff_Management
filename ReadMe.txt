@@ -7,6 +7,7 @@ https://github.com/tsaijunglee/PawPuff_Management.git
 開發期間以更動自己的Controllers、Views、css、js為主，
 除了在三層式架構相關資料夾(DTOs、Infra、Repositories、Services、ViewModels)新增class、Program進行Service的DI註冊外，
 避免更動到共用程式或他人的程式。
+所有按鈕切換的Views都位在Index，可自行將彈窗新增/詳情頁拆分。並且，須自行將原先假資料部分改為串接後端資料庫。
 
 3. 開發一定時間後一同至Github進行逐個分支的合併操作、確認無合併衝突，
 完成後再次拉取主分支，並建立新個人分支繼續新一輪開發。
@@ -28,7 +29,7 @@ master 主分支內容(2026/7/17):
 		private readonly List<string> _allowedExtensions = new() { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
 
 		// 透過相依性注入 (Dependency Injection) 取得 R2Service
-		public HomeController(R2Service r2Service)
+		public ShopController(R2Service r2Service)
 		{
 			_r2Service = r2Service;
 		}
@@ -101,7 +102,7 @@ master 主分支內容(2026/7/17):
             }
 
             <div class="card shadow-sm p-4 mb-4">
-                <form asp-controller="Home" asp-action="Upload" method="post" enctype="multipart/form-data">
+                <form asp-controller="Shop" asp-action="Upload" method="post" enctype="multipart/form-data">
 
                     <div class="mb-3 text-start">
                         <label for="folder" class="form-label fw-bold">儲存目錄 (選填)</label>
