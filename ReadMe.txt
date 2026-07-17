@@ -20,7 +20,7 @@ master 主分支內容(2026/7/17):
 [v]建立空白Controllers，產生View並搬入前端畫面、串接至_Layout (客服工單預留連結，未來依需建立串接)
 [v]加入圖床連接基礎共用程式: R2Service (含appsettings更改、Program註冊DI)
 ==================================================================
-- 後續使用圖床須遵照以下二步驟(以:Views/Shop/Index頁面，要進行上傳至圖床or從圖床中讀取圖片為例):
+- 後續使用圖床須遵照以下二步驟(以:Views/Shop/Index頁面，要進行上傳至圖床、並從圖床中讀取圖片預覽為例):
 
 1. 到控制器Controllers中改寫程式(例:Controllers/ShopController):
 	public class ShopController : Controller
