@@ -1,4 +1,4 @@
-﻿namespace PawPuff_Management.Models.DTOs
+﻿namespace PawPuff_Management.Models.Dtos
 {
 	/// <summary>圖片。Url 是由 R2 公開網址 + 資料夾 + ImageName 組出來的顯示網址。</summary>
 	public class ArticleImageDto

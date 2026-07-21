@@ -1,5 +1,4 @@
 using PawPuff_Management.Models.Dtos;
-using PawPuff_Management.Models.DTOs;
 using PawPuff_Management.Models.EfModels;
 using PawPuff_Management.Models.Repositories;
 
@@ -9,9 +8,12 @@ namespace PawPuff_Management.Models.Services;
 public interface ICommentService
 {
     /// <summary>組成巢狀(只到一層)的留言樹。</summary>
-    Task<List<CommentDto>> GetForArticleAsync(int articleId);
+    Task<List<CommentRowDto>> GetForArticleAsync(int articleId);
 
-    Task<ServiceResult<int>> AddAsync(CommentCreateDto dto);
+	// 詳情頁用:批次撈這些文章的留言列(含帳號、審核欄位),給前端隱藏節點渲染。
+	Task<List<CommentRowDto>> GetRowsForArticlesAsync(List<int> articleIds);
+
+	Task<ServiceResult<int>> AddAsync(CommentCreateDto dto);
 
     /// <summary>審核:停用 / 啟用一則留言。</summary>
     Task<ServiceResult> SetActiveAsync(int commentId, bool isActive);
@@ -31,26 +33,33 @@ public class CommentService : ICommentService
         _currentUser = currentUser;
     }
 
-    public async Task<List<CommentDto>> GetForArticleAsync(int articleId)
+    public async Task<List<CommentRowDto>> GetForArticleAsync(int articleId)
     {
-        var all = await _repository.GetByArticleAsync(articleId);
+		var all = await _repository.GetByArticleAsync(articleId);
 
-        // 先全部轉成 DTO,再用 ParentCommentId 掛成一層樹。
-        var dtos = all.Select(ToDto).ToList();
-        var byId = dtos.ToDictionary(d => d.Id);
+		// 先全部轉成 DTO,再用 ParentCommentId 掛成一層樹。
+		var dtos = all.Select(ToDto).ToList();
+		var byId = dtos.ToDictionary(d => d.Id);
 
-        var roots = new List<CommentDto>();
-        foreach (var dto in dtos)
-        {
-            if (dto.ParentCommentId is int pid && byId.TryGetValue(pid, out var parent))
-                parent.Replies.Add(dto);   // 子留言掛到父留言底下
-            else
-                roots.Add(dto);            // 沒有父的就是主留言
-        }
-        return roots;
-    }
+		var roots = new List<CommentRowDto>();
+		foreach (var dto in dtos)
+		{
+			if (dto.ParentCommentId is int pid && byId.TryGetValue(pid, out var parent))
+				parent.Replies.Add(dto);   // 子留言掛到父留言底下
+			else
+				roots.Add(dto);            // 沒有父的就是主留言
+		}
+		return roots;
+	}
 
-    public async Task<ServiceResult<int>> AddAsync(CommentCreateDto dto)
+
+	public Task<List<CommentRowDto>> GetRowsForArticlesAsync(List<int> articleIds)
+	=> articleIds.Count == 0
+		? Task.FromResult(new List<CommentRowDto>())
+		: _repository.GetRowsForArticlesAsync(articleIds);
+
+
+	public async Task<ServiceResult<int>> AddAsync(CommentCreateDto dto)
     {
         var content = (dto.CommentContent ?? string.Empty).Trim();
         if (string.IsNullOrWhiteSpace(content))
@@ -109,23 +118,23 @@ public class CommentService : ICommentService
         return ServiceResult.Ok();
     }
 
-    // 蓋上管理員審核足跡。
-    private void Stamp(Comment entity)
-    {
-        entity.AdminUpdatedAt = DateTime.Now;
-        entity.ModifiedByAdminId = _currentUser.GetCurrentAdminId();
-    }
+	// 蓋上管理員審核足跡。
+	private void Stamp(Comment entity)
+	{
+		entity.AdminUpdatedAt = DateTime.Now;
+		entity.ModifiedByAdminId = _currentUser.GetCurrentAdminId();
+	}
 
-    private static CommentDto ToDto(Comment e) => new()
-    {
-        Id = e.Id,
-        ArticleId = e.ArticleId,
-        ParentCommentId = e.ParentCommentId,
-        UserId = e.UserId,
-        AuthorNickname = e.User?.Nickname,
-        CommentContent = e.CommentContent,
-        IsActive = e.IsActive,
-        CreatedAt = e.CreatedAt,
-        AdminComment = e.AdminComment,
-    };
+	private static CommentRowDto ToDto(Comment e) => new()
+	{
+		Id = e.Id,
+		ArticleId = e.ArticleId,
+		ParentCommentId = e.ParentCommentId,
+		UserId = e.UserId,
+		UserName = e.User?.Nickname,
+		CommentContent = e.CommentContent,
+		IsActive = e.IsActive,
+		CreatedAt = e.CreatedAt,
+		AdminComment = e.AdminComment,
+	};
 }

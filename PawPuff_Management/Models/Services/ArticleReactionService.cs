@@ -1,3 +1,4 @@
+using PawPuff_Management.Models.Dtos;
 using PawPuff_Management.Models.EfModels;
 using PawPuff_Management.Models.Repositories;
 
@@ -14,6 +15,10 @@ public interface IArticleReactionService
 
     /// <summary>查目前使用者對某篇文章的讚 / 收藏狀態(給明細面板顯示)。</summary>
     Task<(bool liked, bool saved)> GetStatusAsync(int articleId);
+
+	// 詳情頁用:批次撈這些文章的讚 / 收藏清單(含帳號)。
+	Task<List<ArticleReactionRowDto>> GetLikeRowsAsync(List<int> articleIds);
+	Task<List<ArticleReactionRowDto>> GetSaveRowsAsync(List<int> articleIds);
 }
 
 public class ArticleReactionService : IArticleReactionService
@@ -96,4 +101,15 @@ public class ArticleReactionService : IArticleReactionService
         var save = await _repository.GetSaveAsync(articleId, userId);
         return (like is { IsActive: true }, save is { IsActive: true });
     }
+
+	public Task<List<ArticleReactionRowDto>> GetLikeRowsAsync(List<int> articleIds)
+	=> articleIds.Count == 0
+		? Task.FromResult(new List<ArticleReactionRowDto>())
+		: _repository.GetLikeRowsAsync(articleIds);
+
+	public Task<List<ArticleReactionRowDto>> GetSaveRowsAsync(List<int> articleIds)
+		=> articleIds.Count == 0
+			? Task.FromResult(new List<ArticleReactionRowDto>())
+			: _repository.GetSaveRowsAsync(articleIds);
+
 }

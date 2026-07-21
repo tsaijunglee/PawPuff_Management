@@ -1,4 +1,4 @@
-using PawPuff_Management.Models.DTOs;
+using PawPuff_Management.Models.Dtos;
 
 namespace PawPuff_Management.Models.Dtos;
 #nullable enable
@@ -49,7 +49,7 @@ public class ArticleDetailDto
     public bool SavedByCurrentUser { get; set; }
 
     public List<ArticleImageDto> Images { get; set; } = new();
-    public List<CommentDto> Comments { get; set; } = new();  // 巢狀(只到一層)
+    public List<CommentRowDto> Comments { get; set; } = new();  // 巢狀(只到一層)
 }
 
 // ---- 寫入用(input)----

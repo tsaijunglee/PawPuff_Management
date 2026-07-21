@@ -1,5 +1,4 @@
 using PawPuff_Management.Models.Dtos;
-using PawPuff_Management.Models.DTOs;
 using PawPuff_Management.Models.EfModels;
 using PawPuff_Management.Models.Repositories;
 

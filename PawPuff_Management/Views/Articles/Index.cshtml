@@ -218,51 +218,28 @@
 </div>
 
 <div class="d-none" id="articleReactionData" aria-hidden="true">
-    <span data-article-reaction="like" data-article-id="1" data-account="milktea02" data-created-at="2026-06-01 10:15:00"></span>
-    <span data-article-reaction="like" data-article-id="1" data-account="pudding03" data-created-at="2026-06-01 10:30:00"></span>
-    <span data-article-reaction="like" data-article-id="1" data-account="afu04" data-created-at="2026-06-01 11:00:00"></span>
-    <span data-article-reaction="like" data-article-id="2" data-account="sunny01" data-created-at="2026-06-02 15:00:00"></span>
-    <span data-article-reaction="like" data-article-id="2" data-account="cocoa05" data-created-at="2026-06-02 16:22:00"></span>
-    <span data-article-reaction="like" data-article-id="3" data-account="sunny01" data-created-at="2026-06-03 18:30:00"></span>
-    <span data-article-reaction="like" data-article-id="3" data-account="milktea02" data-created-at="2026-06-03 19:00:00"></span>
-    <span data-article-reaction="like" data-article-id="4" data-account="sunny01" data-created-at="2026-06-04 10:05:00"></span>
-    <span data-article-reaction="like" data-article-id="5" data-account="milktea02" data-created-at="2026-06-05 12:45:00"></span>
-    <span data-article-reaction="like" data-article-id="5" data-account="pudding03" data-created-at="2026-06-05 13:10:00"></span>
-    <span data-article-reaction="like" data-article-id="6" data-account="xiaobai07" data-created-at="2026-06-06 16:00:00"></span>
-    <span data-article-reaction="like" data-article-id="7" data-account="tofu08" data-created-at="2026-06-07 21:00:00"></span>
-    <span data-article-reaction="like" data-article-id="8" data-account="happy09" data-created-at="2026-06-08 12:00:00"></span>
-    <span data-article-reaction="like" data-article-id="9" data-account="anan10" data-created-at="2026-06-09 18:30:00"></span>
-    <span data-article-reaction="like" data-article-id="11" data-account="milktea02" data-created-at="2026-06-11 9:00:00"></span>
-    <span data-article-reaction="favorite" data-article-id="1" data-account="cocoa05" data-created-at="2026-06-01 12:00:00"></span>
-    <span data-article-reaction="favorite" data-article-id="2" data-account="pudding03" data-created-at="2026-06-02 17:00:00"></span>
-    <span data-article-reaction="favorite" data-article-id="4" data-account="sunny01" data-created-at="2026-06-04 10:10:00"></span>
-    <span data-article-reaction="favorite" data-article-id="5" data-account="sunny01" data-created-at="2026-06-05 12:30:00"></span>
-    <span data-article-reaction="favorite" data-article-id="5" data-account="milktea02" data-created-at="2026-06-05 13:00:00"></span>
-    <span data-article-reaction="favorite" data-article-id="5" data-account="millet06" data-created-at="2026-06-05 14:00:00"></span>
-    <span data-article-reaction="favorite" data-article-id="6" data-account="tofu08" data-created-at="2026-06-06 17:30:00"></span>
-    <span data-article-reaction="favorite" data-article-id="7" data-account="milktea02" data-created-at="2026-06-07 22:00:00"></span>
-    <span data-article-reaction="favorite" data-article-id="7" data-account="cocoa05" data-created-at="2026-06-07 22:15:00"></span>
-    <span data-article-reaction="favorite" data-article-id="8" data-account="pudding03" data-created-at="2026-06-08 13:00:00"></span>
-    <span data-article-reaction="favorite" data-article-id="8" data-account="afu04" data-created-at="2026-06-08 14:30:00"></span>
-    <span data-article-reaction="favorite" data-article-id="9" data-account="milktea02" data-created-at="2026-06-09 19:00:00"></span>
+    @foreach (var r in Model.Reactions)
+    {
+        <span data-article-reaction="@r.Type" data-article-id="@r.ArticleId" data-account="@r.Account" data-created-at="@(r.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"))"></span>
+    }
 </div>
 
 <div class="d-none" id="articleCommentData" aria-hidden="true">
-    <span data-article-comment data-comment-id="1" data-article-id="1" data-parent-comment-id="NULL" data-account="milktea02" data-comment-content="剛帶回家千萬不要強抱牠，一定要給牠獨立的安靜小空間適應。" data-active="true" data-created-at="2026-06-01 10:10:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
-    <span data-article-comment data-comment-id="2" data-article-id="1" data-parent-comment-id="1" data-account="sunny01" data-comment-content="好的，我已經把貓籠放在安靜角落了，也放了水跟乾乾，現在盡量不打擾牠。" data-active="true" data-created-at="2026-06-01 10:20:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
-    <span data-article-comment data-comment-id="3" data-article-id="1" data-parent-comment-id="NULL" data-account="pudding03" data-comment-content="等牠情緒穩定後，建議帶去獸醫那裡做個糞便檢查看看有沒有寄生蟲喔！" data-active="true" data-created-at="2026-06-01 10:45:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
-    <span data-article-comment data-comment-id="4" data-article-id="1" data-parent-comment-id="3" data-account="sunny01" data-comment-content="謝謝提醒，我已經預約了這週末的獸醫院，希望一切健康。" data-active="true" data-created-at="2026-06-01 11:05:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
-    <span data-article-comment data-comment-id="5" data-article-id="2" data-parent-comment-id="NULL" data-account="cocoa05" data-comment-content="我們家哈士奇也是破壞狂，借問一下這款在中大型犬身上也適用嗎？" data-active="true" data-created-at="2026-06-02 16:00:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
-    <span data-article-comment data-comment-id="6" data-article-id="2" data-parent-comment-id="5" data-account="milktea02" data-comment-content="這品牌有出 XL 號，對於大狗來說很安全，不容易被咬碎吞食！" data-active="true" data-created-at="2026-06-02 16:30:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
-    <span data-article-comment data-comment-id="7" data-article-id="3" data-parent-comment-id="NULL" data-account="afu04" data-comment-content="多多看起來太可愛了，好親人喔！幫高推，希望能快點找到好家庭！" data-active="true" data-created-at="2026-06-03 18:40:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
-    <span data-article-comment data-comment-id="8" data-article-id="3" data-parent-comment-id="NULL" data-account="cocoa05" data-comment-content="已轉發到台北認養相關社團，祝多多早日找到幸福新家！" data-active="true" data-created-at="2026-06-03 19:15:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
-    <span data-article-comment data-comment-id="9" data-article-id="4" data-parent-comment-id="NULL" data-account="sunny01" data-comment-content="聽說用馬克杯裝滿水放在桌上，貓咪特別愛偷喝，真的很神奇！" data-active="true" data-created-at="2026-06-04 9:30:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
-    <span data-article-comment data-comment-id="10" data-article-id="4" data-parent-comment-id="9" data-account="afu04" data-comment-content="真的！我們家那隻每天都來偷喝我杯子裡的水，乾脆直接給牠放一個專屬馬克杯。" data-active="true" data-created-at="2026-06-04 9:45:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
-    <span data-article-comment data-comment-id="11" data-article-id="5" data-parent-comment-id="NULL" data-account="millet06" data-comment-content="這週馬上來動手做做看，材料簡單又健康！夏天給狗狗吃超消暑。" data-active="true" data-created-at="2026-06-05 13:00:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
-    <span data-article-comment data-comment-id="12" data-article-id="6" data-parent-comment-id="NULL" data-account="tofu08" data-comment-content="這篇修剪指甲的教學太詳細了！每次幫我們家玄鳳剪指甲都像世界大戰，下次試試看你教的保定法。" data-active="true" data-created-at="2026-06-06 17:00:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
-    <span data-article-comment data-comment-id="13" data-article-id="7" data-parent-comment-id="NULL" data-account="milktea02" data-comment-content="很實用的科普文！先收藏了，免得遇到狀況時手忙腳亂。" data-active="true" data-created-at="2026-06-07 21:15:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
-    <span data-article-comment data-comment-id="14" data-article-id="11" data-parent-comment-id="NULL" data-account="pudding03" data-comment-content="好可愛的小橘！可惜家裡已經三隻貓了，幫推祝早日找到好主人。" data-active="true" data-created-at="2026-06-11 9:10:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL"></span>
-    <span data-article-comment data-comment-id="15" data-article-id="5" data-parent-comment-id="NULL" data-account="millet06" data-comment-content="(廣告連結)" data-active="false" data-created-at="2026-06-05 13:00:00" data-updated-at="2026-06-05 13:03:12" data-admin-comment="留言含有廣告" data-admin-updated-at="2026-06-07 18:15:43" data-modified-by-admin="admin01"></span>
+    @foreach (var c in Model.CommentRows)
+    {
+        <span data-article-comment
+              data-comment-id="@c.Id"
+              data-article-id="@c.ArticleId"
+              data-parent-comment-id="@(c.ParentCommentId?.ToString() ?? "NULL")"
+              data-account="@c.Account"
+              data-comment-content="@c.CommentContent"
+              data-active="@c.IsActive.ToString().ToLower()"
+              data-created-at="@(c.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"))"
+              data-updated-at="@(c.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "NULL")"
+              data-admin-comment="@(c.AdminComment ?? "NULL")"
+              data-admin-updated-at="@(c.AdminUpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "NULL")"
+              data-modified-by-admin="@(c.ModifiedByAdminAccount ?? "NULL")"></span>
+    }
 </div>
 
 <div class="modal fade" id="articleCreateModal" tabindex="-1" aria-labelledby="articleCreateModalTitle" aria-hidden="true">

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PawPuff_Management.Models.Dtos;
 using PawPuff_Management.Models.EfModels;
 
 namespace PawPuff_Management.Models.Repositories;
@@ -18,7 +19,11 @@ public interface IArticleReactionRepository
 
     Task<bool> ArticleExistsAsync(int articleId);
 
-    Task SaveChangesAsync();
+	// 詳情頁用:批次撈這些文章的「有效」讚 / 收藏(含帳號),給前端隱藏節點渲染。
+	Task<List<ArticleReactionRowDto>> GetLikeRowsAsync(List<int> articleIds);
+	Task<List<ArticleReactionRowDto>> GetSaveRowsAsync(List<int> articleIds);
+
+	Task SaveChangesAsync();
 }
 
 public class ArticleReactionRepository : IArticleReactionRepository
@@ -47,6 +52,33 @@ public class ArticleReactionRepository : IArticleReactionRepository
     public async Task<bool> ArticleExistsAsync(int articleId)
         => await _context.Set<Article>().AnyAsync(a => a.Id == articleId);
 
-    public async Task SaveChangesAsync()
+	public async Task<List<ArticleReactionRowDto>> GetLikeRowsAsync(List<int> articleIds)
+	   => await _context.Set<ArticleLike>().AsNoTracking()
+		   .Where(l => l.IsActive && articleIds.Contains(l.ArticleId))
+		   .OrderBy(l => l.CreatedAt)
+		   .Select(l => new ArticleReactionRowDto
+		   {
+			   ArticleId = l.ArticleId,
+			   Type = "like",
+			   Account = l.User.Account,
+			   CreatedAt = l.CreatedAt,
+		   })
+		   .ToListAsync();
+
+	public async Task<List<ArticleReactionRowDto>> GetSaveRowsAsync(List<int> articleIds)
+		=> await _context.Set<ArticleSafe>().AsNoTracking()
+			.Where(s => s.IsActive && articleIds.Contains(s.ArticleId))
+			.OrderBy(s => s.CreatedAt)
+			.Select(s => new ArticleReactionRowDto
+			{
+				ArticleId = s.ArticleId,
+				Type = "favorite",
+				Account = s.User.Account,
+				CreatedAt = s.CreatedAt,
+			})
+			.ToListAsync();
+
+
+	public async Task SaveChangesAsync()
         => await _context.SaveChangesAsync();
 }

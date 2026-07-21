@@ -1,5 +1,5 @@
-using System.ComponentModel.DataAnnotations;
 using PawPuff_Management.Models.Dtos;
+using System.ComponentModel.DataAnnotations;
 
 namespace PawPuff_Management.ViewModels.Article;
 #nullable enable
@@ -89,4 +89,8 @@ public class ArticleIndexVm
     public ArticleDetailDto? Detail { get; set; }
     public ArticleEditVm EditForm { get; set; } = new();
     public CommentCreateVm NewComment { get; set; } = new();
+
+	// 詳情頁隱藏節點的資料來源(整頁文章的讚 / 收藏 / 留言,前端 JS 依 article-id 取用)
+	public List<ArticleReactionRowDto> Reactions { get; set; } = new();
+	public List<CommentRowDto> CommentRows { get; set; } = new();
 }

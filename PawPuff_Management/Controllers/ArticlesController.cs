@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PawPuff_Management.Models.Dtos;
-using PawPuff_Management.Models.DTOs;
 using PawPuff_Management.Models.Services;
 using PawPuff_Management.ViewModels.Article;
 
@@ -212,6 +211,50 @@ public class ArticlesController : Controller
 		return RedirectToAction(nameof(Index), new { articleId });
 	}
 
+	// ================= 給前端 JS 用的 JSON 端點 =================
+	// 免登入階段先不加 [ValidateAntiForgeryToken]。
+
+	// POST: /Articles/SetActiveAjax  (停用/啟用文章,reason 寫進 admin_comment)
+	[HttpPost]
+	public async Task<IActionResult> SetActiveAjax(int id, bool isActive, string? reason)
+	{
+		// 1. 先切文章的上下架狀態(is_active)
+		var r1 = await _articleService.SetActiveAsync(id, isActive);
+		if (!r1.Success)
+			return Json(new { success = false, message = r1.Error });
+
+		// 2. 有填屏蔽說明就寫進 admin_comment(順便蓋 admin_updated_at、modified_by_admin_id)
+		if (!string.IsNullOrWhiteSpace(reason))
+		{
+			var r2 = await _articleService.SetAdminNoteAsync(id, reason);
+			if (!r2.Success)
+				return Json(new { success = false, message = r2.Error });
+		}
+
+		// 3. 回傳成功給前端 JS
+		return Json(new { success = true });
+	}
+
+	// POST: /Articles/SetCommentActiveAjax  (停用/啟用留言,reason 寫進 admin_comment)
+	[HttpPost]
+	public async Task<IActionResult> SetCommentActiveAjax(int commentId, bool isActive, string? reason)
+	{
+		// 1. 先切留言的顯示/隱藏狀態(is_active)
+		var r1 = await _commentService.SetActiveAsync(commentId, isActive);
+		if (!r1.Success)
+			return Json(new { success = false, message = r1.Error });
+
+		// 2. 有填屏蔽說明就寫進留言的 admin_comment
+		if (!string.IsNullOrWhiteSpace(reason))
+		{
+			var r2 = await _commentService.SetAdminNoteAsync(commentId, reason);
+			if (!r2.Success)
+				return Json(new { success = false, message = r2.Error });
+		}
+
+		return Json(new { success = true });
+	}
+
 	// ---------------- 私有:組裝 Index 頁 ViewModel ----------------
 
 	private async Task<ArticleIndexVm> BuildIndexVmAsync(
@@ -230,6 +273,13 @@ public class ArticlesController : Controller
 				.Select(c => new CategoryOption { Id = c.Id, Name = c.Name })
 				.ToList(),
 		};
+
+		// 詳情頁的按讚/收藏/留言隱藏節點:一次撈齊目前清單這些文章的資料,交給前端 JS 依 article-id 取用。
+		var articleIds = vm.Articles.Select(a => a.Id).ToList();
+		var likeRows = await _reactionService.GetLikeRowsAsync(articleIds);
+		var saveRows = await _reactionService.GetSaveRowsAsync(articleIds);
+		vm.Reactions = likeRows.Concat(saveRows).ToList();
+		vm.CommentRows = await _commentService.GetRowsForArticlesAsync(articleIds);
 
 		if (articleId.HasValue)
 		{
@@ -256,4 +306,6 @@ public class ArticlesController : Controller
 		if (string.IsNullOrEmpty(message)) return;
 		TempData[success ? "Success" : "Error"] = message;
 	}
+
+
 }

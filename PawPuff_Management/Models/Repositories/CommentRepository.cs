@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PawPuff_Management.Models.Dtos;
 using PawPuff_Management.Models.EfModels;
 
 namespace PawPuff_Management.Models.Repositories;
@@ -11,7 +12,10 @@ public interface ICommentRepository
 
     Task<Comment?> GetByIdAsync(int id);
 
-    Task AddAsync(Comment entity);
+	// 詳情頁用:批次撈這些文章的所有留言(含停用的,含作者帳號與審核欄位)。
+	Task<List<CommentRowDto>> GetRowsForArticlesAsync(List<int> articleIds);
+
+	Task AddAsync(Comment entity);
 
     Task SaveChangesAsync();
 }
@@ -35,7 +39,28 @@ public class CommentRepository : ICommentRepository
     public async Task<Comment?> GetByIdAsync(int id)
         => await _context.Set<Comment>().FirstOrDefaultAsync(c => c.Id == id);
 
-    public async Task AddAsync(Comment entity)
+	public async Task<List<CommentRowDto>> GetRowsForArticlesAsync(List<int> articleIds)
+	 => await _context.Set<Comment>().AsNoTracking()
+		 .Where(c => articleIds.Contains(c.ArticleId))
+		 .OrderBy(c => c.CreatedAt)
+		 .Select(c => new CommentRowDto
+		 {
+			 Id = c.Id,
+			 ArticleId = c.ArticleId,
+			 ParentCommentId = c.ParentCommentId,
+			 Account = c.User != null ? c.User.Account : null,
+			 CommentContent = c.CommentContent,
+			 IsActive = c.IsActive,
+			 CreatedAt = c.CreatedAt,
+			 UpdatedAt = c.UpdatedAt,
+			 AdminComment = c.AdminComment,
+			 AdminUpdatedAt = c.AdminUpdatedAt,
+			 ModifiedByAdminAccount = c.ModifiedByAdmin != null ? c.ModifiedByAdmin.Account : null,
+		 })
+		 .ToListAsync();
+
+
+	public async Task AddAsync(Comment entity)
         => await _context.Set<Comment>().AddAsync(entity);
 
     public async Task SaveChangesAsync()
