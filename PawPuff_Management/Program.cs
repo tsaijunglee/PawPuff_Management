@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using PawPuff_Management.Models.EfModels;
+using PawPuff_Management.Models.Repositories;
+using PawPuff_Management.Models.Services;
 
 namespace PawPuff_Management
 {
@@ -19,6 +21,10 @@ namespace PawPuff_Management
 
 			// µù¥UR2¹Ï§É
 			builder.Services.AddSingleton<Models.Services.R2Service>();
+
+			// µù¥U¯È«½«½²Õ¦X¹wÄý
+			builder.Services.AddScoped<ICombinationPreviewRepository, CombinationPreviewRepository>();
+			builder.Services.AddScoped<ICombinationPreviewService, CombinationPreviewService>();
 
 			//builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 			//builder.Services.AddScoped<AuthService>();
