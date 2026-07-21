@@ -1,4 +1,9 @@
-﻿@{
+@model PawPuff_Management.ViewModels.Article.ArticleIndexVm
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@{
+    var r2Base = (Configuration["CloudflareR2:PublicUrl"] ?? "").TrimEnd('/');
+}
+@{
     ViewData["Title"] = "文章管理";
     ViewData["CurrentScreen"] = "article-management";
 }
@@ -74,102 +79,36 @@
                             </tr>
                         </thead>
                         <tbody id="articleTableBody">
-                            <tr data-article-row data-id="1" data-account="sunny01" data-category-name="醫療養護" data-title="幼貓剛帶回家需要注意什麼？新手醫療與環境適應求助" data-article-content="今天剛領養了一隻兩個月大的小浪貓。目前牠一直躲在籠子角落發抖，不吃不喝。請問我應該主動抱牠，還是先讓牠自己靜靜呢？有沒有需要先帶去獸醫院做什麼傳染病篩檢？" data-image-names="kitten_adaptation_01.jpg|kitten_adaptation_02.jpg" data-active="true" data-created-at="2026-06-01 10:00:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
-                                <td data-article-cell="id">1</td>
-                                <td data-article-cell="account">sunny01</td>
-                                <td data-article-cell="category">醫療養護</td>
-                                <td data-article-cell="title">幼貓剛帶回家需要注意什麼？新手醫療與環境適應求助</td>
-                                <td><button class="member-detail-btn" type="button" data-article-detail="1">查看 <i class="bi bi-chevron-right"></i></button></td>
-                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus1" type="checkbox" role="switch" data-article-status="1" checked><label class="member-status-text" for="articleStatus1">啟用</label></div></td>
-                            </tr>
-                            <tr data-article-row data-id="2" data-account="milktea02" data-category-name="行為訓練" data-title="推薦這款超耐咬的柴犬抗憂鬱玩具！" data-article-content="我們家阿柴是破壞狂，市面上標榜耐咬的玩具通常撐不過三天。這次買了這款防爆咬骨頭，裡面還可以塞零食，竟然成功轉移牠撕咬沙發的注意力，大推！" data-image-names="shiba_chew_toy.jpg" data-active="true" data-created-at="2026-06-02 14:30:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
-                                <td data-article-cell="id">2</td>
-                                <td data-article-cell="account">milktea02</td>
-                                <td data-article-cell="category">行為訓練</td>
-                                <td data-article-cell="title">推薦這款超耐咬的柴犬抗憂鬱玩具！</td>
-                                <td><button class="member-detail-btn" type="button" data-article-detail="2">查看 <i class="bi bi-chevron-right"></i></button></td>
-                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus2" type="checkbox" role="switch" data-article-status="2" checked><label class="member-status-text" for="articleStatus2">啟用</label></div></td>
-                            </tr>
-                            <tr data-article-row data-id="3" data-account="pudding03" data-category-name="寵物認養" data-title="【認養】台北信義區超親人棕色貴賓(多多)，尋找愛牠的溫暖家人！" data-article-content="名字：多多。品種：玩具貴賓。目前約兩歲，親人、親狗、不亂叫，已做好晶片登記與結紮。希望尋找有耐心、能定期帶牠散步的愛心家庭。意者請私訊！" data-image-names="poodle_adoption_todo.jpg" data-active="true" data-created-at="2026-06-03 18:15:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
-                                <td data-article-cell="id">3</td>
-                                <td data-article-cell="account">pudding03</td>
-                                <td data-article-cell="category">寵物認養</td>
-                                <td data-article-cell="title">【認養】台北信義區超親人棕色貴賓(多多)，尋找愛牠的溫暖家人！</td>
-                                <td><button class="member-detail-btn" type="button" data-article-detail="3">查看 <i class="bi bi-chevron-right"></i></button></td>
-                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus3" type="checkbox" role="switch" data-article-status="3" checked><label class="member-status-text" for="articleStatus3">啟用</label></div></td>
-                            </tr>
-                            <tr data-article-row data-id="4" data-account="afu04" data-category-name="飲食營養" data-title="貓咪不愛喝水容易引發腎臟病？試試這三個神奇妙招" data-article-content="貓咪不喝水容易得尿道炎和腎臟病。我試過流動水機、湯罐、甚至在水杯放冰塊，最後發現這三個方法最有效，成功讓貓咪飲水量翻倍！" data-image-names="cat_drinking_water.jpg" data-active="true" data-created-at="2026-06-04 9:12:00" data-updated-at="2026-06-04 10:00:00" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
-                                <td data-article-cell="id">4</td>
-                                <td data-article-cell="account">afu04</td>
-                                <td data-article-cell="category">飲食營養</td>
-                                <td data-article-cell="title">貓咪不愛喝水容易引發腎臟病？試試這三個神奇妙招</td>
-                                <td><button class="member-detail-btn" type="button" data-article-detail="4">查看 <i class="bi bi-chevron-right"></i></button></td>
-                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus4" type="checkbox" role="switch" data-article-status="4" checked><label class="member-status-text" for="articleStatus4">啟用</label></div></td>
-                            </tr>
-                            <tr data-article-row data-id="5" data-account="cocoa05" data-category-name="飲食營養" data-title="自製貓狗鮮食：超簡單「雞胸肉蔬菜凍」食譜分享" data-article-content="夏天到了，毛孩食慾變差嗎？今天教大家做無油無鹽、營養滿分的蔬菜凍，貓咪和狗狗都能安心享用。食材只要雞胸肉、紅蘿蔔和吉利丁，步驟超簡單！" data-image-names="diy_chicken_jelly.jpg|diy_chicken_jelly_details.jpg" data-active="true" data-created-at="2026-06-05 12:00:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
-                                <td data-article-cell="id">5</td>
-                                <td data-article-cell="account">cocoa05</td>
-                                <td data-article-cell="category">飲食營養</td>
-                                <td data-article-cell="title">自製貓狗鮮食：超簡單「雞胸肉蔬菜凍」食譜分享</td>
-                                <td><button class="member-detail-btn" type="button" data-article-detail="5">查看 <i class="bi bi-chevron-right"></i></button></td>
-                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus5" type="checkbox" role="switch" data-article-status="5" checked><label class="member-status-text" for="articleStatus5">啟用</label></div></td>
-                            </tr>
-                            <tr data-article-row data-id="6" data-account="millet06" data-category-name="美容美體" data-title="鸚鵡羽毛保養秘訣：如何安全地幫鳥寶修剪飛羽與指甲" data-article-content="養鸚鵡的朋友一定常遇到指甲太長抓傷人的問題。這篇跟大家分享如何利用原木棲木自然磨指甲，以及非必要時如何進行安全修剪飛羽的心得。" data-image-names="bird_nail_trimming.jpg" data-active="true" data-created-at="2026-06-06 15:45:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
-                                <td data-article-cell="id">6</td>
-                                <td data-article-cell="account">millet06</td>
-                                <td data-article-cell="category">美容美體</td>
-                                <td data-article-cell="title">鸚鵡羽毛保養秘訣：如何安全地幫鳥寶修剪飛羽與指甲</td>
-                                <td><button class="member-detail-btn" type="button" data-article-detail="6">查看 <i class="bi bi-chevron-right"></i></button></td>
-                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus6" type="checkbox" role="switch" data-article-status="6" checked><label class="member-status-text" for="articleStatus6">啟用</label></div></td>
-                            </tr>
-                            <tr data-article-row data-id="7" data-account="xiaobai07" data-category-name="醫療養護" data-title="狗狗拉肚子怎麼辦？專業獸醫預防與腸胃保健處理分享" data-article-content="最近換季，很多毛孩出現腸胃不適。其實輕微拉肚子可以先觀察，本文整理了幾種常見拉肚子的原因（如寄生蟲、消化不良），以及何時必須立即送醫！" data-image-names="dog_stomach_care.jpg" data-active="true" data-created-at="2026-06-07 20:30:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
-                                <td data-article-cell="id">7</td>
-                                <td data-article-cell="account">xiaobai07</td>
-                                <td data-article-cell="category">醫療養護</td>
-                                <td data-article-cell="title">狗狗拉肚子怎麼辦？專業獸醫預防與腸胃保健處理分享</td>
-                                <td><button class="member-detail-btn" type="button" data-article-detail="7">查看 <i class="bi bi-chevron-right"></i></button></td>
-                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus7" type="checkbox" role="switch" data-article-status="7" checked><label class="member-status-text" for="articleStatus7">啟用</label></div></td>
-                            </tr>
-                            <tr data-article-row data-id="8" data-account="tofu08" data-category-name="醫療養護" data-title="貓咪結紮前後的照護重點全紀錄，術後傷口怎麼顧？" data-article-content="我們家咪咪上週剛做完結紮手術。從術前空腹、術後頭套選擇、到傷口照護與飲食調整，這篇文章詳細記錄了所有細節，給準備帶貓結紮的家長參考。" data-image-names="cat_neutering_care.jpg" data-active="true" data-created-at="2026-06-08 11:22:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
-                                <td data-article-cell="id">8</td>
-                                <td data-article-cell="account">tofu08</td>
-                                <td data-article-cell="category">醫療養護</td>
-                                <td data-article-cell="title">貓咪結紮前後的照護重點全紀錄，術後傷口怎麼顧？</td>
-                                <td><button class="member-detail-btn" type="button" data-article-detail="8">查看 <i class="bi bi-chevron-right"></i></button></td>
-                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus8" type="checkbox" role="switch" data-article-status="8" checked><label class="member-status-text" for="articleStatus8">啟用</label></div></td>
-                            </tr>
-                            <tr data-article-row data-id="9" data-account="happy09" data-category-name="行為訓練" data-title="黃金獵犬幼犬暴衝、愛咬人？行為訓練師教你如何改善" data-article-content="大家都說黃金獵犬是天使，但牠們小時候根本是小惡魔（咬人、爆衝、體力怪獸）！本篇分享行為訓練師建議的減壓法，想養的朋友一定要做好訓練準備。" data-image-names="golden_retriever_training.jpg" data-active="true" data-created-at="2026-06-09 17:10:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
-                                <td data-article-cell="id">9</td>
-                                <td data-article-cell="account">happy09</td>
-                                <td data-article-cell="category">行為訓練</td>
-                                <td data-article-cell="title">黃金獵犬幼犬暴衝、愛咬人？行為訓練師教你如何改善</td>
-                                <td><button class="member-detail-btn" type="button" data-article-detail="9">查看 <i class="bi bi-chevron-right"></i></button></td>
-                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus9" type="checkbox" role="switch" data-article-status="9" checked><label class="member-status-text" for="articleStatus9">啟用</label></div></td>
-                            </tr>
-                            <tr data-article-row data-id="10" data-account="sunny01" data-category-name="寵物認養" data-title="辦公室新來的親人浪浪小橘，求愛心領養！(已完成驅蟲與預防針)" data-article-content="這隻小橘貓大約三個月大，不怕人，一摸就呼嚕。目前寄住在我們辦公室，已經做完體內外驅蟲與第一劑疫苗。希望能幫牠找到一輩子的避風港。地點在台中。" data-image-names="cockatiel_safety_home.jpg" data-active="true" data-created-at="2026-06-11 8:30:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
-                                <td data-article-cell="id">10</td>
-                                <td data-article-cell="account">sunny01</td>
-                                <td data-article-cell="category">寵物認養</td>
-                                <td data-article-cell="title">辦公室新來的親人浪浪小橘，求愛心領養！(已完成驅蟲與預防針)</td>
-                                <td><button class="member-detail-btn" type="button" data-article-detail="10">查看 <i class="bi bi-chevron-right"></i></button></td>
-                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus10" type="checkbox" role="switch" data-article-status="10" checked><label class="member-status-text" for="articleStatus10">啟用</label></div></td>
-                            </tr>
-                            <tr data-article-row data-id="11" data-account="admin" data-category-name="官方公告" data-title="【官方公告】 PawPuff 平台使用者條款更新" data-article-content="親愛的會員您好，本平台已更新隱私權條款，請詳閱..." data-active="true" data-created-at="2026-06-01 12:00:00" data-updated-at="NULL" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
-                                <td data-article-cell="id">11</td>
-                                <td data-article-cell="account">admin</td>
-                                <td data-article-cell="category">官方公告</td>
-                                <td data-article-cell="title">【官方公告】 PawPuff 平台使用者條款更新</td>
-                                <td><button class="member-detail-btn" type="button" data-article-detail="11">查看 <i class="bi bi-chevron-right"></i></button></td>
-                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus11" type="checkbox" role="switch" data-article-status="11" checked><label class="member-status-text" for="articleStatus11">啟用</label></div></td>
-                            </tr>
-                            <tr data-article-row data-id="12" data-account="pudding03" data-category-name="美容美體" data-title="惡意攻擊文" data-article-content="這家寵物店爛死了..." data-active="false" data-created-at="2026-06-03 18:15:00" data-updated-at="2026-06-03 18:30:00" data-admin-comment="內容違反版規：惡意毀謗商家" data-admin-updated-at="2026-06-03 18:40:00" data-modified-by-admin="admin01">
-                                <td data-article-cell="id">12</td>
-                                <td data-article-cell="account">pudding03</td>
-                                <td data-article-cell="category">美容美體</td>
-                                <td data-article-cell="title">惡意攻擊文</td>
-                                <td><button class="member-detail-btn" type="button" data-article-detail="12">查看 <i class="bi bi-chevron-right"></i></button></td>
-                                <td><div class="form-check form-switch member-status-switch article-status-switch"><input class="form-check-input" id="articleStatus12" type="checkbox" role="switch" data-article-status="12"><label class="member-status-text" for="articleStatus12">停用</label></div></td>
-                            </tr>
+                            @foreach (var a in Model.Articles)
+                            {
+                                var imageNames = string.Join("|", a.ImageNames);
+                                var imageSrcs = string.Join("|", a.ImageNames.Select(n => $"{r2Base}/articles/{n}"));
+                                <tr data-article-row data-id="@a.Id"
+                                    data-account="@a.AuthorAccount"
+                                    data-category-name="@a.CategoryName"
+                                    data-title="@a.Title"
+                                    data-article-content="@a.ArticleContent"
+                                    data-image-names="@imageNames"
+                                    data-image-srcs="@imageSrcs"
+                                    data-active="@a.IsActive.ToString().ToLower()"
+                                    data-created-at="@(a.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"))"
+                                    data-updated-at="@(a.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "NULL")"
+                                    data-admin-comment="@(a.AdminComment ?? "NULL")"
+                                    data-admin-updated-at="@(a.AdminUpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "NULL")"
+                                    data-modified-by-admin="@(a.ModifiedByAdminAccount ?? "NULL")">
+                                    <td data-article-cell="id">@a.Id</td>
+                                    <td data-article-cell="account">@a.AuthorAccount</td>
+                                    <td data-article-cell="category">@a.CategoryName</td>
+                                    <td data-article-cell="title">@a.Title</td>
+                                    <td><button class="member-detail-btn" type="button" data-article-detail="@a.Id">查看 <i class="bi bi-chevron-right"></i></button></td>
+                                    <td>
+                                        <div class="form-check form-switch member-status-switch article-status-switch">
+                                            <input class="form-check-input" id="articleStatus@(a.Id)" type="checkbox" role="switch" data-article-status="@a.Id" checked="@(a.IsActive ? "checked" : null)">
+                                            <label class="member-status-text" for="articleStatus@(a.Id)">@(a.IsActive ? "啟用" : "停用")</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>

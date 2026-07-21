@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using PawPuff_Management.Models.EfModels;
+using PawPuff_Management.Models.Repositories;
+using PawPuff_Management.Models.Services;
 
 namespace PawPuff_Management
 {
@@ -24,6 +26,25 @@ namespace PawPuff_Management
 			//builder.Services.AddScoped<AuthService>();
 
 			//builder.Services.AddScoped<MemberService>();
+
+			// 目前操作者(開發用假身分;之後接上登入只換這一行的實作)
+			builder.Services.AddScoped<ICurrentUserService, DevCurrentUserService>();
+
+			// 分類
+			builder.Services.AddScoped<IArticleCategoryRepository, ArticleCategoryRepository>();
+			builder.Services.AddScoped<IArticleCategoryService, ArticleCategoryService>();
+
+			// 文章 + 圖片 + 留言 + 按讚/收藏
+			builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
+			builder.Services.AddScoped<IArticleImageRepository, ArticleImageRepository>();
+			builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+			builder.Services.AddScoped<IArticleReactionRepository, ArticleReactionRepository>();
+
+			builder.Services.AddScoped<IArticleService, ArticleService>();
+			builder.Services.AddScoped<IArticleImageService, ArticleImageService>();
+			builder.Services.AddScoped<ICommentService, CommentService>();
+			builder.Services.AddScoped<IArticleReactionService, ArticleReactionService>();
+
 
 			//builder.Services.AddScoped<ProductRepository>();
 			//builder.Services.AddScoped<ProductService>();

@@ -7,14 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.S3" Version="4.0.101.2" />
+    <None Remove="Models\Services\ArticleService.cs~RF7a28a628.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="4.0.101.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.26" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Models\Infra\" />
-    <Folder Include="Models\ViewModels\" />
-    <Folder Include="Models\Repositories\" />
+    <Folder Include="Models\Infra\" />
   </ItemGroup>
 
 </Project>
