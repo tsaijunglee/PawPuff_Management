@@ -24,7 +24,7 @@ public partial class DollColor
 
     [Required]
     [Column("hex_code")]
-    [StringLength(9)]
+    [StringLength(7)]
     [Unicode(false)]
     public string HexCode { get; set; }
 
