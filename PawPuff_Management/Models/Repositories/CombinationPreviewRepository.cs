@@ -4,6 +4,12 @@ using PawPuff_Management.Models.EfModels;
 
 namespace PawPuff_Management.Models.Repositories
 {
+	public interface ICombinationPreviewRepository
+	{
+		Task<CombinationPreviewOptionsDto> GetOptionsAsync(
+			CancellationToken cancellationToken = default);
+	}
+
 	public class CombinationPreviewRepository : ICombinationPreviewRepository
 	{
 
