@@ -1,124 +1,156 @@
 .point-management-view {
-  margin-top: 28px;
+    margin-top: 28px;
 }
 
 .point-page-actions {
-  justify-content: flex-end;
-  margin-top: 18px;
-  margin-bottom: 22px;
+    justify-content: flex-end;
+    margin-top: 18px;
+    margin-bottom: 22px;
 }
 
 .point-search-row {
-  justify-content: space-between;
+    justify-content: space-between;
 }
 
 .point-filter-select,
 .point-modal-input,
 .point-modal-textarea {
-  min-height: 44px;
-  border-color: #efd6ad;
-  border-radius: 14px;
-  color: var(--ink);
-  font-weight: 700;
-  background-color: #fffdf8;
+    min-height: 44px;
+    border-color: #efd6ad;
+    border-radius: 14px;
+    color: var(--ink);
+    font-weight: 700;
+    background-color: #fffdf8;
 }
 
 .point-filter-select {
-  width: clamp(170px, 11vw, 210px);
+    width: clamp(170px, 11vw, 210px);
 }
 
-.point-filter-select:focus,
-.point-modal-input:focus,
-.point-modal-textarea:focus {
-  border-color: #e6ae4b;
-  box-shadow: 0 0 0 .2rem rgba(243, 182, 79, .2);
+    .point-filter-select:focus,
+    .point-modal-input:focus,
+    .point-modal-textarea:focus {
+        border-color: #e6ae4b;
+        box-shadow: 0 0 0 .2rem rgba(243, 182, 79, .2);
+    }
+
+.point-modal-input:disabled,
+.point-modal-textarea:disabled {
+    cursor: wait;
+    opacity: .72;
 }
 
 .point-date-range .form-control {
-  width: 150px;
+    width: 150px;
 }
 
 .point-range-separator {
-  color: #8a5b36;
-  font-weight: 900;
+    color: #8a5b36;
+    font-weight: 900;
 }
 
 .point-table {
-  table-layout: fixed;
-  min-width: 1240px;
+    table-layout: fixed;
+    min-width: 1240px;
 }
 
-.point-table th:nth-child(1),
-.point-table td:nth-child(1) {
-  width: 120px;
-}
+    .point-table th:nth-child(1),
+    .point-table td:nth-child(1) {
+        width: 120px;
+    }
 
-.point-table th:nth-child(2),
-.point-table td:nth-child(2) {
-  width: 150px;
-}
+    .point-table th:nth-child(2),
+    .point-table td:nth-child(2) {
+        width: 150px;
+    }
 
-.point-table th:nth-child(3),
-.point-table td:nth-child(3) {
-  width: 120px;
-}
+    .point-table th:nth-child(3),
+    .point-table td:nth-child(3) {
+        width: 120px;
+    }
 
-.point-table th:nth-child(4),
-.point-table td:nth-child(4) {
-  width: 150px;
-}
+    .point-table th:nth-child(4),
+    .point-table td:nth-child(4) {
+        width: 150px;
+    }
 
-.point-table th:nth-child(5),
-.point-table td:nth-child(5) {
-  width: 210px;
-}
+    .point-table th:nth-child(5),
+    .point-table td:nth-child(5) {
+        width: 210px;
+    }
 
-.point-table th:nth-child(6),
-.point-table td:nth-child(6) {
-  width: 180px;
-}
+    .point-table th:nth-child(6),
+    .point-table td:nth-child(6) {
+        width: 150px;
+    }
 
-.point-table th:nth-child(7),
-.point-table td:nth-child(7),
-.point-table th:nth-child(8),
-.point-table td:nth-child(8) {
-  width: 140px;
-}
+    .point-table th:nth-child(7),
+    .point-table td:nth-child(7),
+    .point-table th:nth-child(8),
+    .point-table td:nth-child(8) {
+        width: 140px;
+    }
 
-.point-table [data-point-cell="description"] {
-  word-break: break-word;
-}
+    .point-table [data-point-cell="description"] {
+        word-break: break-word;
+    }
+
+    .point-table [data-point-cell="changedAt"] {
+        white-space: nowrap;
+    }
 
 .point-change {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 74px;
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-weight: 900;
-  white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 74px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-weight: 900;
+    white-space: nowrap;
 }
 
-.point-change.is-positive {
-  border: 1px solid #f0c36b;
-  background: #fff3cd;
-  color: #875c12;
-}
+    .point-change.is-positive {
+        border: 1px solid #f0c36b;
+        background: #fff3cd;
+        color: #875c12;
+    }
 
-.point-change.is-negative {
-  border: 1px solid #efb1a6;
-  background: #fff0ed;
-  color: #a44532;
-}
+    .point-change.is-negative {
+        border: 1px solid #efb1a6;
+        background: #fff0ed;
+        color: #a44532;
+    }
+
+    .point-change.is-zero {
+        border: 1px solid #d5c8bc;
+        background: #f7f3ef;
+        color: #74665b;
+    }
 
 .point-null {
-  color: #c4ad98;
-  font-weight: 800;
-  white-space: nowrap;
+    color: #c4ad98;
+    font-weight: 800;
+    white-space: nowrap;
 }
 
 .point-modal-textarea {
-  min-height: 120px;
-  resize: vertical;
+    min-height: 120px;
+    resize: vertical;
+}
+
+#pointCreateSubmit:disabled {
+    cursor: wait;
+    opacity: .72;
+}
+
+@media (max-width: 767.98px) {
+    .point-date-range {
+        width: 100%;
+    }
+
+        .point-date-range .form-control {
+            flex: 1 1 130px;
+            width: auto;
+        }
 }

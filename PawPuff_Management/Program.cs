@@ -26,6 +26,9 @@ namespace PawPuff_Management
 			builder.Services.AddScoped<IPointRuleRepository, PointRuleRepository>();
 			builder.Services.AddScoped<IPointRuleService, PointRuleService>();
 
+			// 註冊點數變動一覽
+			builder.Services.AddScoped<IPointRepository, PointRepository>();
+			builder.Services.AddScoped<IPointService, PointService>();
 
 			// 註冊紙娃娃組合預覽
 			builder.Services.AddScoped<ICombinationPreviewRepository, CombinationPreviewRepository>();
