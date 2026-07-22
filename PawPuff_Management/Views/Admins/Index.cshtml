@@ -1,7 +1,11 @@
-﻿@{
+﻿@model IEnumerable<PawPuff_Management.Models.DTOs.AdminPermissionDto>
+
+@{
     ViewData["Title"] = "管理員管理";
     ViewData["CurrentScreen"] = "admin-management";
 }
+
+
 
 <div class="dashboard-content management-screen" id="managementScreen" data-screen-panel="management">
     <section class="soft-panel management-panel">
@@ -77,7 +81,8 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody id="memberTableBody" data-table-columns="id,account,nickname,email">
+
+                        @* <tbody id="memberTableBody" data-table-columns="id,account,nickname,email">
                             <tr data-member-row data-id="1" data-account="admin01" data-password-hash="123456" data-nickname="蓉蓉" data-email="admin01@pawpuff.com" data-is-active="1" data-enabled="true" data-created-at="2025-01-02 9:00:00" data-admin-comment="NULL" data-admin-updated-at="2025-01-02 9:00:00" data-modified-by-admin-id="NULL">
                                 <td data-member-cell="id">1</td>
                                 <td data-member-cell="account">admin01</td>
@@ -158,28 +163,96 @@
                                 <td><button class="member-detail-btn" type="button" data-member-detail="10">查看 <i class="bi bi-chevron-right"></i></button></td>
                                 <td><div class="form-check form-switch member-status-switch"><input class="form-check-input" id="memberStatus10" type="checkbox" role="switch" data-member-status="10"><label class="member-status-text" for="memberStatus10">停用</label></div></td>
                             </tr>
+                            </tbody>
+                            *@
+
+
+
+
+
+                        <tbody id="memberTableBody" data-table-columns="id,account,nickname,email">
+                            @foreach (var item in Model)
+                            {
+                                <tr data-member-row
+                                    data-id="@item.AdminId"
+                                    data-account="@item.Account"
+                                   data-password-hash="@item.PasswordHash"
+                                    data-nickname="@item.Nickname"
+                                    data-email="@item.Email"
+                                    data-is-active="@item.IsActive.ToString().ToLower()"
+                                    data-created-at="@item.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")"
+                                    data-admin-comment="@item.AdminComment"
+                                    data-admin-updated-at="@(item.AdminUpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "")"
+                                    data-modified-by-admin-id="@item.ModifiedByAdminId">
+                                    <td data-member-cell>
+                                        @Html.DisplayFor(modelItem => item.AdminId)
+                                    </td>
+                                    <td data-member-cell>
+                                        @Html.DisplayFor(modelItem => item.Account)
+                                    </td>
+                                    <td data-member-cell>
+                                        @Html.DisplayFor(modelItem => item.Nickname)
+                                    </td>
+                                    <td data-member-cell>
+                                        @Html.DisplayFor(modelItem => item.Email)
+                                    </td>
+                                    <td><button class="member-detail-btn" type="button" data-member-detail="@item.AdminId">查看 <i class="bi bi-chevron-right"></i></button>
+                                    </td>
+                                    <td data-member-cell>
+                                        <div class="form-check form-switch member-status-switch">
+                                            <input class="form-check-input"
+                                                   id="memberStatus@(item.AdminId)"
+                                                   type="checkbox"
+                                                   role="switch"
+                                                   data-member-status="@item.AdminId"
+                                                   checked="@item.IsActive">
+
+                                            <label class="member-status-text"
+                                                   for="memberStatus@(item.AdminId)">
+                                                @(item.IsActive ? "啟用" : "停用")
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
+
+                @* 分頁 *@
                 <div class="member-pagination-wrap">
-                    <span class="member-page-info" id="memberPageInfo">第 1 頁</span>
+                    <span class="member-page-info" id="memberPageInfo">第1頁</span>
                     <nav aria-label="管理員表格分頁">
                         <ul class="pagination member-pagination" id="memberPagination"></ul>
                     </nav>
                 </div>
+
+
             </div>
         </div>
 
+
+        @* 權限管理 *@
         <div class="permission-management-view d-none" id="permissionManagementView">
+
+            @Html.AntiForgeryToken()
+
             <div class="permission-page-actions">
                 <button class="member-back-btn px-3" id="permissionBackToAdmin" type="button">
                     <i class="bi bi-arrow-left me-1"></i>返回管理員管理
                 </button>
-                <button class="permission-save-btn" id="permissionSaveButton" type="button" disabled>
+                <button class="permission-save-btn"
+                        id="permissionSaveButton"
+                        type="button"
+                        data-save-url="@Url.Action("SavePermissions", "Admins")"
+                        disabled>
                     <i class="bi bi-save me-1"></i>儲存權限
                 </button>
             </div>
 
+
+
+            @* 權限管理 - 搜尋 *@
             <form class="member-search-panel permission-search-panel" id="permissionSearchForm">
                 <div class="member-search-row">
                     <div class="member-search-field">
@@ -194,18 +267,20 @@
                         <label class="form-label" for="permissionFilterNickname">暱稱</label>
                         <input class="form-control" id="permissionFilterNickname" type="text" data-permission-filter="nickname" placeholder="輸入暱稱">
                     </div>
+
+                   
                     <div class="member-search-field is-wide">
                         <label class="form-label" for="permissionFilterName">權限名稱</label>
                         <select class="form-select" id="permissionFilterName" data-permission-filter="permission">
                             <option value="">全部權限</option>
-                            <option value="儀錶板">儀錶板</option>
-                            <option value="帳號">帳號</option>
-                            <option value="文章">文章</option>
-                            <option value="商城">商城</option>
-                            <option value="點數">點數</option>
-                            <option value="紙娃娃">紙娃娃</option>
-                            <option value="通知">通知</option>
-                            <option value="客服">客服</option>
+                            <option value="Dashboard">儀錶板</option>
+                            <option value="Account">帳號</option>
+                            <option value="Articles">文章</option>
+                            <option value="Shop">商城</option>
+                            <option value="Points">點數</option>
+                            <option value="Doll">紙娃娃</option>
+                            <option value="Notification">通知</option>
+                            <option value="Support">客服</option>
                         </select>
                     </div>
                     <div class="member-search-field">
@@ -216,12 +291,16 @@
                 </div>
             </form>
 
+
+            @* 權限管理 - 管理員權限資料表 *@
             <div class="member-table-card permission-table-card">
                 <div class="member-table-toolbar">
                     <strong><i class="bi bi-shield-check me-2"></i>管理員權限資料表</strong>
                     <span class="member-count" id="permissionResultCount">共 0 筆</span>
                 </div>
                 <div class="table-responsive">
+
+
                     <table class="table table-hover member-table permission-table align-middle">
                         <thead>
                             <tr>
@@ -239,25 +318,72 @@
                                 </th>
                             </tr>
                         </thead>
+
+
+                        @{
+                            var allPermissions = new[]
+                            {
+                                                new { Value = "Dashboard", Label = "儀錶板" },
+                                                new { Value = "Account", Label = "帳號" },
+                                                new { Value = "Articles", Label = "文章" },
+                                                new { Value = "Shop", Label = "商城" },
+                                                new { Value = "Points", Label = "點數" },
+                                                new { Value = "Doll", Label = "紙娃娃" },
+                                                new { Value = "Notification", Label = "通知" },
+                                                new { Value = "Support", Label = "客服" }
+                                                };
+                        }
+
                         <tbody id="permissionTableBody">
-                            <tr data-permission-row data-id="1" data-account="admin01" data-nickname="蓉蓉">
-                                <td data-permission-cell="id">1</td>
-                                <td data-permission-cell="account">admin01</td>
-                                <td data-permission-cell="nickname">蓉蓉</td>
-                                <td class="permission-cell">
-                                    <div class="permission-check-grid" aria-label="admin01 權限">
-                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="儀錶板" checked>儀錶板</label>
-                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="帳號" checked>帳號</label>
-                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="文章" checked>文章</label>
-                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="商城" checked>商城</label>
-                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="點數" checked>點數</label>
-                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="紙娃娃" checked>紙娃娃</label>
-                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="通知" checked>通知</label>
-                                        <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="客服" checked>客服</label>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr data-permission-row data-id="2" data-account="admin02" data-nickname="小賀">
+                            @foreach (var item in Model)
+                            {
+                                var ownedPermissions = item.Permissions .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+                                <tr data-permission-row
+                                    data-id="@item.AdminId"
+                                    data-admin-id="@item.AdminId" 
+                                    data-account="@item.Account"
+                                    data-nickname="@item.Nickname">
+
+                                    <td data-permission-cell="id">
+                                        @item.AdminId
+                                    </td>
+
+                                    <td data-permission-cell="account">
+                                        @item.Account
+                                    </td>
+
+                                    <td data-permission-cell="nickname">
+                                        @item.Nickname
+                                    </td>
+
+                                    <td class="permission-cell">
+                                        <div class="permission-check-grid"
+                                             aria-label="@($"{item.Account} 權限")">
+
+                                            @foreach (var permission in allPermissions)
+                                            {
+                                                bool hasPermission =
+                                                ownedPermissions.Contains(permission.Value);
+
+                                                <label class="permission-check">
+                                                    <input class="form-check-input"
+                                                           type="checkbox"
+                                                           data-permission-check
+                                                           data-admin-id="@item.AdminId"
+                                                           value="@permission.Value"
+                                                           checked="@hasPermission">
+
+                                                    @permission.Label
+                                                </label>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                            @* <tr data-permission-row data-id="2" data-account="admin02" data-nickname="小賀">
                                 <td data-permission-cell="id">2</td>
                                 <td data-permission-cell="account">admin02</td>
                                 <td data-permission-cell="nickname">小賀</td>
@@ -409,15 +535,20 @@
                                         <label class="permission-check"><input class="form-check-input" type="checkbox" data-permission-check value="客服" checked>客服</label>
                                     </div>
                                 </td>
-                            </tr>
-                        </tbody>
+                            </tr> *@
                     </table>
                 </div>
+
+
+
                 <div class="member-pagination-wrap permission-table-footer">
                     <span class="member-page-info" id="permissionPageInfo">顯示 10 筆</span>
                 </div>
+
             </div>
         </div>
+
+
 
         <div class="member-detail-view d-none" id="memberDetailView">
             <div class="member-detail-card">
@@ -489,28 +620,70 @@
                     <div class="row g-3">
                         <div class="col-12 col-md-6">
                             <label class="form-label fw-bold" for="memberCreateAccount">帳號</label>
-                            <input class="form-control" id="memberCreateAccount" type="text" autocomplete="off" required>
-                            <div class="invalid-feedback">請輸入帳號。</div>
+                            <input class="form-control"
+                                   id="memberCreateAccount"
+                                   type="text"
+                                   minlength="4"
+                                   maxlength="50"
+                                   pattern="[A-Za-z0-9_]+"
+                                   autocomplete="off"
+                                   required>
+                            <div class="invalid-feedback">
+                                請輸入帳號，須為4～50字，只能使用英文字母、數字或底線。
+                            </div>
                         </div>
+
                         <div class="col-12 col-md-6">
                             <label class="form-label fw-bold" for="memberCreatePassword">密碼</label>
-                            <input class="form-control" id="memberCreatePassword" type="password" autocomplete="new-password" required>
-                            <div class="invalid-feedback">請輸入密碼。</div>
+                            <input class="form-control"
+                                   id="memberCreatePassword"
+                                   type="password"
+                                   minlength="6"
+                                   maxlength="20"
+                                   autocomplete="new-password"
+                                   required>
+                            <div class="invalid-feedback">
+                                請輸入密碼，須為6～20個字。
+                            </div>
+
                         </div>
                         <div class="col-12 col-md-6">
                             <label class="form-label fw-bold" for="memberCreatePasswordConfirm">確認密碼</label>
-                            <input class="form-control" id="memberCreatePasswordConfirm" type="password" autocomplete="new-password" required>
-                            <div class="invalid-feedback">請再次輸入相同密碼。</div>
+                            <input class="form-control"
+                                   id="memberCreatePasswordConfirm"
+                                   type="password"
+                                   minlength="6"
+                                   maxlength="20"
+                                   autocomplete="new-password"
+                                   required>
+                            <div class="invalid-feedback">
+                                請再次輸入相同密碼。
+                            </div>
                         </div>
                         <div class="col-12 col-md-6">
                             <label class="form-label fw-bold" for="memberCreateNickname">暱稱</label>
-                            <input class="form-control" id="memberCreateNickname" type="text" autocomplete="off" required>
-                            <div class="invalid-feedback">請輸入暱稱。</div>
+                            <input class="form-control"
+                                   id="memberCreateNickname"
+                                   type="text"
+                                   maxlength="10"
+                                   pattern="[\p{L}\p{N}]+"
+                                   autocomplete="off"
+                                   required>
+                            <div class="invalid-feedback">
+                                請輸入暱稱，須為1～10個字，只能使用中文、英文字母或數字。
+                            </div>
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-bold" for="memberCreateEmail">電子信箱</label>
-                            <input class="form-control" id="memberCreateEmail" type="email" autocomplete="email" required>
-                            <div class="invalid-feedback">請輸入有效的電子信箱。</div>
+                            <input class="form-control"
+                                   id="memberCreateEmail"
+                                   type="email"
+                                   maxlength="100"
+                                   autocomplete="email"
+                                   required>
+                            <div class="invalid-feedback">
+                                請輸入有效的電子信箱，長度不能超過100字。
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -549,5 +722,6 @@
 }
 
 @section Scripts {
-    <script src="~/js/admin-permissions.js"></script>
+    <script src="~/js/admin-permissions.js" asp-append-version="true"></script>
+        @* 這會在網址後加入檔案版本雜湊；JS 更新後，瀏覽器就不會繼續執行會產生英文重複列的舊快取 *@
 }

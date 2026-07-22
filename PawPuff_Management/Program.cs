@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PawPuff_Management.Models.EfModels;
+using PawPuff_Management.Models.Repositories;
+using PawPuff_Management.Models.Services;
 
 namespace PawPuff_Management
 {
@@ -16,6 +19,14 @@ namespace PawPuff_Management
 			// µù¥UDbContext ===========================
 			builder.Services.AddDbContext<PawPuffContext>(options =>
 			options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+			// µù¥URepo & Service ===========================
+			builder.Services.AddScoped<AdminRepository>();
+			builder.Services.AddScoped<AdminService>();
+
+			// µù¥UPasswordHash ===========================
+			builder.Services.AddScoped<IPasswordHasher<Admin>,PasswordHasher<Admin>>();
+
 
 			// µù¥UR2¹Ï§É
 			builder.Services.AddSingleton<Models.Services.R2Service>();

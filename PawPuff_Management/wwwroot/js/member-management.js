@@ -131,44 +131,124 @@
     clearCreateValidation();
     let valid = true;
 
-    if (!values.account) {
-      setCreateFieldInvalid(refs.memberCreateAccount, "請輸入帳號。");
-      valid = false;
-    } else if (accountExists(values.account)) {
-      setCreateFieldInvalid(refs.memberCreateAccount, "此帳號已存在。");
-      valid = false;
-    }
+      const accountPattern = /^[A-Za-z0-9_]+$/;
+      const nicknamePattern = /^[\p{L}\p{N}]+$/u;
+      const nicknameLength = Array.from(values.nickname).length;
 
-    if (!values.password.trim()) {
-      setCreateFieldInvalid(refs.memberCreatePassword, "請輸入密碼。");
-      valid = false;
-    }
+      //帳號驗證
+      if (!values.account) {
+          setCreateFieldInvalid(
+              refs.memberCreateAccount,
+              "請輸入帳號。"
+          );
+          valid = false;
+      } else if (
+          values.account.length < 4 ||
+          values.account.length > 50
+      ) {
+          setCreateFieldInvalid(
+              refs.memberCreateAccount,
+              "帳號長度必須為4～50字。"
+          );
+          valid = false;
+      } else if (!accountPattern.test(values.account)) {
+          setCreateFieldInvalid(
+              refs.memberCreateAccount,
+              "帳號只能使用英文字母、數字或底線。"
+          );
+          valid = false;
+      } else if (accountExists(values.account)) {
+          setCreateFieldInvalid(
+              refs.memberCreateAccount,
+              "此帳號已存在。"
+          );
+          valid = false;
+      }
 
-    if (!values.passwordConfirm.trim()) {
-      setCreateFieldInvalid(refs.memberCreatePasswordConfirm, "請再次輸入密碼。");
-      valid = false;
-    } else if (values.password !== values.passwordConfirm) {
-      setCreateFieldInvalid(refs.memberCreatePasswordConfirm, "確認密碼需與密碼相同。");
-      valid = false;
-    }
 
-    if (!values.nickname) {
-      setCreateFieldInvalid(refs.memberCreateNickname, "請輸入暱稱。");
-      valid = false;
-    }
+
+      //密碼驗證
+      if (!values.password) {
+          setCreateFieldInvalid(
+              refs.memberCreatePassword,
+              "請輸入密碼。"
+          );
+          valid = false;
+      } else if (
+          values.password.length < 6 ||
+          values.password.length > 20
+      ) {
+          setCreateFieldInvalid(
+              refs.memberCreatePassword,
+              "密碼長度必須為6～20個字。"
+          );
+          valid = false;
+      }
+
+      if (!values.passwordConfirm) {
+          setCreateFieldInvalid(
+              refs.memberCreatePasswordConfirm,
+              "請再次輸入密碼。"
+          );
+          valid = false;
+      } else if (values.password !== values.passwordConfirm) {
+          setCreateFieldInvalid(
+              refs.memberCreatePasswordConfirm,
+              "確認密碼需與密碼相同。"
+          );
+          valid = false;
+      }
+
+
+      //暱稱驗證
+      if (!values.nickname) {
+          setCreateFieldInvalid(
+              refs.memberCreateNickname,
+              "請輸入暱稱。"
+          );
+          valid = false;
+      } else if (Array.from(values.nickname).length > 10) {
+          setCreateFieldInvalid(
+              refs.memberCreateNickname,
+              "暱稱不能超過10個字。"
+          );
+          valid = false;
+      } else if (!nicknamePattern.test(values.nickname)) {
+          setCreateFieldInvalid(
+              refs.memberCreateNickname,
+              "暱稱只能使用中文、英文字母或數字，不能包含空格及特殊符號。"
+          );
+          valid = false;
+      }
+
 
     if (refs.memberCreatePhone && !values.phone) {
       setCreateFieldInvalid(refs.memberCreatePhone, "請輸入電話。");
       valid = false;
     }
 
-    if (!values.email || (refs.memberCreateEmail && !refs.memberCreateEmail.checkValidity())) {
-      setCreateFieldInvalid(refs.memberCreateEmail, "請輸入有效的電子信箱。");
-      valid = false;
-    }
+
+      //電子信箱驗證
+      if (!values.email) {
+          setCreateFieldInvalid(
+              refs.memberCreateEmail,
+              "請輸入電子信箱。"
+          );
+          valid = false;
+      } else if (
+          values.email.length > 100 ||
+          !refs.memberCreateEmail.checkValidity()
+      ) {
+          setCreateFieldInvalid(
+              refs.memberCreateEmail,
+              "請輸入有效的電子信箱，長度不能超過100字。"
+          );
+          valid = false;
+      }
 
     return valid;
-  }
+    }
+
 
   function getNextMemberId() {
     if (!memberRowElements.length) collectRows();
