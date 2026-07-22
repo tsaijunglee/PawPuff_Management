@@ -20,7 +20,9 @@ public class ArticleCategoryRepository : IArticleCategoryRepository
         if (!includeInactive)
             query = query.Where(c => c.IsActive);
 
-        return await query.OrderBy(c => c.Name).ToListAsync();
+        return await query
+            .OrderBy(c => c.Id) // 依編號排序
+			.ToListAsync();
     }
 
     public async Task<ArticleCategory?> GetByIdAsync(int id)

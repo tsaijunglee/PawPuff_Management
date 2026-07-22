@@ -7,10 +7,7 @@ namespace PawPuff_Management.Controllers;
 #nullable enable
 
 /// <summary>
-/// 文章後台:所有功能(文章 CRUD、圖片、留言、按讚、收藏)都在這一個 Controller、
-/// 一個 Index 頁上完成。頁面採「清單 + 明細面板」:選一篇文章(?articleId=)就在同頁
-/// 展開它的編輯 / 圖片 / 留言 / 讚收藏管理。所有動作都是表單 post 後導回同頁(PRG)。
-/// Controller 保持薄:轉呼叫 Service、依 ServiceResult 給訊息、導頁。
+/// 文章後台(全 Ajax):清單 + 詳情面板。Controller 保持薄,只轉呼叫 Service、回 JSON。
 /// </summary>
 public class ArticlesController : Controller
 {
@@ -42,217 +39,124 @@ public class ArticlesController : Controller
 		return View(vm);
 	}
 
-	// ---------------- 文章 CRUD ----------------
-
-	// POST: /Articles/Create
+	// POST: /Articles/CreateAjax  (新增文章 + 上傳圖片,回傳新文章資料給前端畫列)
 	[HttpPost]
-	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> Create(ArticleCreateVm createForm)
+	public async Task<IActionResult> CreateAjax(int categoryId, string title, string content, List<IFormFile>? files)
 	{
-		if (!ModelState.IsValid)
-		{
-			var vm = await BuildIndexVmAsync(null, null, null, mode: "create", articleId: null);
-			vm.CreateForm = createForm;
-			return View(nameof(Index), vm);
-		}
+		// 建立文章 + 上傳圖片,一次完成(流程封裝在 Service)
+		var createResult = await _articleService.CreateWithImagesAsync(
+			new ArticleCreateDto
+			{
+				Title = title,
+				ArticleContent = content,
+				CategoryId = categoryId,
+				IsActive = true,
+			},
+			files ?? new List<IFormFile>());
 
-		var result = await _articleService.CreateAsync(new ArticleCreateDto
+		if (!createResult.Success)
+			return JsonFail(createResult.Error);
+
+		var newId = createResult.Data;
+
+		// 撈回新文章的顯示資料(查單筆,不撈全表)回傳給前端
+		var created = await _articleService.GetListItemByIdAsync(newId);
+		var images = await _imageService.GetForArticleAsync(newId);
+
+		return Json(new
 		{
-			Title = createForm.Title,
-			ArticleContent = createForm.ArticleContent,
-			CategoryId = createForm.CategoryId,
-			IsActive = createForm.IsActive,
+			success = true,
+			id = newId,
+			account = created?.AuthorAccount,
+			categoryName = created?.CategoryName,
+			title,
+			articleContent = content,
+			createdAt = created?.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
+			images = images.Select(i => new { name = i.ImageName, src = i.Url }).ToList(),
 		});
-
-		if (!result.Success)
-		{
-			ModelState.AddModelError(string.Empty, result.Error!);
-			var vm = await BuildIndexVmAsync(null, null, null, mode: "create", articleId: null);
-			vm.CreateForm = createForm;
-			return View(nameof(Index), vm);
-		}
-
-		TempData["Success"] = "文章已新增。可在下方面板繼續上傳圖片。";
-		// 導到新文章的明細面板,方便馬上加圖片 / 看留言。
-		return RedirectToAction(nameof(Index), new { articleId = result.Data });
 	}
 
-	// POST: /Articles/Edit
+	// POST: /Articles/EditAjax  (編輯文章欄位 + 圖片對帳)
 	[HttpPost]
-	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> Edit(ArticleEditVm editForm)
+	public async Task<IActionResult> EditAjax(int id, string categoryName, string title, string content,
+		List<string>? keptImageNames, List<IFormFile>? files)
 	{
-		if (!ModelState.IsValid)
-		{
-			var vm = await BuildIndexVmAsync(null, null, null, mode: null, articleId: editForm.Id);
-			vm.EditForm = editForm;
-			return View(nameof(Index), vm);
-		}
+		// 分類名稱 → id
+		var categories = await _categoryService.GetAllAsync(includeInactive: true);
+		var category = categories.FirstOrDefault(c => c.Name == (categoryName ?? "").Trim());
+		if (category is null)
+			return JsonFail("找不到分類:" + categoryName);
 
-		var result = await _articleService.UpdateAsync(new ArticleEditDto
+		// 取目前狀態(編輯不改上下架)
+		var detail = await _articleService.GetDetailAsync(id);
+		if (detail is null)
+			return JsonFail("找不到文章。");
+
+		// 更新欄位
+		var update = await _articleService.UpdateAsync(new ArticleEditDto
 		{
-			Id = editForm.Id,
-			Title = editForm.Title,
-			ArticleContent = editForm.ArticleContent,
-			CategoryId = editForm.CategoryId,
-			IsActive = editForm.IsActive,
+			Id = id,
+			Title = title,
+			ArticleContent = content,
+			CategoryId = category.Id,
+			IsActive = detail.IsActive,
 		});
+		if (!update.Success)
+			return JsonFail(update.Error);
 
-		if (!result.Success)
+		// 圖片對帳(保留的留、移除的刪、新增的傳)
+		var reconcile = await _imageService.ReconcileAsync(id,
+			keptImageNames ?? new List<string>(), files ?? new List<IFormFile>());
+		if (!reconcile.Success)
+			return JsonFail("文章已更新,但圖片處理失敗:" + reconcile.Error);
+
+		// 回傳更新後資料(查單筆)
+		var updated = await _articleService.GetListItemByIdAsync(id);
+		var images = await _imageService.GetForArticleAsync(id);
+		return Json(new
 		{
-			ModelState.AddModelError(string.Empty, result.Error!);
-			var vm = await BuildIndexVmAsync(null, null, null, mode: null, articleId: editForm.Id);
-			vm.EditForm = editForm;
-			return View(nameof(Index), vm);
-		}
-
-		TempData["Success"] = "文章已更新。";
-		return RedirectToAction(nameof(Index), new { articleId = editForm.Id });
-	}
-
-	// POST: /Articles/SetActive
-	[HttpPost]
-	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> SetActive(int id, bool isActive)
-	{
-		var result = await _articleService.SetActiveAsync(id, isActive);
-		SetFlash(result.Success, result.Success ? (isActive ? "文章已上架。" : "文章已下架。") : result.Error);
-		return RedirectToAction(nameof(Index), new { articleId = id });
-	}
-
-	// POST: /Articles/SetAdminNote
-	[HttpPost]
-	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> SetAdminNote(int id, string? adminComment)
-	{
-		var result = await _articleService.SetAdminNoteAsync(id, adminComment);
-		SetFlash(result.Success, result.Success ? "已更新管理員備註。" : result.Error);
-		return RedirectToAction(nameof(Index), new { articleId = id });
-	}
-
-	// ---------------- 圖片 ----------------
-
-	// POST: /Articles/UploadImages
-	[HttpPost]
-	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> UploadImages(int articleId, List<IFormFile> files)
-	{
-		var result = await _imageService.UploadAsync(articleId, files);
-		SetFlash(result.Success, result.Success ? "圖片已上傳。" : result.Error);
-		return RedirectToAction(nameof(Index), new { articleId });
-	}
-
-	// POST: /Articles/DeleteImage
-	[HttpPost]
-	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> DeleteImage(int imageId, int articleId)
-	{
-		var result = await _imageService.DeleteAsync(imageId);
-		SetFlash(result.Success, result.Success ? "圖片已刪除(R2 檔案保留)。" : result.Error);
-		return RedirectToAction(nameof(Index), new { articleId });
-	}
-
-	// ---------------- 留言 ----------------
-
-	// POST: /Articles/AddComment
-	[HttpPost]
-	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> AddComment(int articleId, int? parentCommentId, string commentContent)
-	{
-		var result = await _commentService.AddAsync(new CommentCreateDto
-		{
-			ArticleId = articleId,
-			ParentCommentId = parentCommentId,
-			CommentContent = commentContent,
+			success = true,
+			id,
+			categoryName = updated?.CategoryName,
+			title,
+			articleContent = content,
+			updatedAt = updated?.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "",
+			images = images.Select(i => new { name = i.ImageName, src = i.Url }).ToList(),
 		});
-		SetFlash(result.Success, result.Success ? "留言已送出。" : result.Error);
-		return RedirectToAction(nameof(Index), new { articleId });
 	}
 
-	// POST: /Articles/SetCommentActive
-	[HttpPost]
-	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> SetCommentActive(int commentId, bool isActive, int articleId)
-	{
-		var result = await _commentService.SetActiveAsync(commentId, isActive);
-		SetFlash(result.Success, result.Success ? (isActive ? "留言已顯示。" : "留言已隱藏。") : result.Error);
-		return RedirectToAction(nameof(Index), new { articleId });
-	}
-
-	// POST: /Articles/SetCommentAdminNote
-	[HttpPost]
-	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> SetCommentAdminNote(int commentId, string? adminComment, int articleId)
-	{
-		var result = await _commentService.SetAdminNoteAsync(commentId, adminComment);
-		SetFlash(result.Success, result.Success ? "已更新留言的管理員備註。" : result.Error);
-		return RedirectToAction(nameof(Index), new { articleId });
-	}
-
-	// ---------------- 按讚 / 收藏(以目前使用者身分)----------------
-
-	// POST: /Articles/ToggleLike
-	[HttpPost]
-	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> ToggleLike(int articleId)
-	{
-		var result = await _reactionService.ToggleLikeAsync(articleId);
-		SetFlash(result.Success, result.Success ? (result.Data ? "已按讚。" : "已取消讚。") : result.Error);
-		return RedirectToAction(nameof(Index), new { articleId });
-	}
-
-	// POST: /Articles/ToggleSave
-	[HttpPost]
-	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> ToggleSave(int articleId)
-	{
-		var result = await _reactionService.ToggleSaveAsync(articleId);
-		SetFlash(result.Success, result.Success ? (result.Data ? "已收藏。" : "已取消收藏。") : result.Error);
-		return RedirectToAction(nameof(Index), new { articleId });
-	}
-
-	// ================= 給前端 JS 用的 JSON 端點 =================
-	// 免登入階段先不加 [ValidateAntiForgeryToken]。
+	private IActionResult JsonOk(object? data = null) => Json(new { success = true, data });
+	private IActionResult JsonFail(string? message) => Json(new { success = false, message });
 
 	// POST: /Articles/SetActiveAjax  (停用/啟用文章,reason 寫進 admin_comment)
 	[HttpPost]
 	public async Task<IActionResult> SetActiveAjax(int id, bool isActive, string? reason)
 	{
-		// 1. 先切文章的上下架狀態(is_active)
 		var r1 = await _articleService.SetActiveAsync(id, isActive);
-		if (!r1.Success)
-			return Json(new { success = false, message = r1.Error });
+		if (!r1.Success) return JsonFail(r1.Error);
 
-		// 2. 有填屏蔽說明就寫進 admin_comment(順便蓋 admin_updated_at、modified_by_admin_id)
 		if (!string.IsNullOrWhiteSpace(reason))
 		{
 			var r2 = await _articleService.SetAdminNoteAsync(id, reason);
-			if (!r2.Success)
-				return Json(new { success = false, message = r2.Error });
+			if (!r2.Success) return JsonFail(r2.Error);
 		}
-
-		// 3. 回傳成功給前端 JS
-		return Json(new { success = true });
+		return JsonOk();
+	
 	}
 
 	// POST: /Articles/SetCommentActiveAjax  (停用/啟用留言,reason 寫進 admin_comment)
 	[HttpPost]
 	public async Task<IActionResult> SetCommentActiveAjax(int commentId, bool isActive, string? reason)
 	{
-		// 1. 先切留言的顯示/隱藏狀態(is_active)
 		var r1 = await _commentService.SetActiveAsync(commentId, isActive);
-		if (!r1.Success)
-			return Json(new { success = false, message = r1.Error });
+		if (!r1.Success) return JsonFail(r1.Error);
 
-		// 2. 有填屏蔽說明就寫進留言的 admin_comment
 		if (!string.IsNullOrWhiteSpace(reason))
 		{
 			var r2 = await _commentService.SetAdminNoteAsync(commentId, reason);
-			if (!r2.Success)
-				return Json(new { success = false, message = r2.Error });
+			if (!r2.Success) return JsonFail(r2.Error);
 		}
-
-		return Json(new { success = true });
+		return JsonOk();
 	}
 
 	// ---------------- 私有:組裝 Index 頁 ViewModel ----------------
@@ -300,12 +204,4 @@ public class ArticlesController : Controller
 
 		return vm;
 	}
-
-	private void SetFlash(bool success, string? message)
-	{
-		if (string.IsNullOrEmpty(message)) return;
-		TempData[success ? "Success" : "Error"] = message;
-	}
-
-
 }

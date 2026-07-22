@@ -37,7 +37,7 @@ public class CommentRepository : ICommentRepository
             .ToListAsync();
 
     public async Task<Comment?> GetByIdAsync(int id)
-        => await _context.Set<Comment>().FirstOrDefaultAsync(c => c.Id == id);
+        => await _context.Set<Comment>().AsTracking().FirstOrDefaultAsync(c => c.Id == id);
 
 	public async Task<List<CommentRowDto>> GetRowsForArticlesAsync(List<int> articleIds)
 	 => await _context.Set<Comment>().AsNoTracking()

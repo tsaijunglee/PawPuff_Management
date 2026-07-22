@@ -14,11 +14,9 @@ public class DevCurrentUserService : ICurrentUserService
         _configuration = configuration;
     }
 
-    // appsettings.json → "DevSettings": { "CurrentUserId": 1, "CurrentAdminId": 1 }
-    // 請把這兩個值設成你假資料裡「真的存在」的 users.id / admins.id,否則外鍵會對不到。
-    public int GetCurrentUserId()
-        => _configuration.GetValue<int?>("DevSettings:CurrentUserId") ?? 1;
+	// 測試階段固定身分,不讀 appsettings。
+	// ★ CurrentUserId 要填「users 表裡真的存在」的 id ★
+	public int GetCurrentUserId() => 1;   //  users id=1
+	public int GetCurrentAdminId() => 1;  // admins id=1
 
-    public int GetCurrentAdminId()
-        => _configuration.GetValue<int?>("DevSettings:CurrentAdminId") ?? 1;
 }

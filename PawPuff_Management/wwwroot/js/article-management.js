@@ -616,46 +616,58 @@
         return row;
     }
 
-    function handleCreateSubmit(event) {
+    async function handleCreateSubmit(event) {
         event.preventDefault();
-        const category = document.getElementById("articleCreateCategory");
-        const title = document.getElementById("articleCreateTitle");
-        const content = document.getElementById("articleCreateContent");
-        let valid = true;
 
-        clearCreateValidation();
-        if (!category?.value.trim()) {
-            setFieldInvalid(category, "請選擇文章分類。");
-            valid = false;
-        }
-        if (!title?.value.trim()) {
-            setFieldInvalid(title, "請輸入文章標題。");
-            valid = false;
-        }
-        if (!content?.value.trim()) {
-            setFieldInvalid(content, "請輸入文章內容。");
-            valid = false;
-        }
-        if (!valid) return;
+        // ★ 找到送出鈕,鎖起來防連點
+        const submitBtn = event.target.querySelector('button[type="submit"]');
+        if (submitBtn?.disabled) return;          // 已經在送出中,直接忽略後續點擊
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "發佈中…"; }
 
-        document.getElementById("articleTableBody")?.appendChild(buildArticleRow({
-            id: getNextArticleId(),
-            account: "admin",
-            categoryName: category.value.trim(),
-            title: title.value.trim(),
-            articleContent: content.value.trim(),
-            images: createImages.map((image) => ({ name: image.name, src: image.src })),
-            createdAt: formatDateTime()
-        }));
-        collectRows();
-        state.sortKey = "id";
-        state.sortDir = "asc";
-        state.page = Math.max(Math.ceil(getFilteredRows().length / state.pageSize), 1);
-        renderTable();
-        createModal?.hide();
-        event.target.reset();
-        clearSelectedImages(false);
-        showToast("已新增文章");
+        try {
+            const category = document.getElementById("articleCreateCategory");
+            const title = document.getElementById("articleCreateTitle");
+            const content = document.getElementById("articleCreateContent");
+            const imageInput = document.getElementById("articleCreateImages");
+            let valid = true;
+
+            clearCreateValidation();
+            if (!category?.value.trim()) { setFieldInvalid(category, "請選擇文章分類。"); valid = false; }
+            if (!title?.value.trim()) { setFieldInvalid(title, "請輸入文章標題。"); valid = false; }
+            if (!content?.value.trim()) { setFieldInvalid(content, "請輸入文章內容。"); valid = false; }
+            if (!valid) return;
+
+            const formData = new FormData();
+            formData.append("categoryId", category.value);
+            formData.append("title", title.value.trim());
+            formData.append("content", content.value.trim());
+            const files = imageInput?.files || [];
+            for (let i = 0; i < files.length; i++) formData.append("files", files[i]);
+
+            const response = await fetch("/Articles/CreateAjax", { method: "POST", body: formData });
+            if (!response.ok) throw new Error("HTTP " + response.status);
+            const result = await response.json();
+            if (!result.success) { setFieldInvalid(title, result.message || "新增失敗。"); return; }
+
+            document.getElementById("articleTableBody")?.appendChild(buildArticleRow({
+                id: result.id, account: result.account, categoryName: result.categoryName,
+                title: result.title, articleContent: result.articleContent,
+                images: result.images || [], createdAt: result.createdAt
+            }));
+            collectRows();
+            state.sortKey = "id"; state.sortDir = "asc";
+            state.page = Math.max(Math.ceil(getFilteredRows().length / state.pageSize), 1);
+            renderTable();
+            createModal?.hide();
+            event.target.reset();
+            clearSelectedImages(false);
+            showToast("已新增文章");
+        } catch (error) {
+            setFieldInvalid(document.getElementById("articleCreateTitle"), "連線失敗,請稍後再試。");
+        } finally {
+            // ★ 不論成功失敗都解鎖,讓使用者能重試
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "新增文章"; }
+        }
     }
 
     function revokePreviewUrl(image) {

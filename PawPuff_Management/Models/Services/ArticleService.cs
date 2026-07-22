@@ -30,7 +30,10 @@ public class ArticleService : IArticleService
     public Task<List<ArticleListItemDto>> GetListAsync(string? keyword, int? categoryId, bool? isActive)
         => _repository.GetListAsync(keyword, categoryId, isActive);
 
-    public async Task<ArticleDetailDto?> GetDetailAsync(int id)
+	public Task<ArticleListItemDto?> GetListItemByIdAsync(int id)
+	=> _repository.GetListItemByIdAsync(id);
+
+	public async Task<ArticleDetailDto?> GetDetailAsync(int id)
     {
         var detail = await _repository.GetDetailBaseAsync(id);
         if (detail is null) return null;
@@ -51,7 +54,13 @@ public class ArticleService : IArticleService
         if (!await _repository.CategoryExistsAsync(dto.CategoryId))
             return ServiceResult<int>.Fail("指定的分類不存在。");
 
-        var entity = new Article
+		// 防重複送出:同一作者、相同標題+內容、10 秒內,視為重複
+		var userId = _currentUser.GetCurrentUserId();
+		var since = DateTime.Now.AddSeconds(-10);
+		if (await _repository.ExistsRecentDuplicateAsync(userId, dto.Title.Trim(), dto.ArticleContent.Trim(), since))
+			return ServiceResult<int>.Fail("這篇文章剛剛已經新增過了,請勿重複送出。");
+
+		var entity = new Article
         {
             Title = dto.Title.Trim(),
             ArticleContent = dto.ArticleContent.Trim(),
@@ -61,7 +70,7 @@ public class ArticleService : IArticleService
             CreatedAt = DateTime.Now,
         };
 
-        await _repository.AddAsync(entity);
+		await _repository.AddAsync(entity);
         await _repository.SaveChangesAsync();
         return ServiceResult<int>.Ok(entity.Id);
     }
@@ -114,7 +123,20 @@ public class ArticleService : IArticleService
         return ServiceResult.Ok();
     }
 
-    private static string? Validate(string? title, string? content)
+	public async Task<ServiceResult<int>> CreateWithImagesAsync(ArticleCreateDto dto, IReadOnlyList<IFormFile> files)
+	{
+		var create = await CreateAsync(dto);
+		if (!create.Success) return create;
+
+		if (files is { Count: > 0 })
+		{
+			var upload = await _imageService.UploadAsync(create.Data, files);
+			if (!upload.Success) return ServiceResult<int>.Fail("文章已建立,但圖片上傳失敗:" + upload.Error);
+		}
+		return create;
+	}
+
+	private static string? Validate(string? title, string? content)
     {
         if (string.IsNullOrWhiteSpace(title)) return "標題不可空白。";
         if (title.Trim().Length > 100) return "標題不可超過 100 字。";

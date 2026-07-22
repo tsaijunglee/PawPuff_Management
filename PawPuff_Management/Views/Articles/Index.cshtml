@@ -38,15 +38,12 @@
                     </div>
                     <div class="member-search-field is-wide">
                         <label class="form-label" for="articleFilterCategory">文章分類</label>
-                        <select class="form-select article-filter-select" id="articleFilterCategory" data-article-filter="category">
+                        <select class="form-select" id="articleFilterCategory" data-article-filter="category">
                             <option value="">全部分類</option>
-                            <option value="官方公告">官方公告</option>
-                            <option value="醫療養護">醫療養護</option>
-                            <option value="飲食營養">飲食營養</option>
-                            <option value="行為訓練">行為訓練</option>
-                            <option value="寵物認養">寵物認養</option>
-                            <option value="美容美體">美容美體</option>
-                            <option value="走失求助">走失求助</option>
+                            @foreach (var c in Model.Categories)
+                            {
+                                <option value="@c.Name">@c.Name</option>
+                            }
                         </select>
                     </div>
                     <div class="member-search-field is-wide">
@@ -256,13 +253,10 @@
                             <label class="form-label fw-bold" for="articleCreateCategory">文章分類</label>
                             <select class="form-select" id="articleCreateCategory" required>
                                 <option value="">請選擇分類</option>
-                                <option value="官方公告">官方公告</option>
-                                <option value="醫療養護">醫療養護</option>
-                                <option value="飲食營養">飲食營養</option>
-                                <option value="行為訓練">行為訓練</option>
-                                <option value="寵物認養">寵物認養</option>
-                                <option value="美容美體">美容美體</option>
-                                <option value="走失求助">走失求助</option>
+                                @foreach (var c in Model.Categories)
+                                {
+                                    <option value="@c.Id">@c.Name</option>
+                                }
                             </select>
                             <div class="invalid-feedback">請選擇文章分類。</div>
                         </div>
@@ -311,13 +305,10 @@
                             <label class="form-label fw-bold" for="articleEditCategory">文章分類</label>
                             <select class="form-select" id="articleEditCategory" required>
                                 <option value="">請選擇分類</option>
-                                <option value="官方公告">官方公告</option>
-                                <option value="醫療養護">醫療養護</option>
-                                <option value="飲食營養">飲食營養</option>
-                                <option value="行為訓練">行為訓練</option>
-                                <option value="寵物認養">寵物認養</option>
-                                <option value="美容美體">美容美體</option>
-                                <option value="走失求助">走失求助</option>
+                                @foreach (var c in Model.Categories)
+                                {
+                                    <option value="@c.Name">@c.Name</option>
+                                }
                             </select>
                             <div class="invalid-feedback">請選擇文章分類。</div>
                         </div>

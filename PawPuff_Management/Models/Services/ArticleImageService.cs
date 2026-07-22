@@ -10,6 +10,9 @@ public interface IArticleImageService
     Task<List<ArticleImageDto>> GetForArticleAsync(int articleId);
     Task<ServiceResult> UploadAsync(int articleId, IReadOnlyList<IFormFile> files);
     Task<ServiceResult> DeleteAsync(int imageId);
+
+	// 介面 IArticleImageService 裡加:
+	Task<ServiceResult> ReconcileAsync(int articleId, List<string> keptNames, IReadOnlyList<IFormFile> newFiles);
 }
 
 public class ArticleImageService : IArticleImageService
@@ -91,7 +94,31 @@ public class ArticleImageService : IArticleImageService
         return ServiceResult.Ok();
     }
 
-    private ArticleImageDto ToDto(ArticleImage e) => new()
+	// 類別 ArticleImageService 裡加(放在 DeleteAsync 後面):
+	public async Task<ServiceResult> ReconcileAsync(int articleId, List<string> keptNames, IReadOnlyList<IFormFile> newFiles)
+	{
+		keptNames ??= new List<string>();
+
+		// 1. 既有圖片中,不在「保留清單」的就刪掉(含 R2)。
+		var existing = await _repository.GetByArticleAsync(articleId);
+		foreach (var img in existing.Where(i => !keptNames.Contains(i.ImageName)))
+		{
+			var del = await DeleteAsync(img.Id);
+			if (!del.Success) return del;
+		}
+
+		// 2. 有新檔就上傳(接在目前最大排序後面)。
+		var valid = (newFiles ?? new List<IFormFile>()).Where(f => f is { Length: > 0 }).ToList();
+		if (valid.Count > 0)
+		{
+			var up = await UploadAsync(articleId, valid);
+			if (!up.Success) return up;
+		}
+
+		return ServiceResult.Ok();
+	}
+
+	private ArticleImageDto ToDto(ArticleImage e) => new()
     {
         Id = e.Id,
         ArticleId = e.ArticleId,
