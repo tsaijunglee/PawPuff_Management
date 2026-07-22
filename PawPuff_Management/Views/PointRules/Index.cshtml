@@ -1,4 +1,7 @@
-﻿@{
+﻿@using PawPuff_Management.Models.ViewModels
+@model PointRulesIndexViewModel
+
+@{
     ViewData["Title"] = "規則管理";
     ViewData["CurrentScreen"] = "point-rule-management";
 }
@@ -16,9 +19,16 @@
         <div class="point-rule-view" id="pointRuleView">
             <div class="member-table-card point-rule-table-card">
                 <div class="member-table-toolbar">
-                    <strong><i class="bi bi-coin me-2"></i>點數規則資料表</strong>
-                    <span class="member-count">共 10 筆</span>
+                    <strong>
+                        <i class="bi bi-coin me-2"></i>
+                        點數規則資料表
+                    </strong>
+
+                    <span class="member-count">
+                        共 @Model.TotalCount 筆
+                    </span>
                 </div>
+
                 <div class="table-responsive">
                     <table class="table table-hover member-table point-rule-table align-middle">
                         <thead>
@@ -32,121 +42,110 @@
                                 <th scope="col">操作</th>
                             </tr>
                         </thead>
+
                         <tbody id="pointRuleTableBody">
-                            <tr data-point-rule-row data-id="1" data-fixed="true" data-default-value="5">
-                                <td>1</td>
-                                <td data-point-rule-cell="name">每日登入打卡</td>
-                                <td><span class="point-rule-badge is-fixed">是</span></td>
-                                <td data-point-rule-cell="defaultValue">5</td>
-                                <td>1</td>
-                                <td class="point-rule-description" data-point-rule-cell="description">每日一次，預設固定+5</td>
-                                <td>
-                                    <button class="member-detail-btn point-rule-edit-btn" type="button" data-point-rule-edit>
-                                        <i class="bi bi-pencil-square"></i>編輯
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr data-point-rule-row data-id="2" data-fixed="true" data-default-value="10">
-                                <td>2</td>
-                                <td data-point-rule-cell="name">每日發文</td>
-                                <td><span class="point-rule-badge is-fixed">是</span></td>
-                                <td data-point-rule-cell="defaultValue">10</td>
-                                <td>1</td>
-                                <td class="point-rule-description" data-point-rule-cell="description">每日一次，預設固定+5，活動雙倍</td>
-                                <td>
-                                    <button class="member-detail-btn point-rule-edit-btn" type="button" data-point-rule-edit>
-                                        <i class="bi bi-pencil-square"></i>編輯
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr data-point-rule-row data-id="3" data-fixed="true" data-default-value="5">
-                                <td>3</td>
-                                <td data-point-rule-cell="name">每日回文</td>
-                                <td><span class="point-rule-badge is-fixed">是</span></td>
-                                <td data-point-rule-cell="defaultValue">5</td>
-                                <td>1</td>
-                                <td class="point-rule-description" data-point-rule-cell="description">每日一次，預設固定+5</td>
-                                <td>
-                                    <button class="member-detail-btn point-rule-edit-btn" type="button" data-point-rule-edit>
-                                        <i class="bi bi-pencil-square"></i>編輯
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr data-point-rule-row data-id="4" data-fixed="true" data-default-value="5">
-                                <td>4</td>
-                                <td data-point-rule-cell="name">每日點讚</td>
-                                <td><span class="point-rule-badge is-fixed">是</span></td>
-                                <td data-point-rule-cell="defaultValue">5</td>
-                                <td>1</td>
-                                <td class="point-rule-description" data-point-rule-cell="description">每日一次，預設固定+5</td>
-                                <td>
-                                    <button class="member-detail-btn point-rule-edit-btn" type="button" data-point-rule-edit>
-                                        <i class="bi bi-pencil-square"></i>編輯
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr data-point-rule-row data-id="5" data-fixed="true" data-default-value="5">
-                                <td>5</td>
-                                <td data-point-rule-cell="name">發文收到讚</td>
-                                <td><span class="point-rule-badge is-fixed">是</span></td>
-                                <td data-point-rule-cell="defaultValue">5</td>
-                                <td><span class="point-rule-null" aria-label="NULL">—</span></td>
-                                <td class="point-rule-description" data-point-rule-cell="description">每日不限次，預設固定+5</td>
-                                <td>
-                                    <button class="member-detail-btn point-rule-edit-btn" type="button" data-point-rule-edit>
-                                        <i class="bi bi-pencil-square"></i>編輯
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr data-point-rule-row data-id="6" data-fixed="true" data-default-value="5">
-                                <td>6</td>
-                                <td data-point-rule-cell="name">發文被收藏</td>
-                                <td><span class="point-rule-badge is-fixed">是</span></td>
-                                <td data-point-rule-cell="defaultValue">5</td>
-                                <td><span class="point-rule-null" aria-label="NULL">—</span></td>
-                                <td class="point-rule-description" data-point-rule-cell="description">每日不限次，預設固定+5</td>
-                                <td>
-                                    <button class="member-detail-btn point-rule-edit-btn" type="button" data-point-rule-edit>
-                                        <i class="bi bi-pencil-square"></i>編輯
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr data-point-rule-row data-id="7" data-fixed="false" data-default-value="">
-                                <td>7</td>
-                                <td data-point-rule-cell="name">贊助平台</td>
-                                <td><span class="point-rule-badge">否</span></td>
-                                <td><span class="point-rule-null" aria-label="NULL">—</span></td>
-                                <td><span class="point-rule-null" aria-label="NULL">—</span></td>
-                                <td class="point-rule-description" data-point-rule-cell="description">每日不限次，依贊助金額+?</td>
-                                <td><span class="point-rule-unavailable">不可編輯</span></td>
-                            </tr>
-                            <tr data-point-rule-row data-id="8" data-fixed="false" data-default-value="">
-                                <td>8</td>
-                                <td data-point-rule-cell="name">管理員給予</td>
-                                <td><span class="point-rule-badge">否</span></td>
-                                <td><span class="point-rule-null" aria-label="NULL">—</span></td>
-                                <td><span class="point-rule-null" aria-label="NULL">—</span></td>
-                                <td class="point-rule-description" data-point-rule-cell="description">每日不限次，依管理員給予+?</td>
-                                <td><span class="point-rule-unavailable">不可編輯</span></td>
-                            </tr>
-                            <tr data-point-rule-row data-id="9" data-fixed="false" data-default-value="">
-                                <td>9</td>
-                                <td data-point-rule-cell="name">管理員扣除</td>
-                                <td><span class="point-rule-badge">否</span></td>
-                                <td><span class="point-rule-null" aria-label="NULL">—</span></td>
-                                <td><span class="point-rule-null" aria-label="NULL">—</span></td>
-                                <td class="point-rule-description" data-point-rule-cell="description">每日不限次，依管理員扣除-?</td>
-                                <td><span class="point-rule-unavailable">不可編輯</span></td>
-                            </tr>
-                            <tr data-point-rule-row data-id="10" data-fixed="false" data-default-value="">
-                                <td>10</td>
-                                <td data-point-rule-cell="name">商城消費</td>
-                                <td><span class="point-rule-badge">否</span></td>
-                                <td><span class="point-rule-null" aria-label="NULL">—</span></td>
-                                <td><span class="point-rule-null" aria-label="NULL">—</span></td>
-                                <td class="point-rule-description" data-point-rule-cell="description">每日不限次，依商城消費金額-?</td>
-                                <td><span class="point-rule-unavailable">不可編輯</span></td>
-                            </tr>
+                            @if (Model.Rules.Count == 0)
+                            {
+                                <tr>
+                                    <td class="point-rule-empty"
+                                        colspan="7">
+                                        目前沒有點數規則資料。
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                @foreach (var rule in Model.Rules)
+                                {
+                                    <tr data-point-rule-row
+                                        data-id="@rule.Id"
+                                        data-fixed="@rule.IsFixed.ToString().ToLowerInvariant()"
+                                        data-default-value="@(rule.DefaultValue?.ToString() ?? string.Empty)"
+                                        data-description="@rule.Description">
+                                        <td>@rule.Id</td>
+
+                                        <td data-point-rule-cell="name">
+                                            @rule.ActionName
+                                        </td>
+
+                                        <td>
+                                            @if (rule.IsFixed)
+                                            {
+                                                <span class="point-rule-badge is-fixed">
+                                                    是
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="point-rule-badge">
+                                                    否
+                                                </span>
+                                            }
+                                        </td>
+
+                                        <td data-point-rule-cell="defaultValue">
+                                            @if (rule.DefaultValue.HasValue)
+                                            {
+                                                @rule.DefaultValue.Value
+                                            }
+                                            else
+                                            {
+                                                <span class="point-rule-null"
+                                                      aria-label="NULL">
+                                                    —
+                                                </span>
+                                            }
+                                        </td>
+
+                                        <td>
+                                            @if (rule.DailyLimit.HasValue)
+                                            {
+                                                @rule.DailyLimit.Value
+                                            }
+                                            else
+                                            {
+                                                <span class="point-rule-null"
+                                                      aria-label="NULL">
+                                                    —
+                                                </span>
+                                            }
+                                        </td>
+
+                                        <td class="point-rule-description"
+                                            data-point-rule-cell="description">
+                                            @if (!string.IsNullOrWhiteSpace(rule.Description))
+                                            {
+                                                @rule.Description
+                                            }
+                                            else
+                                            {
+                                                <span class="point-rule-null"
+                                                      aria-label="NULL">
+                                                    —
+                                                </span>
+                                            }
+                                        </td>
+
+                                        <td>
+                                            @if (rule.CanEdit)
+                                            {
+                                                <button class="member-detail-btn point-rule-edit-btn"
+                                                        type="button"
+                                                        data-point-rule-edit>
+                                                    <i class="bi bi-pencil-square"></i>
+                                                    編輯
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <span class="point-rule-unavailable">
+                                                    不可編輯
+                                                </span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -155,40 +154,100 @@
     </section>
 </div>
 
-<div class="modal fade" id="pointRuleEditModal" tabindex="-1" aria-labelledby="pointRuleEditModalTitle" aria-hidden="true">
+<div class="modal fade"
+     id="pointRuleEditModal"
+     tabindex="-1"
+     aria-labelledby="pointRuleEditModalTitle"
+     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content member-form-modal">
-            <form id="pointRuleEditForm" novalidate>
+            <form id="pointRuleEditForm"
+                  data-update-url="@Url.Action("Update", "PointRules")"
+                  novalidate>
+                @Html.AntiForgeryToken()
+
                 <div class="modal-header">
-                    <h5 class="modal-title" id="pointRuleEditModalTitle">編輯點數規則</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+                    <h5 class="modal-title" id="pointRuleEditModalTitle">
+                        編輯點數規則
+                    </h5>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="關閉">
+                    </button>
                 </div>
+
                 <div class="modal-body">
-                    <input id="pointRuleEditId" type="hidden">
+                    <input id="pointRuleEditId" type="hidden" />
+
                     <div class="mb-3">
-                        <label class="form-label" for="pointRuleEditName">規則名稱</label>
-                        <input class="form-control point-rule-modal-input" id="pointRuleEditName" type="text" readonly>
+                        <label class="form-label"
+                               for="pointRuleEditName">
+                            規則名稱
+                        </label>
+
+                        <input class="form-control point-rule-modal-input"
+                               id="pointRuleEditName"
+                               type="text"
+                               readonly />
                     </div>
+
                     <div class="mb-3">
-                        <label class="form-label" for="pointRuleEditValue">預設值</label>
-                        <input class="form-control point-rule-modal-input" id="pointRuleEditValue" type="number" min="0" step="1" required>
-                        <div class="invalid-feedback">請輸入預設值。</div>
+                        <label class="form-label"
+                               for="pointRuleEditValue">
+                            預設值
+                        </label>
+
+                        <input class="form-control point-rule-modal-input"
+                               id="pointRuleEditValue"
+                               type="number"
+                               min="0"
+                               max="2147483647"
+                               step="1"
+                               required />
+
+                        <div class="invalid-feedback">
+                            請輸入大於或等於 0 的整數預設值。
+                        </div>
                     </div>
+
                     <div>
-                        <label class="form-label" for="pointRuleEditReason">描述</label>
-                        <textarea class="form-control point-rule-modal-textarea" id="pointRuleEditReason" rows="4" required placeholder="請填寫規則描述"></textarea>
-                        <div class="invalid-feedback">請填寫描述。</div>
+                        <label class="form-label"
+                               for="pointRuleEditReason">
+                            描述
+                        </label>
+
+                        <textarea class="form-control point-rule-modal-textarea"
+                                  id="pointRuleEditReason"
+                                  rows="4"
+                                  maxlength="100"
+                                  required
+                                  placeholder="請填寫規則描述"></textarea>
+
+                        <div class="invalid-feedback">
+                            請填寫 100 個字以內的描述。
+                        </div>
                     </div>
                 </div>
+
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="submit" class="btn btn-warning fw-bold text-brown">儲存修改</button>
+                    <button type="button"
+                            class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal">
+                        取消
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-warning fw-bold text-brown"
+                            id="pointRuleEditSubmit">
+                        儲存修改
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
 
 @section Styles {
     <link href="~/css/point-rule-management.css" rel="stylesheet">
