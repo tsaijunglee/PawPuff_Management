@@ -10,10 +10,6 @@ namespace PawPuff_Management.Models.EfModels;
 
 [Table("products")]
 [Index("Name", Name = "IX_products", IsUnique = true)]
-[Index("DollBodyId", Name = "IX_products_1", IsUnique = true)]
-[Index("DollAccessoryId", Name = "IX_products_2", IsUnique = true)]
-[Index("DollFramesId", Name = "IX_products_3", IsUnique = true)]
-[Index("DollColorsId", Name = "IX_products_4", IsUnique = true)]
 public partial class Product
 {
     [Key]

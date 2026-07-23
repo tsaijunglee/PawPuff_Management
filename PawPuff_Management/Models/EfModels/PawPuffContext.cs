@@ -274,6 +274,22 @@ public partial class PawPuffContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__products__3213E83F8381F71B");
 
+            entity.HasIndex(e => e.DollAccessoryId, "IX_products_doll_accessory_id")
+                .IsUnique()
+                .HasFilter("([doll_accessory_id] IS NOT NULL)");
+
+            entity.HasIndex(e => e.DollBodyId, "IX_products_doll_body_id")
+                .IsUnique()
+                .HasFilter("([doll_body_id] IS NOT NULL)");
+
+            entity.HasIndex(e => e.DollColorsId, "IX_products_doll_colors_id")
+                .IsUnique()
+                .HasFilter("([doll_colors_id] IS NOT NULL)");
+
+            entity.HasIndex(e => e.DollFramesId, "IX_products_doll_frames_id")
+                .IsUnique()
+                .HasFilter("([doll_frames_id] IS NOT NULL)");
+
             entity.Property(e => e.IsActive).HasDefaultValue(true);
 
             entity.HasOne(d => d.DollAccessory).WithOne(p => p.Product).HasConstraintName("FK_products_doll_accessory");
