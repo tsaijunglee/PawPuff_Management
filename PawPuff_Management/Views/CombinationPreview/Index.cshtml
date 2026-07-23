@@ -1,6 +1,14 @@
-﻿@{
+﻿@using PawPuff_Management.Models.ViewModels
+@model CombinationPreviewViewModel
+
+@{
     ViewData["Title"] = "組合預覽";
     ViewData["CurrentScreen"] = "combination-preview";
+
+    var hasMissingOptions =
+    Model.Bodies.Count == 0 ||
+    Model.Colors.Count == 0 ||
+    Model.Accessories.Count == 0;
 }
 
 <div class="dashboard-content management-screen" id="managementScreen" data-screen-panel="management">
@@ -11,91 +19,155 @@
         </span>
         <h2 class="screen-title" id="managementTitle">組合預覽</h2>
         <p class="screen-desc" id="managementDescription">
-            預覽指定帳號或組合的紙娃娃搭配結果。
+            選擇底圖、染劑及配件，預覽紙娃娃的搭配結果。
         </p>
-        <div class="combination-preview-view" id="combinationPreviewView">
-            <form class="combination-preview-form" id="combinationPreviewForm">
+
+        @if (hasMissingOptions)
+        {
+            <div class="combination-data-warning" role="status">
+                資料庫中的底圖、染劑或配件沒有資料，
+                部分下拉選單可能只有預設選項。
+            </div>
+        }
+
+        <div class="combination-preview-view"
+             id="combinationPreviewView"
+             data-body-sort-order="@Model.BodySortOrder">
+            <form class="combination-preview-form"
+                  id="combinationPreviewForm"
+                  autocomplete="off">
                 <div class="combination-select-panel">
                     <div class="combination-field">
-                        <label class="form-label" for="previewBodySelect">底圖</label>
-                        <select class="form-select combination-select" id="previewBodySelect" data-preview-item="body">
+                        <label class="form-label"
+                               for="previewBodySelect">
+                            底圖
+                        </label>
+
+                        <select class="form-select combination-select"
+                                id="previewBodySelect"
+                                data-preview-item="body">
                             <option value="">請選擇底圖</option>
-                            <option value="b1.png" data-name="底圖1" data-image="b1.png">底圖1（b1.png）</option>
-                            <option value="b2.png" data-name="底圖2" data-image="b2.png">底圖2（b2.png）</option>
-                            <option value="b3.png" data-name="底圖3" data-image="b3.png">底圖3（b3.png）</option>
+
+                            @foreach (var body in Model.Bodies)
+                            {
+                                <option value="@body.Id"
+                                        data-name="@body.Name"
+                                        data-image-name="@body.ImageName"
+                                        data-image-url="@body.ImageUrl">
+                                    @body.Name
+                                </option>
+                            }
                         </select>
                     </div>
+
                     <div class="combination-field">
-                        <label class="form-label" for="previewBodyColorSelect">底圖染劑</label>
-                        <select class="form-select combination-select" id="previewBodyColorSelect" data-preview-color="body" disabled>
+                        <label class="form-label"
+                               for="previewBodyColorSelect">
+                            底圖染劑
+                        </label>
+
+                        <select class="form-select combination-select"
+                                id="previewBodyColorSelect"
+                                data-preview-color="body"
+                                disabled>
                             <option value="">不套用染劑</option>
-                            <option value="#FF44AA" data-name="染劑1">染劑1（#FF44AA）</option>
-                            <option value="#5555FF" data-name="染劑2">染劑2（#5555FF）</option>
-                            <option value="#000000" data-name="染劑3">染劑3（#000000）</option>
+
+                            @foreach (var color in Model.Colors)
+                            {
+                                <option value="@color.Id"
+                                        data-name="@color.Name"
+                                        data-hex-code="@color.HexCode">
+                                    @color.Name
+                                </option>
+                            }
                         </select>
                     </div>
-                    <div class="combination-field">
-                        <label class="form-label" for="previewAccessory1Select">配件1</label>
-                        <select class="form-select combination-select" id="previewAccessory1Select" data-preview-item="accessory1">
-                            <option value="">請選擇配件1</option>
-                            <option value="al1.png" data-name="配件1" data-line="al1.png" data-mask="am1.png" data-sort="1">配件1（al1.png）</option>
-                            <option value="al2.png" data-name="配件2" data-line="al2.png" data-mask="am2.png" data-sort="5">配件2（al2.png）</option>
-                            <option value="al3.png" data-name="配件3" data-line="al3.png" data-mask="am3.png" data-sort="6">配件3（al3.png）</option>
-                        </select>
-                    </div>
-                    <div class="combination-field">
-                        <label class="form-label" for="previewAccessory1ColorSelect">配件1染劑</label>
-                        <select class="form-select combination-select" id="previewAccessory1ColorSelect" data-preview-color="accessory1" disabled>
-                            <option value="">不套用染劑</option>
-                            <option value="#FF44AA" data-name="染劑1">染劑1（#FF44AA）</option>
-                            <option value="#5555FF" data-name="染劑2">染劑2（#5555FF）</option>
-                            <option value="#000000" data-name="染劑3">染劑3（#000000）</option>
-                        </select>
-                    </div>
-                    <div class="combination-field">
-                        <label class="form-label" for="previewAccessory2Select">配件2</label>
-                        <select class="form-select combination-select" id="previewAccessory2Select" data-preview-item="accessory2">
-                            <option value="">請選擇配件2</option>
-                            <option value="al1.png" data-name="配件1" data-line="al1.png" data-mask="am1.png" data-sort="1">配件1（al1.png）</option>
-                            <option value="al2.png" data-name="配件2" data-line="al2.png" data-mask="am2.png" data-sort="5">配件2（al2.png）</option>
-                            <option value="al3.png" data-name="配件3" data-line="al3.png" data-mask="am3.png" data-sort="6">配件3（al3.png）</option>
-                        </select>
-                    </div>
-                    <div class="combination-field">
-                        <label class="form-label" for="previewAccessory2ColorSelect">配件2染劑</label>
-                        <select class="form-select combination-select" id="previewAccessory2ColorSelect" data-preview-color="accessory2" disabled>
-                            <option value="">不套用染劑</option>
-                            <option value="#FF44AA" data-name="染劑1">染劑1（#FF44AA）</option>
-                            <option value="#5555FF" data-name="染劑2">染劑2（#5555FF）</option>
-                            <option value="#000000" data-name="染劑3">染劑3（#000000）</option>
-                        </select>
-                    </div>
-                    <div class="combination-field">
-                        <label class="form-label" for="previewAccessory3Select">配件3</label>
-                        <select class="form-select combination-select" id="previewAccessory3Select" data-preview-item="accessory3">
-                            <option value="">請選擇配件3</option>
-                            <option value="al1.png" data-name="配件1" data-line="al1.png" data-mask="am1.png" data-sort="1">配件1（al1.png）</option>
-                            <option value="al2.png" data-name="配件2" data-line="al2.png" data-mask="am2.png" data-sort="5">配件2（al2.png）</option>
-                            <option value="al3.png" data-name="配件3" data-line="al3.png" data-mask="am3.png" data-sort="6">配件3（al3.png）</option>
-                        </select>
-                    </div>
-                    <div class="combination-field">
-                        <label class="form-label" for="previewAccessory3ColorSelect">配件3染劑</label>
-                        <select class="form-select combination-select" id="previewAccessory3ColorSelect" data-preview-color="accessory3" disabled>
-                            <option value="">不套用染劑</option>
-                            <option value="#FF44AA" data-name="染劑1">染劑1（#FF44AA）</option>
-                            <option value="#5555FF" data-name="染劑2">染劑2（#5555FF）</option>
-                            <option value="#000000" data-name="染劑3">染劑3（#000000）</option>
-                        </select>
-                    </div>
+
+                    @for (var slot = 1; slot <= 3; slot++)
+                    {
+                        var slotKey = $"accessory{slot}";
+                        var accessorySelectId =
+                        $"previewAccessory{slot}Select";
+                        var colorSelectId =
+                        $"previewAccessory{slot}ColorSelect";
+
+                        <div class="combination-field">
+                            <label class="form-label"
+                                   for="@accessorySelectId">
+                                配件 @slot
+                            </label>
+
+                            <select class="form-select combination-select"
+                                    id="@accessorySelectId"
+                                    data-preview-item="@slotKey">
+                                <option value="">
+                                    請選擇配件 @slot
+                                </option>
+
+                                @foreach (var accessory in Model.Accessories)
+                                {
+                                    <option value="@accessory.Id"
+                                            data-name="@accessory.Name"
+                                            data-line-name="@accessory.LineImageName"
+                                            data-line-url="@accessory.LineImageUrl"
+                                            data-mask-name="@accessory.MaskImageName"
+                                            data-mask-url="@accessory.MaskImageUrl"
+                                            data-sort-order="@accessory.SortOrder">
+                                        @accessory.Name
+                                    </option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="combination-field">
+                            <label class="form-label"
+                                   for="@colorSelectId">
+                                配件 @slot 染劑
+                            </label>
+
+                            <select class="form-select combination-select"
+                                    id="@colorSelectId"
+                                    data-preview-color="@slotKey"
+                                    disabled>
+                                <option value="">不套用染劑</option>
+
+                                @foreach (var color in Model.Colors)
+                                {
+                                    <option value="@color.Id"
+                                            data-name="@color.Name"
+                                            data-hex-code="@color.HexCode">
+                                        @color.Name
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                    }
                 </div>
 
                 <div class="combination-preview-panel" aria-live="polite">
-                    <div class="combination-preview-frame" id="combinationPreviewFrame">
-                        <div class="combination-preview-empty" id="combinationPreviewEmpty">—</div>
-                        <div class="combination-layer-stack" id="combinationLayerStack"></div>
+                    <div class="combination-preview-frame"
+                         id="combinationPreviewFrame"
+                         role="img"
+                         aria-label="紙娃娃組合預覽">
+                        <div class="combination-preview-empty"
+                             id="combinationPreviewEmpty">
+                            請先選擇底圖或配件
+                        </div>
+
+                        <canvas class="combination-preview-canvas d-none"
+                                id="combinationPreviewCanvas"
+                                aria-hidden="true">
+                        </canvas>
+
+                        <div class="combination-preview-error d-none"
+                             id="combinationPreviewError"
+                             role="alert">
+                        </div>
                     </div>
-                    <div class="combination-layer-list" id="combinationLayerList"></div>
+
+                    <div class="combination-layer-list"
+                         id="combinationLayerList">
+                    </div>
                 </div>
             </form>
         </div>
@@ -103,9 +175,12 @@
 </div>
 
 @section Styles {
-    <link href="~/css/combination-preview.css" rel="stylesheet">
+    <link href="~/css/combination-preview.css"
+          rel="stylesheet"
+          asp-append-version="true" />
 }
 
 @section Scripts {
-    <script src="~/js/combination-preview.js"></script>
+    <script src="~/js/combination-preview.js"
+            asp-append-version="true"></script>
 }
