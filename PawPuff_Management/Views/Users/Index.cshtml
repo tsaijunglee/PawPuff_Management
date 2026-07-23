@@ -1,7 +1,10 @@
-﻿@{
+﻿@model IEnumerable<PawPuff_Management.Models.DTOs.CreateUserDto>
+@{
     ViewData["Title"] = "會員管理";
     ViewData["CurrentScreen"] = "member-management";
 }
+
+@Html.AntiForgeryToken()
 
 
 <div class="dashboard-content management-screen" id="managementScreen" data-screen-panel="management">
@@ -85,7 +88,8 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody id="memberTableBody" data-table-columns="id,account,nickname,phone,email,points">
+
+                        @* <tbody id="memberTableBody" data-table-columns="id,account,nickname,phone,email,points">
                             <tr data-member-row data-id="1" data-account="sunny01" data-password-hash="069edcc63a6a9b47e5b22b27a3c3fbc6776b2512f4efeb38a6a12ff31405e3f5" data-nickname="小晴" data-email="sunny01@gmail.com" data-phone="0932649915" data-active-doll-configs-id="NULL" data-active-doll-frame-id="NULL" data-point-balance="50" data-points="50" data-is-active="1" data-enabled="true" data-created-at="2026-03-16 8:35:00" data-admin-comment="NULL" data-admin-updated-at="NULL" data-modified-by-admin="NULL">
                                 <td data-member-cell="id">1</td>
                                 <td data-member-cell="account">sunny01</td>
@@ -290,6 +294,76 @@
                                     </div>
                                 </td>
                             </tr>
+                        </tbody> *@
+
+                        <tbody id="memberTableBody" data-table-columns="id,account,nickname,email">
+                            @foreach (var item in Model)
+                            {
+                                <tr data-member-row
+                                    data-id="@item.Id"
+                                    data-account="@item.Account"
+                                    data-password-hash="@item.PasswordHash"
+                                    data-nickname="@item.Nickname"
+                                    data-phone="@item.Phone"
+                                    data-email="@item.Email"
+                                    data-is-active="@item.IsActive.ToString().ToLower()"
+                                    data-enabled="@item.IsActive.ToString().ToLower()"
+                                    data-active_doll_configs_id="@item.ActiveDollConfigsId"
+                                    data-active_doll_frame_id="@item.ActiveDollFrameId"
+                                    data-point_balance="@item.PointBalance"
+                                    data-created-at="@item.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")"
+                                    data-admin-comment="@item.AdminComment"
+                                    data-admin-updated-at="@(item.AdminUpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "")"
+                                    data-modified-by-admin-id="@item.ModifiedByAdminId">
+                                    <td data-member-cell="id">
+                                        @item.Id
+                                    </td>
+                                    <td data-member-cell="account">
+                                        @item.Account
+                                    </td>
+
+                                    <td data-member-cell="nickname">
+                                        @item.Nickname
+                                    </td>
+
+                                    <td data-member-cell="phone">
+                                        @item.Phone
+                                    </td>
+
+                                    <td data-member-cell="email">
+                                        @item.Email
+                                    </td>
+
+                                    <td data-member-cell="points">
+                                        @item.PointBalance.ToString("N0")
+                                    </td>
+
+                                    <td>
+                                        <button class="member-detail-btn"
+                                                type="button"
+                                                data-member-detail="@item.Id">
+                                            查看
+                                            <i class="bi bi-chevron-right"></i>
+                                        </button>
+                                    </td>
+
+                                    <td>
+                                        <div class="form-check form-switch member-status-switch">
+                                            <input class="form-check-input"
+                                                   id="memberStatus@(item.Id)"
+                                                   type="checkbox"
+                                                   role="switch"
+                                                   data-member-status="@item.Id"
+                                                   checked="@item.IsActive">
+
+                                            <label class="member-status-text"
+                                                   for="memberStatus@(item.Id)">
+                                                @(item.IsActive ? "啟用" : "停用")
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -382,7 +456,10 @@
 <div class="modal fade" id="memberCreateModal" tabindex="-1" aria-labelledby="memberCreateModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content member-form-modal">
-            <form id="memberCreateForm" novalidate>
+            <form id="memberCreateForm" data-create-url="@Url.Action("Create", "Users")"  novalidate>
+
+                 @Html.AntiForgeryToken()
+
                 <div class="modal-header">
                     <h5 class="modal-title" id="memberCreateModalTitle">新增會員資料</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
@@ -445,7 +522,12 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-warning fw-bold text-brown" id="memberStatusConfirm">確認切換</button>
+                <button type="button"
+                        class="btn btn-warning fw-bold text-brown"
+                        id="memberStatusConfirm"
+                        data-update-status-url="@Url.Action("UpdateStatus", "Users")">
+                    確認切換
+                </button>
             </div>
         </div>
     </div>

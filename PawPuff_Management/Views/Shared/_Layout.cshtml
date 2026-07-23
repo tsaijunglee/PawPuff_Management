@@ -168,7 +168,18 @@
                         <ul class="dropdown-menu dropdown-menu-end admin-menu" id="adminMenu">
                             <li><a class="dropdown-item" asp-controller="Profile" asp-action="Index" data-screen="profile-management" data-screen-title="修改個人資料"><i class="bi bi-person"></i>修改個人資料</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" asp-controller="Auth" asp-action="Index"><i class="bi bi-box-arrow-right"></i>登出</a></li>
+                            @* <li><a class="dropdown-item" asp-controller="Auth" asp-action="Index"><i class="bi bi-box-arrow-right"></i>登出</a></li> *@
+                            <li>
+                                <form asp-controller="Auth"
+                                      asp-action="Logout"
+                                      method="post">
+                                    <button type="submit"
+                                            class="dropdown-item">
+                                        <i class="bi bi-box-arrow-right"></i>
+                                        登出
+                                    </button>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>

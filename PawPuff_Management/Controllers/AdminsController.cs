@@ -87,20 +87,20 @@ namespace PawPuff_Management.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create(
-	    [FromBody] 
-		CreateAdminDto request)
+	[FromBody] CreateAdminDto request)
 		{
 			if (!ModelState.IsValid)
 			{
 				var message = ModelState.Values
 					.SelectMany(value => value.Errors)
 					.Select(error => error.ErrorMessage)
-					.FirstOrDefault();
+					.FirstOrDefault()
+					?? "新增資料格式不正確。";
 
 				return BadRequest(new
 				{
 					success = false,
-					message = message ?? "新增資料格式不正確。"
+					message
 				});
 			}
 
@@ -127,10 +127,56 @@ namespace PawPuff_Management.Controllers
 					email = result.Admin.Email,
 					isActive = result.Admin.IsActive,
 					createdAt = result.Admin.CreatedAt
+						.ToString("yyyy-MM-dd HH:mm:ss")
 				}
 			});
 		}
 
+
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> UpdateStatus(
+	[FromBody] UpdateAdminStatusDto request)
+		{
+			if (!ModelState.IsValid)
+			{
+				var message = ModelState.Values
+					.SelectMany(value => value.Errors)
+					.Select(error => error.ErrorMessage)
+					.FirstOrDefault() ?? "狀態資料格式不正確。";
+
+				return BadRequest(new
+				{
+					success = false,
+					message
+				});
+			}
+
+			// 暫時測試使用，登入完成後要改由 Claim 取得。
+			int operatorAdminId = 1;
+
+			var result = await _service.UpdateStatusAsync(
+				request,
+				operatorAdminId
+			);
+
+			if (!result.IsSuccess)
+			{
+				return BadRequest(new
+				{
+					success = false,
+					message = result.Message
+				});
+			}
+
+			return Ok(new
+			{
+				success = true,
+				message = result.Message,
+				isActive = request.IsActive
+			});
+		}
 
 
 

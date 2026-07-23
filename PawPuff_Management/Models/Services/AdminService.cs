@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PawPuff_Management.Models.DTOs;
 using PawPuff_Management.Models.EfModels;
+using PawPuff_Management.Models.Infra;
 using PawPuff_Management.Models.Repositories;
 using System.Security.Cryptography.Xml;
 using static Amazon.S3.Util.S3EventNotification;
@@ -20,12 +20,43 @@ namespace PawPuff_Management.Models.Services
 	public class AdminService
 	{
 		private readonly AdminRepository _repository;
-		private readonly IPasswordHasher<Admin> _passwordHasher;
 
-		public AdminService(AdminRepository repository,IPasswordHasher<Admin> passwordHasher)
+		public AdminService(AdminRepository repository)
 		{
-			_repository = repository; _passwordHasher = passwordHasher;
+			_repository = repository;
 		}
+
+
+		//驗證管理員帳號密碼登入
+		public async Task<(bool IsSuccess, string Message, Admin? Admin)> LoginAsync(LoginDto request)
+		{
+			var admin = await _repository.GetByAccountAsync(request.Account); //從_repository抓的帳號,雜湊密碼
+	
+
+			if (admin is null)
+				return (false, "帳號或密碼錯誤", null);
+
+			if (!admin.IsActive)
+				return (false, "此管理員帳號已停用", null);
+
+			var isPasswordValid = HashUtility.VerifyPassword(request.Password,admin.PasswordHash);
+
+			if (!isPasswordValid)
+				return (false, "帳號或密碼錯誤", null);
+
+			return (true, "登入成功。", admin);
+		}
+
+
+
+
+
+
+
+
+
+
+
 
 		// 資料庫允許儲存的權限英文名稱
 		private static readonly string[] AllowedPermissions =
@@ -284,20 +315,12 @@ namespace PawPuff_Management.Models.Services
 
 			if (await _repository.AccountExistsAsync(request.Account))
 			{
-				return (
-	false,
-	"此管理員帳號已存在。",
-	null
-);
+				return (false, "此管理員帳號已存在。",null);
 			}
 
 			if (await _repository.EmailExistsAsync(request.Email))
 			{
-				return (
-	false,
-	"此管理員帳號已存在。",
-	null
-);
+				return (false,"此電子信箱已被使用。",null);
 			}
 
 			var admin = new Admin
@@ -306,26 +329,61 @@ namespace PawPuff_Management.Models.Services
 				Nickname = nickname,
 				Email = email,
 				IsActive = true,
-				CreatedAt = DateTime.Now
+				CreatedAt = DateTime.Now,
+				AdminComment = null,
+				AdminUpdatedAt = null,
+				ModifiedByAdminId = null
 			};
 
-			admin.PasswordHash =
-				_passwordHasher.HashPassword(
-					admin,
-					request.Password);
+			admin.PasswordHash = HashUtility.HashPassword(request.Password);
 
 			_repository.AddAdmin(admin);
 			await _repository.SaveChangesAsync();
 
 
 			// 接下來才建立 Admin、雜湊密碼及寫入資料庫。
+			return (true,"管理員新增成功。",admin);
+		}
+
+
+		public async Task<(bool IsSuccess, string Message)>
+	UpdateStatusAsync(UpdateAdminStatusDto request,int? modifiedByAdminId)
+		{
+			if (request.AdminId <= 0)
+				return (false, "管理員編號不正確。");
+
+			if (!request.IsActive && string.IsNullOrWhiteSpace(request.AdminComment))
+			{
+				return (false, "停用管理員時,必須輸入說明。");
+			}
+
+			var admin = await _repository.GetAdminByIdAsync(request.AdminId);
+
+			if (admin is null)
+				return (false, "找不到指定的管理員。");
+
+			if (admin.IsActive == request.IsActive)
+				return (true, "管理員狀態沒有變更。");
+
+			admin.IsActive = request.IsActive;
+			admin.AdminComment = request.IsActive
+		                        ? null
+		                        : request.AdminComment!.Trim();
+
+			admin.AdminUpdatedAt = DateTime.Now;
+			admin.ModifiedByAdminId = modifiedByAdminId;
+
+			await _repository.SaveChangesAsync();
 
 			return (
-	true,
-	"管理員新增成功。",
-	admin
-);
+				true,
+				request.IsActive
+					? "管理員帳號已啟用。"
+					: "管理員帳號已停用。"
+			);
 		}
+
+
 	}
 
 

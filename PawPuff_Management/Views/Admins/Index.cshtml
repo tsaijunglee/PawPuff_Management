@@ -5,6 +5,7 @@
     ViewData["CurrentScreen"] = "admin-management";
 }
 
+@Html.AntiForgeryToken()
 
 
 <div class="dashboard-content management-screen" id="managementScreen" data-screen-panel="management">
@@ -180,20 +181,21 @@
                                     data-nickname="@item.Nickname"
                                     data-email="@item.Email"
                                     data-is-active="@item.IsActive.ToString().ToLower()"
+                                    data-enabled="@item.IsActive.ToString().ToLower()"
                                     data-created-at="@item.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")"
                                     data-admin-comment="@item.AdminComment"
                                     data-admin-updated-at="@(item.AdminUpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "")"
                                     data-modified-by-admin-id="@item.ModifiedByAdminId">
-                                    <td data-member-cell>
+                                    <td data-member-cell ="id">
                                         @Html.DisplayFor(modelItem => item.AdminId)
                                     </td>
-                                    <td data-member-cell>
+                                    <td data-member-cell="account">
                                         @Html.DisplayFor(modelItem => item.Account)
                                     </td>
-                                    <td data-member-cell>
+                                    <td data-member-cell="nickname">
                                         @Html.DisplayFor(modelItem => item.Nickname)
                                     </td>
-                                    <td data-member-cell>
+                                    <td data-member-cell="email">
                                         @Html.DisplayFor(modelItem => item.Email)
                                     </td>
                                     <td><button class="member-detail-btn" type="button" data-member-detail="@item.AdminId">查看 <i class="bi bi-chevron-right"></i></button>
@@ -608,10 +610,16 @@
     </section>
 </div>
 
+
+
+@* 新增管理員 *@
 <div class="modal fade" id="memberCreateModal" tabindex="-1" aria-labelledby="memberCreateModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content member-form-modal">
-            <form id="memberCreateForm" novalidate>
+                <form id="memberCreateForm"
+                       data-create-url="@Url.Action("Create", "Admins")"
+                       novalidate>
+                @Html.AntiForgeryToken()
                 <div class="modal-header">
                     <h5 class="modal-title" id="memberCreateModalTitle">新增管理員資料</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
@@ -696,22 +704,46 @@
     </div>
 </div>
 
+
+
+
+@* 
+目前啟用 → 按停用
+→ 跳出視窗
+→ 必須填寫停用原因
+→ IsActive = false
+→ AdminComment = 停用原因
+→ 寫入資料庫
+
+目前停用 → 按啟用
+→ 不顯示說明視窗
+→ 直接呼叫 UpdateStatus
+→ IsActive = false
+→ AdminComment 清空
+→ 寫入資料庫
+ *@
+
 <div class="modal fade" id="memberStatusModal" tabindex="-1" aria-labelledby="memberStatusModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content member-status-modal">
             <div class="modal-header">
-                <h5 class="modal-title" id="memberStatusModalTitle">啟用/停用說明</h5>
+                <h5 class="modal-title" id="memberStatusModalTitle">停用說明</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
             </div>
             <div class="modal-body">
-                <p class="member-status-modal-desc" id="memberStatusModalDescription">請輸入啟用/停用說明。</p>
-                <label class="form-label fw-bold" for="memberStatusReason">啟用/停用說明</label>
-                <textarea class="form-control" id="memberStatusReason" rows="4" placeholder="請輸入此次啟用/停用原因"></textarea>
-                <div class="invalid-feedback d-none" id="memberStatusReasonError">請輸入啟用/停用說明後再確認。</div>
+                <p class="member-status-modal-desc" id="memberStatusModalDescription">請輸入停用說明。</p>
+                <label class="form-label fw-bold" for="memberStatusReason">停用說明</label>
+                <textarea class="form-control" id="memberStatusReason" rows="4" placeholder="請輸入此次停用原因"></textarea>
+                <div class="invalid-feedback d-none" id="memberStatusReasonError">請輸入停用說明後再確認。</div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-warning fw-bold text-brown" id="memberStatusConfirm">確認切換</button>
+                <button type="button"
+                        class="btn btn-warning fw-bold text-brown"
+                        id="memberStatusConfirm"
+                        data-update-status-url="@Url.Action("UpdateStatus", "Admins")">
+                    確認切換
+                </button>
             </div>
         </div>
     </div>

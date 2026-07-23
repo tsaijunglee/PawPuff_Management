@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PawPuff_Management.Models.EfModels;
 using PawPuff_Management.Models.Repositories;
 using PawPuff_Management.Models.Services;
+using System.Net;
 
 namespace PawPuff_Management
 {
@@ -20,12 +21,13 @@ namespace PawPuff_Management
 			builder.Services.AddDbContext<PawPuffContext>(options =>
 			options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-			// 註冊Repo & Service ===========================
+			// 註冊 Admin = Repo & Service ===========================
 			builder.Services.AddScoped<AdminRepository>();
 			builder.Services.AddScoped<AdminService>();
 
-			// 註冊PasswordHash ===========================
-			builder.Services.AddScoped<IPasswordHasher<Admin>,PasswordHasher<Admin>>();
+			// 註冊 User = Repo & Service ===========================
+			builder.Services.AddScoped<UserRepository>();
+			builder.Services.AddScoped<UserService>();
 
 
 			// 註冊R2圖床
@@ -43,6 +45,9 @@ namespace PawPuff_Management
 			builder.Services.AddScoped<ICombinationPreviewRepository, CombinationPreviewRepository>();
 			builder.Services.AddScoped<ICombinationPreviewService, CombinationPreviewService>();
 
+
+
+
 			//builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 			//builder.Services.AddScoped<AuthService>();
 
@@ -50,6 +55,38 @@ namespace PawPuff_Management
 
 			//builder.Services.AddScoped<ProductRepository>();
 			//builder.Services.AddScoped<ProductService>();
+
+
+
+
+
+			// Cookie Authentication ===================
+			builder.Services.AddAuthentication(options =>
+			{
+				options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme; //"Cookies"名字可自訂
+				options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+			})
+				.AddCookie(options =>
+				{
+					options.Cookie.Name = "PawPuff_Management"; // Set cookie name
+
+													
+					options.LoginPath = "/Auth/Index"; // Set login path
+													   //使用者還沒登入
+
+                  // options.AccessDeniedPath = "/Auth/AccessDenied"; // Set access denied path
+					options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // Set cookie expiration time
+																	   //設定登入有效期限為目前 UTC 時間的一小時後 => 過期後使用者需要重新登入
+
+					options.SlidingExpiration = true; //管理員持續操作網站時，Cookie 的有效期限可以向後延長
+													  // Enable sliding expiration
+													 
+				});
+
+
+
+
 
 			// Cookie Authentication ===================
 			//builder.Services.AddAuthentication(options =>
@@ -84,7 +121,8 @@ namespace PawPuff_Management
 
             app.UseRouting();
 
-            app.UseAuthorization();
+			app.UseAuthentication();
+			app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",

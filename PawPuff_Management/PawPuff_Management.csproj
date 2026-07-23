@@ -8,11 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.S3" Version="4.0.101.2" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.26" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\Infra\" />
   </ItemGroup>
 
   <ItemGroup>

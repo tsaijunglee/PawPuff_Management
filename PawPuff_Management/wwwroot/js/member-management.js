@@ -346,32 +346,343 @@
     toast?.show();
   }
 
-  async function handleCreateSubmit(event) {
-    event.preventDefault();
+  //async function handleCreateSubmit(event) {
+  //  event.preventDefault();
 
-    const values = getCreateFormValues();
-    if (!validateCreateForm(values)) return;
+  //  const values = getCreateFormValues();
+  //  if (!validateCreateForm(values)) return;
 
-    const member = {
-      id: getNextMemberId(),
-      account: values.account,
-      passwordHash: await hashPassword(values.password),
-      nickname: values.nickname,
-      phone: values.phone,
-      email: values.email,
-      createdAt: formatStatusUpdatedAt()
-    };
+  //  const member = {
+  //    id: getNextMemberId(),
+  //    account: values.account,
+  //    passwordHash: await hashPassword(values.password),
+  //    nickname: values.nickname,
+  //    phone: values.phone,
+  //    email: values.email,
+  //    createdAt: formatStatusUpdatedAt()
+  //  };
 
-    refs.memberTableBody?.appendChild(buildMemberRow(member));
-    collectRows();
-    memberState.sortKey = "id";
-    memberState.sortDir = "asc";
-    memberState.page = Math.max(Math.ceil(getFilteredRows().length / memberState.pageSize), 1);
-    renderTable();
-    createModal?.hide();
-    resetCreateForm();
-    showMemberToast(getEntityConfig().createSuccessMessage);
-  }
+    //  refs.memberTableBody?.appendChild(buildMemberRow(member));
+
+//    collectRows();
+//    memberState.sortKey = "id";
+//    memberState.sortDir = "asc";
+//    memberState.page = Math.max(Math.ceil(getFilteredRows().length / memberState.pageSize), 1);
+//    renderTable();
+//    createModal?.hide();
+//    resetCreateForm();
+//    showMemberToast(getEntityConfig().createSuccessMessage);
+//}
+
+    //async function handleCreateSubmit(event) {
+    //    event.preventDefault();
+
+    //    const values = getCreateFormValues();
+    //    if (!validateCreateForm(values)) return;
+
+    //    const form = refs.memberCreateForm;
+    //    const createUrl = form?.dataset.createUrl;
+    //    const token = form?.querySelector(
+    //        'input[name="__RequestVerificationToken"]'
+    //    )?.value;
+
+    //    if (!createUrl) {
+    //        showMemberToast("找不到新增管理員 API。");
+    //        return;
+    //    }
+
+    //    const submitButton = document.getElementById(
+    //        "memberCreateSubmit"
+    //    );
+
+    //    if (submitButton) submitButton.disabled = true;
+
+    //    try {
+    //        const response = await fetch(createUrl, {
+    //            method: "POST",
+    //            headers: {
+    //                "Content-Type": "application/json",
+    //                "RequestVerificationToken": token || ""
+    //            },
+
+    //            //body: JSON.stringify({
+    //            //    account: values.account,
+    //            //    password: values.password,
+    //            //    passwordConfirm: values.passwordConfirm,
+    //            //    nickname: values.nickname,
+    //            //    email: values.email
+    //            //})
+
+    //            const entityType =getEntityConfig().entityType;
+
+    //            const requestBody = {
+    //                account: values.account,
+    //                password: values.password,
+    //                passwordConfirm: values.passwordConfirm,
+    //                nickname: values.nickname,
+    //                email: values.email
+    //            };
+
+    //            if(entityType === "member") {requestBody.phone = values.phone;}
+
+    //             const response = await fetch(createUrl, {
+    //                   method: "POST",
+    //             headers: {
+    //            "Content-Type": "application/json",
+    //            "RequestVerificationToken":
+    //                token || ""
+    //        },
+    //        body: JSON.stringify(requestBody)
+    //    });
+
+
+
+    //});
+
+
+    async function handleCreateSubmit(event) {
+        event.preventDefault();
+
+        const values = getCreateFormValues();
+
+        if (!validateCreateForm(values)) {
+            return;
+        }
+
+        const form = refs.memberCreateForm;
+        const createUrl = form?.dataset.createUrl;
+
+        const token = form?.querySelector(
+            'input[name="__RequestVerificationToken"]'
+        )?.value;
+
+        if (!createUrl) {
+            showMemberToast("找不到新增資料 API。");
+            return;
+        }
+
+        const submitButton =
+            refs.memberCreateSubmit ||
+            document.getElementById(
+                "memberCreateSubmit"
+            );
+
+        const entityType =
+            getEntityConfig().entityType;
+
+        const requestBody = {
+            account: values.account,
+            password: values.password,
+            passwordConfirm:
+                values.passwordConfirm,
+            nickname: values.nickname,
+            email: values.email
+        };
+
+        // 只有會員需要電話
+        if (entityType === "member") {
+            requestBody.phone = values.phone;
+        }
+
+        if (submitButton) {
+            submitButton.disabled = true;
+        }
+
+        try {
+            const response = await fetch(
+                createUrl,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+
+                        "RequestVerificationToken":
+                            token || ""
+                    },
+
+                    body: JSON.stringify(
+                        requestBody
+                    )
+                }
+            );
+
+            const result = await response
+                .json()
+                .catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(
+                    result.message ||
+                    "新增資料失敗。"
+                );
+            }
+
+            const createdEntity =
+                entityType === "member"
+                    ? result.user
+                    : result.admin;
+
+            if (!createdEntity) {
+                throw new Error(
+                    "新增成功，但回傳資料不完整。"
+                );
+            }
+
+            const pointBalance =
+                createdEntity.pointBalance ?? 0;
+
+            const member = {
+                id: createdEntity.id,
+                account: createdEntity.account,
+                passwordHash: "********",
+                nickname:
+                    createdEntity.nickname,
+                phone:
+                    createdEntity.phone || "",
+                email: createdEntity.email,
+
+                pointBalance,
+                points: pointBalance,
+
+                enabled:
+                    createdEntity.isActive ?? true,
+                isActive:
+                    createdEntity.isActive ?? true,
+
+                createdAt:
+                    createdEntity.createdAt,
+
+                adminComment: "NULL",
+                adminUpdatedAt: "NULL",
+                modifiedByAdmin: "NULL",
+                modifiedByAdminId: "NULL"
+            };
+
+            refs.memberTableBody?.appendChild(
+                buildMemberRow(member)
+            );
+
+            collectRows();
+
+            memberState.sortKey = "id";
+            memberState.sortDir = "asc";
+
+            memberState.page = Math.max(
+                Math.ceil(
+                    getFilteredRows().length /
+                    memberState.pageSize
+                ),
+                1
+            );
+
+            renderTable();
+            createModal?.hide();
+            resetCreateForm();
+
+            showMemberToast(
+                result.message ||
+                getEntityConfig()
+                    .createSuccessMessage
+            );
+        } catch (error) {
+            showMemberToast(
+                error.message ||
+                "新增資料失敗。"
+            );
+        } finally {
+            if (submitButton) {
+                submitButton.disabled = false;
+            }
+        }
+    }
+
+            //const result = await response.json().catch(() => ({}));
+
+            //if (!response.ok) {
+            //    throw new Error(
+            //        result.message || "新增管理員失敗。"
+            //    );
+            //}
+
+            //const member = {
+            //    id: result.admin.id,
+            //    account: result.admin.account,
+            //    passwordHash: "********",
+            //    nickname: result.admin.nickname,
+            //    email: result.admin.email,
+            //    createdAt: result.admin.createdAt
+    //};
+
+
+
+    //const createdEntity =
+    //    entityType === "member"
+    //        ? result.user
+    //        : result.admin;
+
+    //if (!createdEntity) {
+    //    throw new Error(
+    //        "新增成功，但回傳資料不完整。"
+    //    );
+    //}
+
+    //const member = {
+    //    id: createdEntity.id,
+    //    account: createdEntity.account,
+    //    passwordHash: "********",
+    //    nickname: createdEntity.nickname,
+    //    phone: createdEntity.phone || "",
+    //    email: createdEntity.email,
+    //    pointBalance:
+    //        createdEntity.pointBalance || 0,
+    //    points:
+    //        createdEntity.pointBalance || 0,
+    //    enabled:
+    //        createdEntity.isActive ?? true,
+    //    isActive:
+    //        createdEntity.isActive ?? true,
+    //    createdAt: createdEntity.createdAt,
+    //    adminComment: "NULL",
+    //    adminUpdatedAt: "NULL",
+    //    modifiedByAdmin: "NULL"
+    //};
+
+
+
+
+
+    //        refs.memberTableBody?.appendChild(
+    //            buildMemberRow(member)
+    //        );
+
+    //        collectRows();
+
+    //        memberState.sortKey = "id";
+    //        memberState.sortDir = "asc";
+    //        memberState.page = Math.max(
+    //            Math.ceil(
+    //                getFilteredRows().length / memberState.pageSize
+    //            ),
+    //            1
+    //        );
+
+    //        renderTable();
+    //        createModal?.hide();
+    //        resetCreateForm();
+
+    //        showMemberToast(
+    //            result.message || "管理員新增成功。"
+    //        );
+    //    } catch (error) {
+    //        showMemberToast(
+    //            error.message || "新增管理員失敗。"
+    //        );
+
+
+
+   
 
   function getMemberData(row) {
     const enabled = row.dataset.enabled === "true";
@@ -416,56 +727,418 @@
     refs.memberStatusReasonError?.classList.toggle("d-none", !visible);
   }
 
-  function openStatusModal(row, nextEnabled) {
-    const data = getMemberData(row);
-    pendingStatusChange = { row, nextEnabled };
+  //function openStatusModal(row, nextEnabled) {
+  //  const data = getMemberData(row);
+  //  pendingStatusChange = { row, nextEnabled };
 
-    if (refs.memberStatusModalTitle) refs.memberStatusModalTitle.textContent = nextEnabled ? "啟用說明" : "停用說明";
-    if (refs.memberStatusModalDescription) {
-      refs.memberStatusModalDescription.textContent = "請輸入「" + data.nickname + "｜" + data.account + "」的" + (nextEnabled ? "啟用" : "停用") + "說明。";
+  //  if (refs.memberStatusModalTitle) refs.memberStatusModalTitle.textContent = nextEnabled ? "啟用說明" : "停用說明";
+  //  if (refs.memberStatusModalDescription) {
+  //    refs.memberStatusModalDescription.textContent = "請輸入「" + data.nickname + "｜" + data.account + "」的" + (nextEnabled ? "啟用" : "停用") + "說明。";
+  //  }
+  //  if (refs.memberStatusReason) refs.memberStatusReason.value = "";
+  //  setReasonError(false);
+
+  //  if (statusModal) {
+  //    statusModal.show();
+  //    setTimeout(() => refs.memberStatusReason?.focus(), 180);
+  //    return;
+  //  }
+
+  //  const reason = window.prompt("請輸入啟用/停用說明");
+  //  if (reason?.trim()) applyStatusChange(row, nextEnabled, reason.trim());
+  //  pendingStatusChange = null;
+  //}
+
+  //function applyStatusChange(row, nextEnabled, reason) {
+  //  const input = row.querySelector("[data-member-status]");
+  //  if (input) input.checked = nextEnabled;
+
+  //  row.dataset.adminComment = reason;
+  //  row.dataset.adminUpdatedAt = formatStatusUpdatedAt();
+  //  row.dataset.modifiedByAdmin = getEntityConfig().actorAdminAccount;
+  //  row.dataset.modifiedByAdminId = getEntityConfig().actorAdminId;
+  //  syncStatusLabel(row);
+
+  //  if (!refs.memberDetailView?.classList.contains("d-none")) renderMemberDetailFields(row);
+  //  if (memberState.sortKey === "enabled") renderTable();
+  //  }
+
+
+
+
+
+
+  ////function confirmStatusChange() {
+  ////  if (!pendingStatusChange) return;
+
+  ////  const reason = refs.memberStatusReason?.value.trim() || "";
+  ////  if (!reason) {
+  ////    setReasonError(true);
+  ////    refs.memberStatusReason?.focus();
+  ////    return;
+  ////  }
+
+  ////  applyStatusChange(pendingStatusChange.row, pendingStatusChange.nextEnabled, reason);
+  ////  pendingStatusChange = null;
+  ////  statusModal?.hide();
+  ////}     
+  //  async function confirmStatusChange() { //啟用時直接送出
+  //      if (!pendingStatusChange) return;
+
+  //      const reason =
+  //          refs.memberStatusReason?.value.trim() || "";
+
+  //      // 停用一定要填寫原因。
+  //      if (!reason) {
+  //          setReasonError(true);
+  //          refs.memberStatusReason?.focus();
+  //          return;
+  //      }
+  //      const row = pendingStatusChange.row;
+
+  //      const success = await updateAdminStatus(
+  //          pendingStatusChange.row,
+  //          false,
+  //          reason
+  //      );
+  //      // API 失敗時保留視窗，讓使用者重試。
+  //      if (!success) return;
+
+  //      pendingStatusChange = null;
+  //      statusModal?.hide();
+        
+  //  }
+    async function updateAdminStatus(
+        row,
+        nextEnabled,
+        reason = null
+    ) {
+        const adminId = Number(row.dataset.id);
+
+        const confirmButton =
+            refs.memberStatusConfirm;
+
+        const updateUrl =
+            confirmButton?.dataset.updateStatusUrl;
+
+        const token = document.querySelector(
+            'input[name="__RequestVerificationToken"]'
+        )?.value;
+
+        if (!updateUrl) {
+            showMemberToast(
+                "找不到管理員狀態更新 API。"
+            );
+
+            return false;
+        }
+
+        if (!adminId) {
+            showMemberToast(
+                "管理員編號不正確。"
+            );
+
+            return false;
+        }
+
+        if (confirmButton) {
+            confirmButton.disabled = true;
+        }
+
+        try {
+            const response = await fetch(
+                updateUrl,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "RequestVerificationToken":
+                            token || ""
+                    },
+                    body: JSON.stringify({
+                        adminId: adminId,
+                        isActive: nextEnabled,
+                        adminComment: nextEnabled
+                            ? null
+                            : reason
+                    })
+                }
+            );
+
+            const result = await response
+                .json()
+                .catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(
+                    result.message ||
+                    "管理員狀態更新失敗。"
+                );
+            }
+
+            // 資料庫更新成功後才更新畫面。
+            applyStatusChange(
+                row,
+                result.isActive,
+                nextEnabled ? "NULL" : reason
+            );
+
+            showMemberToast(
+                result.message ||
+                "管理員狀態已更新。"
+            );
+
+            return true;
+        } catch (error) {
+            showMemberToast(
+                error.message ||
+                "管理員狀態更新失敗。"
+            );
+
+            return false;
+        } finally {
+            if (confirmButton) {
+                confirmButton.disabled = false;
+            }
+        }
     }
-    if (refs.memberStatusReason) refs.memberStatusReason.value = "";
-    setReasonError(false);
 
-    if (statusModal) {
-      statusModal.show();
-      setTimeout(() => refs.memberStatusReason?.focus(), 180);
-      return;
+
+    async function updateUserStatus(
+        row,
+        nextEnabled,
+        reason = null
+    ) {
+        const userId = Number(row.dataset.id);
+
+        const confirmButton =
+            refs.memberStatusConfirm;
+
+        const updateUrl =
+            confirmButton?.dataset.updateStatusUrl;
+
+        const token = document.querySelector(
+            'input[name="__RequestVerificationToken"]'
+        )?.value;
+
+        if (!updateUrl) {
+            showMemberToast(
+                "找不到會員狀態更新 API。"
+            );
+
+            return false;
+        }
+
+        if (!userId) {
+            showMemberToast(
+                "會員編號不正確。"
+            );
+
+            return false;
+        }
+
+        if (confirmButton) {
+            confirmButton.disabled = true;
+        }
+
+        try {
+            const response = await fetch(
+                updateUrl,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "RequestVerificationToken":
+                            token || ""
+                    },
+                    body: JSON.stringify({
+                        userId: userId,
+                        isActive: nextEnabled,
+                        adminComment: nextEnabled
+                            ? null
+                            : reason
+                    })
+                }
+            );
+
+            const result = await response
+                .json()
+                .catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(
+                    result.message ||
+                    "會員狀態更新失敗。"
+                );
+            }
+
+            // 資料庫更新成功後才更新畫面。
+            applyStatusChange(
+                row,
+                result.isActive,
+                nextEnabled ? "NULL" : reason
+            );
+
+            showMemberToast(
+                result.message ||
+                "會員狀態已更新。"
+            );
+
+            return true;
+        } catch (error) {
+            showMemberToast(
+                error.message ||
+                "會員狀態更新失敗。"
+            );
+
+            return false;
+        } finally {
+            if (confirmButton) {
+                confirmButton.disabled = false;
+            }
+        }
     }
 
-    const reason = window.prompt("請輸入啟用/停用說明");
-    if (reason?.trim()) applyStatusChange(row, nextEnabled, reason.trim());
-    pendingStatusChange = null;
-  }
 
-  function applyStatusChange(row, nextEnabled, reason) {
-    const input = row.querySelector("[data-member-status]");
-    if (input) input.checked = nextEnabled;
+    // 根據目前頁面判斷要更新管理員或會員
+    async function updateEntityStatus(
+        row,
+        nextEnabled,
+        reason = null
+    ) {
+        const entityType =
+            getEntityConfig().entityType;
 
-    row.dataset.adminComment = reason;
-    row.dataset.adminUpdatedAt = formatStatusUpdatedAt();
-    row.dataset.modifiedByAdmin = getEntityConfig().actorAdminAccount;
-    row.dataset.modifiedByAdminId = getEntityConfig().actorAdminId;
-    syncStatusLabel(row);
+        if (entityType === "admin") {
+            return await updateAdminStatus(
+                row,
+                nextEnabled,
+                reason
+            );
+        }
 
-    if (!refs.memberDetailView?.classList.contains("d-none")) renderMemberDetailFields(row);
-    if (memberState.sortKey === "enabled") renderTable();
-  }
-
-  function confirmStatusChange() {
-    if (!pendingStatusChange) return;
-
-    const reason = refs.memberStatusReason?.value.trim() || "";
-    if (!reason) {
-      setReasonError(true);
-      refs.memberStatusReason?.focus();
-      return;
+        return await updateUserStatus(
+            row,
+            nextEnabled,
+            reason
+        );
     }
 
-    applyStatusChange(pendingStatusChange.row, pendingStatusChange.nextEnabled, reason);
-    pendingStatusChange = null;
-    statusModal?.hide();
-  }
+
+
+
+    async function openStatusModal(
+        row,
+        nextEnabled
+    ) {
+        // 啟用不需要填寫原因，直接呼叫 API。
+        if (nextEnabled) {
+            await updateEntityStatus(
+                row,
+                true,
+                null
+            );
+
+            return;
+        }
+
+        // 停用才顯示原因視窗。
+        const data = getMemberData(row);
+
+        pendingStatusChange = {
+            row,
+            nextEnabled: false
+        };
+
+        if (refs.memberStatusModalTitle) {
+            refs.memberStatusModalTitle.textContent =
+                "停用說明";
+        }
+
+        if (refs.memberStatusModalDescription) {
+            refs.memberStatusModalDescription.textContent =
+                "請輸入「" +
+                data.nickname +
+                "｜" +
+                data.account +
+                "」的停用原因。";
+        }
+
+        if (refs.memberStatusReason) {
+            refs.memberStatusReason.value = "";
+        }
+
+        setReasonError(false);
+        statusModal?.show();
+    }
+
+
+    function applyStatusChange(
+        row,
+        nextEnabled,
+        reason
+    ) {
+        const input = row.querySelector(
+            "[data-member-status]"
+        );
+
+        if (input) {
+            input.checked = nextEnabled;
+        }
+
+        row.dataset.adminComment =
+            reason || "NULL";
+
+        row.dataset.adminUpdatedAt =
+            formatStatusUpdatedAt();
+
+        row.dataset.modifiedByAdmin =
+            getEntityConfig().actorAdminAccount;
+
+        row.dataset.modifiedByAdminId =
+            getEntityConfig().actorAdminId;
+
+        syncStatusLabel(row);
+
+        if (
+            !refs.memberDetailView?.classList.contains(
+                "d-none"
+            )
+        ) {
+            renderMemberDetailFields(row);
+        }
+
+        if (memberState.sortKey === "enabled") {
+            renderTable();
+        }
+    }
+
+
+    async function confirmStatusChange() {
+        if (!pendingStatusChange) return;
+
+        const reason =
+            refs.memberStatusReason?.value.trim() || "";
+
+        if (!reason) {
+            setReasonError(true);
+            refs.memberStatusReason?.focus();
+            return;
+        }
+
+        const success = await updateEntityStatus(
+            pendingStatusChange.row,
+            false,
+            reason
+        );
+
+        if (!success) return;
+
+        pendingStatusChange = null;
+        statusModal?.hide();
+    }
+
+
 
   function collectRows() {
     if (!refs.memberTableBody) {
@@ -749,21 +1422,101 @@
       openStatusModal(row, nextEnabled);
     });
 
-    refs.memberDetailStatus?.addEventListener("change", (event) => {
-      const row = findMemberRow(refs.memberDetailView?.dataset.memberId);
-      if (!row) {
-        event.target.checked = !event.target.checked;
-        return;
-      }
+    //refs.memberDetailStatus?.addEventListener("change", (event) => {
+    //  const row = findMemberRow(refs.memberDetailView?.dataset.memberId);
+    //  if (!row) {
+    //    event.target.checked = !event.target.checked;
+    //    return;
+    //  }
 
-      const previousEnabled = row.dataset.enabled === "true";
-      const nextEnabled = event.target.checked;
-      if (previousEnabled === nextEnabled) return;
+    //  const previousEnabled = row.dataset.enabled === "true";
+    //  const nextEnabled = event.target.checked;
+    //  if (previousEnabled === nextEnabled) return;
 
-      event.target.checked = previousEnabled;
-      if (refs.memberDetailStatusLabel) refs.memberDetailStatusLabel.textContent = previousEnabled ? "啟用" : "停用";
-      openStatusModal(row, nextEnabled);
-    });
+    //  event.target.checked = previousEnabled;
+    //  if (refs.memberDetailStatusLabel) refs.memberDetailStatusLabel.textContent = previousEnabled ? "啟用" : "停用";
+
+    //    async function openStatusModal(row, nextEnabled)
+    //    {
+    //        // 啟用：不開視窗，直接寫入資料庫。
+    //        if (nextEnabled) {
+    //            await updateAdminStatus(row,true,null);
+    //            return;
+    //        }
+
+    //        // 停用：使用 Index.cshtml 現有的 Modal。
+    //        const data = getMemberData(row);
+
+    //        pendingStatusChange = {row,nextEnabled: false};
+
+    //        if (refs.memberStatusModalDescription) {
+    //            refs.memberStatusModalDescription.textContent =
+    //                "請輸入「" +
+    //                data.nickname +
+    //                "｜" +
+    //                data.account +
+    //                "」的停用原因。";
+    //        }
+
+    //        if (refs.memberStatusReason) {refs.memberStatusReason.value = "";}
+
+    //        setReasonError(false);
+
+    //        // 顯示 Index.cshtml 現有的 Modal。
+    //        statusModal?.show();
+    //    }
+    //    }
+
+      //});
+
+      refs.memberDetailStatus?.addEventListener(
+          "change",
+          (event) => {
+              const row = findMemberRow(
+                  refs.memberDetailView?.dataset.memberId
+              );
+
+              if (!row) {
+                  event.target.checked =
+                      !event.target.checked;
+
+                  return;
+              }
+
+              const previousEnabled =
+                  row.dataset.enabled === "true";
+
+              const nextEnabled =
+                  event.target.checked;
+
+              if (
+                  previousEnabled === nextEnabled
+              ) {
+                  return;
+              }
+
+              // 等待 API 成功前，先恢復原本狀態。
+              event.target.checked =
+                  previousEnabled;
+
+              if (refs.memberDetailStatusLabel) {
+                  refs.memberDetailStatusLabel.textContent =
+                      previousEnabled
+                          ? "啟用"
+                          : "停用";
+              }
+
+              openStatusModal(
+                  row,
+                  nextEnabled
+              );
+          }
+      );
+
+
+
+
+
 
     refs.memberStatusConfirm?.addEventListener("click", confirmStatusChange);
 

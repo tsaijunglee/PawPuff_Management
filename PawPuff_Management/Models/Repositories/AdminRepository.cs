@@ -15,6 +15,23 @@ namespace PawPuff_Management.Models.Repositories
 		}
 
 
+
+		//根據帳號，從資料庫查詢管理員 => 取得的是「整筆 Admin 資料」不是只取得帳號欄位，所以裡面也包含 PasswordHash
+		public async Task<Admin?> GetByAccountAsync(string account)
+		{
+			var normalizedAccount = account.Trim().ToLower();
+
+			return await _context.Admins
+				.FirstOrDefaultAsync(admin =>
+					admin.Account.ToLower() == normalizedAccount);
+		}
+
+
+
+
+
+
+
 		/// <summary>
 		/// 取得所有管理員以及每位管理員的權限
 		/// </summary>
@@ -25,7 +42,7 @@ namespace PawPuff_Management.Models.Repositories
 		///
 		///現在開始查詢
 		///↓ 等待資料庫
-	    ///查詢完成
+		///查詢完成
 		///	 ↓
 		///得到 List<Admin>
 		///
@@ -68,10 +85,20 @@ namespace PawPuff_Management.Models.Repositories
 		}
 		///.AnyAsync() :是否至少有一筆資料符合條件？
 		///條件是：admin.Id == adminId
+
+
+
 		///
-		/// 
-		/// 
-		/// 
+		///取得被 EF Core 追蹤的 Admin，後面修改欄位後，SaveChangesAsync() 才能產生 SQL UPDATE
+		///
+		public async Task<Admin?> GetAdminByIdAsync(int adminId)
+		{
+			return await _context.Admins
+				.FirstOrDefaultAsync(admin => admin.Id == adminId);
+		}
+
+
+
 		/// <summary>
 		/// 取得指定管理員目前的所有權限
 		/// </summary>
@@ -126,6 +153,7 @@ namespace PawPuff_Management.Models.Repositories
 			return await _context.Admins.AnyAsync(admin =>
 				admin.Account.ToLower() == normalizedAccount);
 		}
+
 
 		public async Task<bool> EmailExistsAsync(string email)
 		{
