@@ -22,6 +22,10 @@ namespace PawPuff_Management
 			// 註冊R2圖床
 			builder.Services.AddSingleton<Models.Services.R2Service>();
 
+			// 註冊持有商品一覽
+			builder.Services.AddScoped<IOwnedProductRepository, OwnedProductRepository>();
+			builder.Services.AddScoped<IOwnedProductService, OwnedProductService>();
+
 			// 註冊點數規則一覽
 			builder.Services.AddScoped<IPointRuleRepository, PointRuleRepository>();
 			builder.Services.AddScoped<IPointRuleService, PointRuleService>();

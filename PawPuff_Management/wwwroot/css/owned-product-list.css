@@ -1,36 +1,94 @@
 .owned-product-view {
-  margin-top: 28px;
+    margin-top: 28px;
 }
 
 .owned-product-search-row {
-  justify-content: space-between;
+    justify-content: space-between;
 }
 
 .owned-product-filter-select {
-  width: clamp(150px, 9vw, 180px);
-  min-height: 44px;
-  border-color: #efd6ad;
-  border-radius: 14px;
-  color: var(--ink);
-  font-weight: 700;
-  background-color: #fffdf8;
+    width: clamp(150px, 9vw, 180px);
+    min-height: 44px;
+    border-color: #efd6ad;
+    border-radius: 14px;
+    color: var(--ink);
+    font-weight: 700;
+    background-color: #fffdf8;
 }
 
-.owned-product-filter-select:focus {
-  border-color: #e6ae4b;
-  box-shadow: 0 0 0 .2rem rgba(243, 182, 79, .2);
-}
+    .owned-product-filter-select:focus {
+        border-color: #e6ae4b;
+        box-shadow: 0 0 0 .2rem rgba(243, 182, 79, .2);
+    }
 
 .owned-product-table {
-  table-layout: fixed;
-  min-width: 1040px;
+    table-layout: fixed;
+    min-width: 1040px;
 }
 
-.owned-product-table th,
-.owned-product-table td {
-  width: auto;
+    .owned-product-table th:nth-child(1),
+    .owned-product-table td:nth-child(1) {
+        width: 90px;
+    }
+
+    .owned-product-table th:nth-child(2),
+    .owned-product-table td:nth-child(2) {
+        width: 140px;
+    }
+
+    .owned-product-table th:nth-child(3),
+    .owned-product-table td:nth-child(3) {
+        width: 110px;
+    }
+
+    .owned-product-table th:nth-child(4),
+    .owned-product-table td:nth-child(4) {
+        width: 220px;
+    }
+
+    .owned-product-table th:nth-child(5),
+    .owned-product-table td:nth-child(5) {
+        width: 120px;
+    }
+
+    .owned-product-table th:nth-child(6),
+    .owned-product-table td:nth-child(6) {
+        width: 155px;
+    }
+
+    .owned-product-table th:nth-child(7),
+    .owned-product-table td:nth-child(7) {
+        width: 130px;
+    }
+
+    .owned-product-table [data-owned-product-cell="name"] {
+        word-break: break-word;
+    }
+
+    .owned-product-table [data-owned-product-cell="purchasedAt"] {
+        white-space: nowrap;
+    }
+
+.owned-product-type-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 72px;
+    padding: 5px 10px;
+    border: 1px solid #ecd2aa;
+    border-radius: 999px;
+    background: #fff8e9;
+    color: #76502d;
+    font-weight: 800;
+    white-space: nowrap;
 }
 
-.owned-product-table [data-owned-product-cell="name"] {
-  word-break: break-word;
+.owned-product-thumb-fallback {
+    white-space: normal;
+}
+
+@media (max-width: 767.98px) {
+    .owned-product-filter-select {
+        width: 100%;
+    }
 }
