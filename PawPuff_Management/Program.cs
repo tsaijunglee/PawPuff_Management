@@ -34,6 +34,11 @@ namespace PawPuff_Management
 			builder.Services.AddScoped<IPointRepository, PointRepository>();
 			builder.Services.AddScoped<IPointService, PointService>();
 
+			// 註冊持有組合一覽
+			builder.Services.AddScoped<IOwnedCombinationRepository,OwnedCombinationRepository>();
+
+			builder.Services.AddScoped<IOwnedCombinationService,OwnedCombinationService>();
+
 			// 註冊紙娃娃組合預覽
 			builder.Services.AddScoped<ICombinationPreviewRepository, CombinationPreviewRepository>();
 			builder.Services.AddScoped<ICombinationPreviewService, CombinationPreviewService>();
