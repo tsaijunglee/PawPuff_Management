@@ -53,10 +53,13 @@ namespace PawPuff_Management.Models.DTOs
 			public string Email { get; set; } = string.Empty;
 
 
-		[Required(ErrorMessage = "請輸入電話。")]
-		[RegularExpression(@"^\d{10}$",
-        ErrorMessage = "電話必須為10位數字。")]
+
+		[Required(ErrorMessage = "請輸入手機號碼。")]
+		[RegularExpression(
+			@"^09\d{8}$",
+			ErrorMessage = "手機號碼必須以09開頭，共10位數字。")]
 		public string Phone { get; set; } = string.Empty;
+
 
 		public int? ActiveDollConfigsId { get; set; }
 

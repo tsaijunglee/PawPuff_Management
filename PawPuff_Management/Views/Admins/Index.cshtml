@@ -1,4 +1,5 @@
-﻿@model IEnumerable<PawPuff_Management.Models.DTOs.AdminPermissionDto>
+﻿@using System.Security.Claims
+@model IEnumerable<PawPuff_Management.Models.DTOs.AdminPermissionDto>
 
 @{
     ViewData["Title"] = "管理員管理";
@@ -18,7 +19,9 @@
         <p class="screen-desc" id="managementDescription">
             管理後台管理員帳號與權限。
         </p>
-        <div class="member-management-view" id="memberManagementView" data-screen="admin-management" data-entity-type="admin" data-detail-title="管理員詳情" data-detail-description-template="查看「{nickname}」的管理員完整資料與帳號狀態。" data-create-success-message="已新增管理員資料" data-actor-admin-account="admin01" data-actor-admin-id="admin01">
+        <div class="member-management-view" id="memberManagementView" data-screen="admin-management" data-entity-type="admin" data-detail-title="管理員詳情" data-detail-description-template="查看「{nickname}」的管理員完整資料與帳號狀態。" data-create-success-message="已新增管理員資料" data-actor-admin-account="@User.Identity?.Name" data-actor-admin-id="@User.FindFirstValue(
+                                                                                                                                                                                                                                                                                                                       ClaimTypes.NameIdentifier
+                                                                                                                                                                                                                                                                                                                   )">
             <div class="member-page-actions">
                 <button class="member-create-open-btn" id="memberCreateOpen" type="button" data-bs-toggle="modal" data-bs-target="#memberCreateModal">
                     <i class="bi bi-person-plus me-1"></i>新增管理員資料
@@ -185,7 +188,8 @@
                                     data-created-at="@item.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")"
                                     data-admin-comment="@item.AdminComment"
                                     data-admin-updated-at="@(item.AdminUpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "")"
-                                    data-modified-by-admin-id="@item.ModifiedByAdminId">
+                                    data-modified-by-admin-id="@(item.ModifiedByAdminId?.ToString()
+                                            ?? "NULL")">
                                     <td data-member-cell ="id">
                                         @Html.DisplayFor(modelItem => item.AdminId)
                                     </td>
@@ -601,7 +605,7 @@
                         <div class="member-detail-value" data-member-detail-value="adminUpdatedAt"></div>
                     </div>
                     <div class="member-detail-field">
-                        <div class="member-detail-label">操作啟用/停用管理員帳號</div>
+                        <div class="member-detail-label">操作啟用/停用管理員ID</div>
                         <div class="member-detail-value" data-member-detail-value="modifiedByAdminId"></div>
                     </div>
                 </div>

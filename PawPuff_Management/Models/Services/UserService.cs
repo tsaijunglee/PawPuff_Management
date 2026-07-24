@@ -37,8 +37,7 @@ namespace PawPuff_Management.Models.Services
 				CreatedAt = user.CreatedAt,
 				AdminComment = user.AdminComment,
 				AdminUpdatedAt = user.AdminUpdatedAt,
-				ModifiedByAdminId =
-					user.ModifiedByAdminId
+				ModifiedByAdminId = user.ModifiedByAdminId
 			}).ToList();
 		}
 

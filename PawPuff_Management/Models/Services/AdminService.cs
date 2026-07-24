@@ -49,15 +49,6 @@ namespace PawPuff_Management.Models.Services
 
 
 
-
-
-
-
-
-
-
-
-
 		// 資料庫允許儲存的權限英文名稱
 		private static readonly string[] AllowedPermissions =
 		[
@@ -384,8 +375,99 @@ namespace PawPuff_Management.Models.Services
 		}
 
 
-	}
+		// 根據目前登入管理員的 AdminId，
+		// 取得該管理員的個人資料與權限，
+		// 再整理成 AdminProfileDto 回傳。
+		public async Task<AdminProfileDto?>
+			GetProfileAsync(int adminId)
+		{
+			// 取得管理員基本資料
+			var admin =
+				await _repository
+					.GetAdminByIdAsync(adminId);
 
+			// 找不到管理員，或管理員已停用
+			if (admin is null || !admin.IsActive)
+			{
+				return null;
+			}
+
+			// 取得該管理員的權限清單
+			var permissions =
+				await _repository
+					.GetPermissionsByAdminIdAsync(
+						adminId);
+
+			// 將管理員資料與權限整理成 DTO
+			return new AdminProfileDto
+			{
+				AdminId = admin.Id,
+				Account = admin.Account,
+				Nickname = admin.Nickname,
+				Email = admin.Email,
+				CreatedAt = admin.CreatedAt,
+
+				Permissions = permissions
+					.Select(permission =>
+						permission.PermissionName)
+					.ToList()
+			};
+		}
+
+
+		public async Task<(bool IsSuccess, string Message)>
+	UpdateProfileAsync(int adminId,UpdateAdminProfileDto request)
+		{
+			var admin =
+				await _repository
+					.GetAdminByIdAsync(adminId);
+
+			if (admin is null || !admin.IsActive)
+			{
+				return (
+					false,
+					"找不到目前登入的有效管理員。"
+				);
+			}
+
+			admin.Nickname =
+				request.Nickname.Trim();
+
+			if (!string.IsNullOrWhiteSpace(
+				request.Password))
+			{
+				admin.PasswordHash =
+					HashUtility.HashPassword(
+						request.Password);
+			}
+
+			admin.AdminUpdatedAt =
+				DateTime.Now;
+
+			admin.ModifiedByAdminId =
+				adminId;
+
+			await _repository.SaveChangesAsync();
+
+			return (
+				true,
+				"個人資料已更新。"
+			);
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+	}
 
 }
 	

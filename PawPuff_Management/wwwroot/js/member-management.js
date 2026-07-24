@@ -38,12 +38,37 @@
     };
   }
 
-  function getTableColumns() {
-    const columns = refs.memberTableBody?.dataset.tableColumns;
-    return columns
-      ? columns.split(",").map((column) => column.trim()).filter(Boolean)
-      : ["id", "account", "nickname", "phone", "email", "points"];
-  }
+  //function getTableColumns() {
+  //  const columns = refs.memberTableBody?.dataset.tableColumns;
+  //  return columns
+  //    ? columns.split(",").map((column) => column.trim()).filter(Boolean)
+  //    : ["id", "account", "nickname", "phone", "email", "points"];
+  //}
+
+    function getTableColumns()
+    {
+    //目前是管理員頁面時，要建立哪些欄位
+    //目前是會員頁面時，要建立哪些欄位
+        const entityType = getEntityConfig().entityType;
+
+        if (entityType === "admin") {
+            return [
+                "id",
+                "account",
+                "nickname",
+                "email"
+            ];
+        }
+
+        return [
+            "id",
+            "account",
+            "nickname",
+            "phone",
+            "email",
+            "points"
+        ];
+    }
 
   function normalizeNullable(value) {
     return value && value !== "NULL" ? value : "NULL";
@@ -127,6 +152,8 @@
     return memberRowElements.some((row) => (row.dataset.account || "").toLowerCase() === account.toLowerCase());
   }
 
+
+  //建立帳號驗證
   function validateCreateForm(values) {
     clearCreateValidation();
     let valid = true;
@@ -221,11 +248,27 @@
           valid = false;
       }
 
+      // 只有會員新增表單存在電話欄位時，才驗證電話
+      if (refs.memberCreatePhone) {
+          const phonePattern = /^09\d{8}$/;
 
-    if (refs.memberCreatePhone && !values.phone) {
-      setCreateFieldInvalid(refs.memberCreatePhone, "請輸入電話。");
-      valid = false;
-    }
+          if (!values.phone) {
+              setCreateFieldInvalid(
+                  refs.memberCreatePhone,
+                  "請輸入電話。"
+              );
+
+              valid = false;
+          }
+          else if (!phonePattern.test(values.phone)) {
+              setCreateFieldInvalid(
+                  refs.memberCreatePhone,
+                  "手機號碼必須以09開頭，共10位數字。"
+              );
+
+              valid = false;
+          }
+      }
 
 
       //電子信箱驗證

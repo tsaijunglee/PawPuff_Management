@@ -93,9 +93,34 @@
     });
   }
 
-  function initDashboardAttendance() {
-    const tableBody = document.getElementById("dashboardAttendanceTableBody");
-    if (!tableBody) return;
+    function initDashboardAttendance() {
+        const attendancePanel =
+            document.getElementById(
+                "dashboardAttendance"
+            );
+
+        const tableBody =
+            document.getElementById(
+                "dashboardAttendanceTableBody"
+            );
+
+        if (!attendancePanel || !tableBody) {
+            return;
+        }
+
+        const recordsUrl =
+            attendancePanel.dataset.recordsUrl;
+
+        const clockInUrl =
+            attendancePanel.dataset.clockInUrl;
+
+        const clockOutUrl =
+            attendancePanel.dataset.clockOutUrl;
+
+        const token =
+            attendancePanel.querySelector(
+                'input[name="__RequestVerificationToken"]'
+            )?.value;
 
     const refs = {
       tableBody,
@@ -117,8 +142,103 @@
         workDate: row.dataset.workDate || "",
         clockIn: row.dataset.clockIn || "",
         clockOut: row.dataset.clockOut || ""
-      };
-    }
+        };
+        }
+
+        async function loadClockRecords() {
+            if (!recordsUrl) {
+                showToast("找不到打卡紀錄 API。");
+                return;
+            }
+
+            try {
+                const response = await fetch(
+                    recordsUrl,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Accept": "application/json"
+                        }
+                    }
+                );
+
+                const result = await response
+                    .json()
+                    .catch(() => ({}));
+
+                if (!response.ok) {
+                    throw new Error(
+                        result.message ||
+                        "取得打卡紀錄失敗。"
+                    );
+                }
+
+                refs.tableBody.innerHTML = "";
+
+                (result.records || []).forEach(
+                    record => {
+                        const row =
+                            document.createElement("tr");
+
+                        row.dataset
+                            .dashboardAttendanceRow = "";
+
+                        row.dataset.dateKey =
+                            record.workDate;
+
+                        row.dataset.workDate =
+                            record.workDate
+                                .replaceAll("-", "/");
+
+                        row.dataset.clockIn =
+                            record.clockIn || "";
+
+                        row.dataset.clockOut =
+                            record.clockOut || "";
+
+                        row.innerHTML = `
+                    <td data-dashboard-attendance-cell="date"></td>
+                    <td data-dashboard-attendance-cell="clockIn"></td>
+                    <td data-dashboard-attendance-cell="clockOut"></td>
+                `;
+
+                        setCell(
+                            row,
+                            "date",
+                            row.dataset.workDate
+                        );
+
+                        setCell(
+                            row,
+                            "clockIn",
+                            row.dataset.clockIn
+                        );
+
+                        setCell(
+                            row,
+                            "clockOut",
+                            row.dataset.clockOut
+                        );
+
+                        refs.tableBody.appendChild(row);
+                    }
+                );
+
+                rows = Array.from(
+                    refs.tableBody.querySelectorAll(
+                        "[data-dashboard-attendance-row]"
+                    )
+                );
+
+                state.page = 1;
+                renderTable();
+            } catch (error) {
+                showToast(
+                    error.message ||
+                    "取得打卡紀錄失敗。"
+                );
+            }
+        }
 
     function getSortValue(row, key) {
       const data = getData(row);
@@ -211,39 +331,121 @@
       return row;
     }
 
-    refs.clockIn?.addEventListener("click", () => {
-      const today = getNowParts();
-      let row = rows.find((item) => item.dataset.dateKey === today.dateKey);
-      if (!row) {
-        row = createTodayRow(today);
-        showToast("已新增今日上班打卡紀錄");
-      } else {
-        row.dataset.clockIn = today.time;
-        setCell(row, "clockIn", today.time);
-        showToast("已更新今日上班時間");
-      }
-      state.page = 1;
-      state.sortKey = "date";
-      state.sortDir = "desc";
-      renderTable();
-    });
 
-    refs.clockOut?.addEventListener("click", () => {
-      const today = getNowParts();
-      const row = rows.find((item) => item.dataset.dateKey === today.dateKey);
-      if (!row || !row.dataset.clockIn) {
-        showToast("請先完成上班打卡");
-        return;
-      }
+        refs.clockIn?.addEventListener(
+            "click",
+            async () => {
+                if (!clockInUrl) {
+                    showToast(
+                        "找不到上班打卡 API。"
+                    );
 
-      row.dataset.clockOut = today.time;
-      setCell(row, "clockOut", today.time);
-      state.page = 1;
-      state.sortKey = "date";
-      state.sortDir = "desc";
-      showToast("已更新今日下班時間");
-      renderTable();
-    });
+                    return;
+                }
+
+                refs.clockIn.disabled = true;
+
+                try {
+                    const response = await fetch(
+                        clockInUrl,
+                        {
+                            method: "POST",
+                            headers: {
+                                "RequestVerificationToken":
+                                    token || ""
+                            }
+                        }
+                    );
+
+                    const result = await response
+                        .json()
+                        .catch(() => ({}));
+
+                    if (!response.ok) {
+                        throw new Error(
+                            result.message ||
+                            "上班打卡失敗。"
+                        );
+                    }
+
+                    showToast(
+                        result.message ||
+                        "上班打卡成功。"
+                    );
+
+                    await loadClockRecords();
+                } catch (error) {
+                    showToast(
+                        error.message ||
+                        "上班打卡失敗。"
+                    );
+                } finally {
+                    refs.clockIn.disabled = false;
+                }
+            }
+        );
+
+
+
+        refs.clockOut?.addEventListener(
+            "click",
+            async () => {
+                if (!clockOutUrl) {
+                    showToast(
+                        "找不到下班打卡 API。"
+                    );
+
+                    return;
+                }
+
+                refs.clockOut.disabled = true;
+
+                try {
+                    const response = await fetch(
+                        clockOutUrl,
+                        {
+                            method: "POST",
+                            headers: {
+                                "RequestVerificationToken":
+                                    token || ""
+                            }
+                        }
+                    );
+
+                    const result = await response
+                        .json()
+                        .catch(() => ({}));
+
+                    if (!response.ok) {
+                        throw new Error(
+                            result.message ||
+                            "下班打卡失敗。"
+                        );
+                    }
+
+                    showToast(
+                        result.message ||
+                        "下班打卡成功。"
+                    );
+
+                    await loadClockRecords();
+                } catch (error) {
+                    showToast(
+                        error.message ||
+                        "下班打卡失敗。"
+                    );
+                } finally {
+                    refs.clockOut.disabled = false;
+                }
+            }
+        );
+
+
+
+
+
+
+
 
     document.querySelectorAll("[data-dashboard-attendance-sort]").forEach((button) => {
       button.addEventListener("click", () => {
@@ -258,7 +460,7 @@
       });
     });
 
-    renderTable();
+        loadClockRecords();
   }
 
   function initAllAttendanceRecords() {
@@ -289,7 +491,107 @@
         clockIn: row.dataset.clockIn || "",
         clockOut: row.dataset.clockOut || ""
       };
-    }
+      }
+
+
+      async function loadClockRecords() {
+          if (!recordsUrl) {
+              showToast("找不到打卡紀錄 API。");
+              return;
+          }
+
+          try {
+              const response = await fetch(
+                  recordsUrl,
+                  {
+                      method: "GET",
+                      headers: {
+                          "Accept": "application/json"
+                      }
+                  }
+              );
+
+              const result = await response
+                  .json()
+                  .catch(() => ({}));
+
+              if (!response.ok) {
+                  throw new Error(
+                      result.message ||
+                      "取得打卡紀錄失敗。"
+                  );
+              }
+
+              refs.tableBody.innerHTML = "";
+
+              (result.records || []).forEach(
+                  record => {
+                      const row =
+                          document.createElement("tr");
+
+                      row.dataset
+                          .dashboardAttendanceRow = "";
+
+                      row.dataset.dateKey =
+                          record.workDate;
+
+                      row.dataset.workDate =
+                          record.workDate.replaceAll(
+                              "-",
+                              "/"
+                          );
+
+                      row.dataset.clockIn =
+                          record.clockIn || "";
+
+                      row.dataset.clockOut =
+                          record.clockOut || "";
+
+                      row.innerHTML = `
+                    <td data-dashboard-attendance-cell="date"></td>
+                    <td data-dashboard-attendance-cell="clockIn"></td>
+                    <td data-dashboard-attendance-cell="clockOut"></td>
+                `;
+
+                      setCell(
+                          row,
+                          "date",
+                          row.dataset.workDate
+                      );
+
+                      setCell(
+                          row,
+                          "clockIn",
+                          row.dataset.clockIn
+                      );
+
+                      setCell(
+                          row,
+                          "clockOut",
+                          row.dataset.clockOut
+                      );
+
+                      refs.tableBody.appendChild(row);
+                  }
+              );
+
+              rows = Array.from(
+                  refs.tableBody.querySelectorAll(
+                      "[data-dashboard-attendance-row]"
+                  )
+              );
+
+              state.page = 1;
+              renderTable();
+          } catch (error) {
+              showToast(
+                  error.message ||
+                  "取得打卡紀錄失敗。"
+              );
+          }
+      }
+
+
 
     function matchesFilters(row) {
       const data = getData(row);

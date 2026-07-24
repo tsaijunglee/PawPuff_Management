@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -5,6 +6,7 @@ using PawPuff_Management.Models.EfModels;
 using PawPuff_Management.Models.Repositories;
 using PawPuff_Management.Models.Services;
 using System.Net;
+using System.Security.Claims;
 
 namespace PawPuff_Management
 {
@@ -21,13 +23,34 @@ namespace PawPuff_Management
 			builder.Services.AddDbContext<PawPuffContext>(options =>
 			options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-			// 註冊 Admin = Repo & Service ===========================
+			// 註冊 管理員資料  Admin = Repo & Service ===========================
 			builder.Services.AddScoped<AdminRepository>();
 			builder.Services.AddScoped<AdminService>();
 
-			// 註冊 User = Repo & Service ===========================
+
+			// 註冊 管理員打卡  AdminClock = Repo & Service ===========================
+			builder.Services.AddScoped<AdminClockRepository>();
+			builder.Services.AddScoped<AdminClockService>();
+
+
+			// 註冊 Policy  權限跳轉用 ===========================
+			builder.Services.AddAuthorization(options =>
+			{
+				options.AddPolicy("Account", policy =>
+				{
+					policy.RequireClaim( "Permission","Account");
+				});
+			});
+
+
+
+			// 註冊 會員資料  User = Repo & Service ===========================
 			builder.Services.AddScoped<UserRepository>();
 			builder.Services.AddScoped<UserService>();
+
+
+
+
 
 
 			// 註冊R2圖床
@@ -75,17 +98,17 @@ namespace PawPuff_Management
 					options.LoginPath = "/Auth/Index"; // Set login path
 													   //使用者還沒登入
 
-                  // options.AccessDeniedPath = "/Auth/AccessDenied"; // Set access denied path
+
+					//已經登入，但沒有權限時，要導向哪一個頁面
+					// options.AccessDeniedPath = "/Auth/AccessDenied"; // Set access denied path
+
 					options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // Set cookie expiration time
 																	   //設定登入有效期限為目前 UTC 時間的一小時後 => 過期後使用者需要重新登入
 
 					options.SlidingExpiration = true; //管理員持續操作網站時，Cookie 的有效期限可以向後延長
 													  // Enable sliding expiration
-													 
+
 				});
-
-
-
 
 
 			// Cookie Authentication ===================
@@ -93,7 +116,6 @@ namespace PawPuff_Management
 			//{
 			//	options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme; //"Cookies"名字可自訂
 			//	options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-
 			//})
 			//	.AddCookie(options =>
 			//	{
@@ -103,7 +125,6 @@ namespace PawPuff_Management
 			//		options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // Set cookie expiration time
 			//		options.SlidingExpiration = true; // Enable sliding expiration
 			//	});
-
 			//==========================================
 
 			var app = builder.Build();

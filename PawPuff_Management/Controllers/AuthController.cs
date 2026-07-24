@@ -54,17 +54,23 @@ namespace PawPuff_Management.Controllers
 
 			var admin = result.Admin; //取得驗證成功的管理員
 
+
 			//建立 Claims 
 			//Claim 是描述目前登入者的身分資料
 			var claims = new List<Claim>
 			{
-				//儲存內容:管理員ID,管理員帳號,管理員暱稱
+				//目前 Cookie 裡面有儲存內容:管理員ID,管理員帳號,管理員暱稱
 				new(ClaimTypes.NameIdentifier,admin.Id.ToString()),
 
 				new(ClaimTypes.Name,admin.Account),
 
 				new("Nickname",admin.Nickname)
 			};
+
+			//登入 Cookie 要新增權限 Claim
+			claims.AddRange(
+	          admin.AdminsPermissions.Select(permission => new Claim("Permission",permission.PermissionName) ));
+
 
 			//建立登入身分
 			//把剛才的 Claims 組成一個身分，並指定這個身分使用 Cookie Authentication。
@@ -98,6 +104,7 @@ namespace PawPuff_Management.Controllers
 			//登入成功後轉向首頁 => /Home/Index
 			return RedirectToAction("Index", "Home");
 		}
+
 
 		//「登出功能」：刪除目前管理員的驗證 Cookie，然後回到登入頁
 		[Authorize]//表示只有已登入的使用者可以執行登出

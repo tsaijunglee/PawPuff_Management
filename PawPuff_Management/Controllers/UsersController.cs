@@ -6,7 +6,9 @@ using System.Security.Claims;
 
 namespace PawPuff_Management.Controllers
 {
-	[Authorize]
+	//不但要登入，還必須有 Account 權限
+	//Policy 必須先在 Program.cs 設定
+	[Authorize(Policy = "Account")]
 	public class UsersController : Controller
 	{
 		private readonly UserService _service;
@@ -15,12 +17,59 @@ namespace PawPuff_Management.Controllers
 			_service = service;
 		}
 
+
+		//取得所有會員
 		public async Task<IActionResult> Index()
 		{
 			var users = await _service.GetAllAsync();
 
 			return View(users);
 		}
+
+
+
+
+
+		////權限跳轉
+		////  進入 AdminsController.Index()
+		////→ 呼叫 HasAccountPermission()
+		////→ 有 Account Claim：繼續顯示頁面
+		////→ 沒有 Account Claim：return Forbid()
+		////→ 導向 AccessDeniedPath
+
+		////例如 AdminsController 的管理員管理需要 Account 權限：
+		////檢查 Account 權限
+		//private bool HasAccountPermission()
+		//{
+		//	return User.HasClaim("Permission", "Account");
+		//}
+
+
+		///// <summary>
+		///// 顯示管理員及權限
+		///// </summary>
+		///// <returns></returns>
+		//public async Task<IActionResult> Index()
+		//{
+		//	if (!HasAccountPermission())
+		//	{
+		//		return Forbid();
+		//	}
+
+
+		//	var model = await _service.GetAdminsWithPermissionsAsync();
+
+		//	return View(model);
+		//}
+
+
+
+
+
+
+
+
+
 
 		//[FromBody] 表示從 HTTP Request Body 讀取 JSON，再轉換成 UpdateUserStatusDto
 		[HttpPost] //POST /Users/UpdateStatus =>通常用來修改會員的啟用或停用狀態

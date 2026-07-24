@@ -16,12 +16,15 @@ namespace PawPuff_Management.Models.Repositories
 
 
 
-		//根據帳號，從資料庫查詢管理員 => 取得的是「整筆 Admin 資料」不是只取得帳號欄位，所以裡面也包含 PasswordHash
+		//根據帳號，從資料庫查詢管理員 => 取得的是「整筆 Admin 資料」不是只取得帳號欄位，
+		//所以裡面也包含Id/PasswordHash/Account/Nickname/Email/IsActive
+		//「登入者是哪一位管理員」且登入時一起抓管理員權限
 		public async Task<Admin?> GetByAccountAsync(string account)
 		{
 			var normalizedAccount = account.Trim().ToLower();
 
 			return await _context.Admins
+				.Include(admin => admin.AdminsPermissions)
 				.FirstOrDefaultAsync(admin =>
 					admin.Account.ToLower() == normalizedAccount);
 		}

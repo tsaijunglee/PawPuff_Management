@@ -1,4 +1,7 @@
-﻿@{
+﻿@model List<PawPuff_Management.Models.DTOs.AdminClockDto>
+
+
+@{
     ViewData["Title"] = "所有員工打卡紀錄";
     ViewData["CurrentScreen"] = "dashboard2";
 }
@@ -63,7 +66,36 @@
                                 </th>
                             </tr>
                         </thead>
+
                         <tbody id="attendanceRecordsTableBody">
+                            @foreach (var record in Model)
+                            {
+                                <tr data-attendance-record-row
+                                    data-admin="@record.AdminAccount"
+                                    data-date-key="@record.WorkDate.ToString("yyyy-MM-dd")"
+                                    data-work-date="@record.WorkDate.ToString("yyyy/M/d")"
+                                    data-clock-in="@record.ClockInTime.ToString("HH:mm")"
+                                    data-clock-out="@(record.ClockOutTime?.ToString("HH:mm") ?? "")">
+
+                                    <td>@record.AdminAccount</td>
+
+                                    <td>
+                                        @record.WorkDate.ToString("yyyy/M/d")
+                                    </td>
+
+                                    <td>
+                                        @record.ClockInTime.ToString("HH:mm")
+                                    </td>
+
+                                    <td>
+                                        @(record.ClockOutTime?.ToString("HH:mm")
+                                                                  ?? "尚未打卡")
+                                </td>
+                            </tr>
+                                                        }
+                        </tbody>
+
+                        @* <tbody id="attendanceRecordsTableBody">
                             <tr data-attendance-record-row data-admin="admin01" data-date-key="2026-07-14" data-work-date="2026/7/14" data-clock-in="9:00" data-clock-out="18:10">
                                 <td>admin01</td>
                                 <td>2026/7/14</td>
@@ -238,7 +270,8 @@
                                 <td>8:45</td>
                                 <td>18:34</td>
                             </tr>
-                        </tbody>
+                        </tbody> *@
+
                     </table>
                 </div>
                 <div class="member-pagination-wrap">
@@ -257,5 +290,5 @@
 }
 
 @section Scripts {
-    <script src="~/js/attendance-management.js"></script>
+    <script src="~/js/attendance-management.js" asp-append-version="true"></script>
 }

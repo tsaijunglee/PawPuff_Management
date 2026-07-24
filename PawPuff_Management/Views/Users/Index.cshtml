@@ -1,4 +1,5 @@
-﻿@model IEnumerable<PawPuff_Management.Models.DTOs.CreateUserDto>
+﻿@using System.Security.Claims
+@model IEnumerable<PawPuff_Management.Models.DTOs.CreateUserDto>
 @{
     ViewData["Title"] = "會員管理";
     ViewData["CurrentScreen"] = "member-management";
@@ -17,7 +18,9 @@
         <p class="screen-desc" id="managementDescription">
             管理會員帳號與啟用狀態。
         </p>
-        <div class="member-management-view" id="memberManagementView" data-screen="member-management" data-entity-type="member" data-detail-title="會員詳情" data-detail-description-template="查看「{nickname}」的會員完整資料、點數與帳號狀態。" data-create-success-message="已新增會員資料" data-actor-admin-account="admin01" data-actor-admin-id="1">
+        <div class="member-management-view" id="memberManagementView" data-screen="member-management" data-entity-type="member" data-detail-title="會員詳情" data-detail-description-template="查看「{nickname}」的會員完整資料、點數與帳號狀態。" data-create-success-message="已新增會員資料" data-actor-admin-account="admin01" data-actor-admin-id="@User.FindFirstValue(
+                                                                                                                                                                                                                                                                                                            ClaimTypes.NameIdentifier
+                                                                                                                                                                                                                                                                                                        )">
             <div class="member-page-actions">
                 <button class="member-create-open-btn" id="memberCreateOpen" type="button" data-bs-toggle="modal" data-bs-target="#memberCreateModal">
                     <i class="bi bi-person-plus me-1"></i>新增會員資料
@@ -296,7 +299,7 @@
                             </tr>
                         </tbody> *@
 
-                        <tbody id="memberTableBody" data-table-columns="id,account,nickname,email">
+                        <tbody id="memberTableBody" data-table-columns="id,account,nickname,phone,email,points">
                             @foreach (var item in Model)
                             {
                                 <tr data-member-row
@@ -314,7 +317,7 @@
                                     data-created-at="@item.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")"
                                     data-admin-comment="@item.AdminComment"
                                     data-admin-updated-at="@(item.AdminUpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "")"
-                                    data-modified-by-admin-id="@item.ModifiedByAdminId">
+                                    data-modified-by-admin-id="@(item.ModifiedByAdminId?.ToString()?? "NULL")">
                                     <td data-member-cell="id">
                                         @item.Id
                                     </td>
@@ -444,8 +447,10 @@
                         <div class="member-detail-value" data-member-detail-value="adminUpdatedAt"></div>
                     </div>
                     <div class="member-detail-field">
-                        <div class="member-detail-label">操作啟用/停用管理員帳號</div>
-                        <div class="member-detail-value" data-member-detail-value="modifiedByAdmin"></div>
+                        <div class="member-detail-label">操作啟用/停用管理員ID</div>
+                        <div class="member-detail-value"
+                             data-member-detail-value="modifiedByAdminId">
+                        </div>
                     </div>
                 </div>
             </div>

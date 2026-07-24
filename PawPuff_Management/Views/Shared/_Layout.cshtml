@@ -162,7 +162,11 @@
                             <span class="admin-avatar" aria-hidden="true">
                                 <img src="~/img/ADMIN(2).PNG" alt="">
                             </span>
-                            <span class="admin-name">Admin</span>
+                            <span class="admin-name">
+                                @(User.FindFirst("Nickname")?.Value
+                                                                ?? User.Identity?.Name
+                                                                ?? "Admin")
+                            </span>
                             <i class="bi bi-chevron-down"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end admin-menu" id="adminMenu">
