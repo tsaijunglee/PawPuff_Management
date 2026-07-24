@@ -12,10 +12,6 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Infra\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="efpt.config.json.user" />
   </ItemGroup>
 

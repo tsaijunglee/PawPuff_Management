@@ -57,6 +57,10 @@ namespace PawPuff_Management
 			builder.Services.AddScoped<ICommentService, CommentService>();
 			builder.Services.AddScoped<IArticleReactionService, ArticleReactionService>();
 
+			// Fqaµù¥U
+			builder.Services.AddScoped<IFaqRepository, FaqRepository>();
+			builder.Services.AddScoped<IFaqService, FaqService>();
+
 
 			//builder.Services.AddScoped<ProductRepository>();
 			//builder.Services.AddScoped<ProductService>();
