@@ -25,31 +25,22 @@
     return String(value || "").trim().toLowerCase();
   }
 
+  // 後端統一輸出 yyyy-MM-dd HH:mm(不到秒),但舊資料可能仍帶秒,
+  // 所以秒的部分做成選擇性,兩種格式都吃得下。
   function parseTime(value) {
     if (!value || value === "NULL") return 0;
-    const match = String(value).match(/^(\d{4})-(\d{2})-(\d{2})\s+(\d{1,2}):(\d{2}):(\d{2})$/);
+    const match = String(value).match(/^(\d{4})-(\d{1,2})-(\d{1,2})[T\s](\d{1,2}):(\d{2})(?::(\d{2}))?$/);
     if (match) {
       const [, year, month, day, hour, minute, second] = match;
-      return new Date(Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute), Number(second)).getTime();
+      // 沒有秒時 second 是 undefined,不補 0 會變 NaN
+      return new Date(Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute), Number(second || 0)).getTime();
     }
-    return Date.parse(String(value).replace(" ", "T")) || 0;
+    const fallback = Date.parse(String(value).replace(" ", "T"));
+    return Number.isNaN(fallback) ? 0 : fallback;
   }
 
   function getLastUpdatedAt(data) {
     return data.updatedAt && data.updatedAt !== "NULL" ? data.updatedAt : data.createdAt;
-  }
-
-  function pad(value) {
-    return String(value).padStart(2, "0");
-  }
-
-  function formatTimestamp(date = new Date()) {
-    return date.getFullYear()
-      + "-" + pad(date.getMonth() + 1)
-      + "-" + pad(date.getDate())
-      + " " + pad(date.getHours())
-      + ":" + pad(date.getMinutes())
-      + ":" + pad(date.getSeconds());
   }
 
   function showToast(message) {
@@ -61,6 +52,51 @@
       : null;
     toast?.show();
   }
+
+  /* ---------------------------------------------------------------
+   * 與後端溝通
+   * ------------------------------------------------------------- */
+
+  function antiForgeryToken() {
+    const input = document.querySelector('input[name="__RequestVerificationToken"]');
+    return input ? input.value : "";
+  }
+
+  async function faqPost(url, data) {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "RequestVerificationToken": antiForgeryToken() },
+      body: new URLSearchParams(data)
+    });
+
+    if (!response.ok) {
+      return { success: false, message: "伺服器沒有回應,請稍後再試。", fieldErrors: {} };
+    }
+    return await response.json();
+  }
+
+  // 排序的位移邏輯在 Service 層做,前端自己算一定會不同步,
+  // 所以任何存檔成功後都回來重讀整份清單。
+  async function reloadRows() {
+    const listUrl = refs.screen?.dataset.faqListUrl;
+    if (!listUrl) return;
+
+    const response = await fetch(listUrl);
+    if (!response.ok) {
+      showToast("重新載入清單失敗,請重新整理頁面。");
+      return;
+    }
+
+    const list = await response.json();
+    refs.tableBody.innerHTML = "";
+    list.forEach((item) => refs.tableBody.appendChild(buildFaqRow(item)));
+    collectRows();
+    renderTable();
+  }
+
+  /* ---------------------------------------------------------------
+   * 表格資料
+   * ------------------------------------------------------------- */
 
   function collectRows() {
     rows = Array.from(refs.tableBody?.querySelectorAll("[data-faq-row]") || []);
@@ -74,6 +110,7 @@
     return {
       id: row.dataset.faqId || "",
       type: row.dataset.type || "",
+      typeValue: row.dataset.typeValue || "",
       question: row.dataset.question || "",
       answer: row.dataset.answer || "",
       sortOrder: Number(row.dataset.sortOrder) || 0,
@@ -236,43 +273,24 @@
     updateSortIcons();
   }
 
-  function getNextFaqId() {
-    return rows.reduce((maxId, row) => Math.max(maxId, Number(row.dataset.faqId) || 0), 0) + 1;
-  }
-
+  // 新增 Modal 開啟時用來預填排序,實際採用的號碼仍以伺服器回傳為準
   function getNextSortOrder() {
     return rows.reduce((maxSort, row) => Math.max(maxSort, Number(row.dataset.sortOrder) || 0), 0) + 1;
   }
 
-  function setSortOrder(row, sortOrder) {
-    row.dataset.sortOrder = String(sortOrder);
-    setCell(row, "sortOrder", sortOrder);
+  function findRowById(id) {
+    return rows.find((item) => item.dataset.faqId === String(id));
   }
 
-  function getRowsBySortOrder() {
-    return rows.slice().sort((rowA, rowB) => {
-      const sortResult = (Number(rowA.dataset.sortOrder) || 0) - (Number(rowB.dataset.sortOrder) || 0);
-      if (sortResult !== 0) return sortResult;
-      return (Number(rowA.dataset.faqId) || 0) - (Number(rowB.dataset.faqId) || 0);
-    });
-  }
-
-  function normalizeSortOrders() {
-    getRowsBySortOrder().forEach((row, index) => setSortOrder(row, index + 1));
-  }
-
-  function moveRowToSortOrder(row, desiredSortOrder) {
-    const sortedRows = getRowsBySortOrder().filter((item) => item !== row);
-    const targetIndex = Math.min(Math.max(Number(desiredSortOrder) || sortedRows.length + 1, 1), sortedRows.length + 1) - 1;
-    sortedRows.splice(targetIndex, 0, row);
-    sortedRows.forEach((item, index) => setSortOrder(item, index + 1));
-  }
-
-  function getPageForRow(row) {
+  function getPageForRowId(id) {
     const filteredRows = getFilteredRows();
-    const rowIndex = filteredRows.indexOf(row);
+    const rowIndex = filteredRows.findIndex((item) => item.dataset.faqId === String(id));
     return rowIndex >= 0 ? Math.floor(rowIndex / state.pageSize) + 1 : 1;
   }
+
+  /* ---------------------------------------------------------------
+   * 表單
+   * ------------------------------------------------------------- */
 
   function getFormValues(prefix) {
     return {
@@ -299,18 +317,27 @@
     form?.querySelectorAll("input, textarea, select").forEach((input) => input.setCustomValidity(""));
   }
 
-  function updateRow(row, data) {
-    row.dataset.type = data.type;
-    row.dataset.question = data.question;
-    row.dataset.answer = data.answer;
-    row.dataset.sortOrder = String(data.sortOrder);
-    row.dataset.updatedAt = data.updatedAt;
-    setCell(row, "sortOrder", data.sortOrder);
-    setCell(row, "type", data.type);
-    setCell(row, "question", data.question);
-    setCell(row, "answer", data.answer);
-    setCell(row, "updatedAt", getLastUpdatedAt(getFaqData(row)));
+  // 把後端回傳的欄位錯誤標到對應欄位。
+  // fieldErrors 的 key 是 DTO 屬性名(Question / Answer / Type / SortOrder),
+  // 加上 prefix 剛好就是畫面上的 element id。
+  function applyServerErrors(form, prefix, fieldErrors) {
+    if (!form || !fieldErrors) return;
+
+    Object.keys(fieldErrors).forEach((key) => {
+      const field = document.getElementById(prefix + key);
+      if (!field) return;
+
+      field.setCustomValidity(fieldErrors[key]);
+      const feedback = field.parentElement?.querySelector(".invalid-feedback");
+      if (feedback) feedback.textContent = fieldErrors[key];
+    });
+
+    form.classList.add("was-validated");
   }
+
+  /* ---------------------------------------------------------------
+   * 新增 / 編輯 / 狀態切換
+   * ------------------------------------------------------------- */
 
   function buildFaqRow(data) {
     const row = document.createElement("tr");
@@ -331,6 +358,7 @@
     row.dataset.faqRow = "";
     row.dataset.faqId = String(data.id);
     row.dataset.type = data.type;
+    row.dataset.typeValue = String(data.typeValue);
     row.dataset.question = data.question;
     row.dataset.answer = data.answer;
     row.dataset.sortOrder = String(data.sortOrder);
@@ -381,59 +409,85 @@
     const data = getFaqData(row);
     resetForm(refs.editForm);
     document.getElementById("faqEditId").value = data.id;
-    document.getElementById("faqEditType").value = data.type;
+    // 類型的 select 用數字當 value,所以要用 typeValue 而不是中文的 type
+    document.getElementById("faqEditType").value = data.typeValue;
     document.getElementById("faqEditSortOrder").value = data.sortOrder;
     document.getElementById("faqEditQuestion").value = data.question;
     document.getElementById("faqEditAnswer").value = data.answer;
     editModal?.show();
   }
 
-  function handleEditSubmit(event) {
+  async function handleCreateSubmit(event) {
+    event.preventDefault();
+    if (!validateForm(event.target)) return;
+
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    const values = getFormValues("faqCreate");
+    const activeInput = document.getElementById("faqCreateActive");
+
+    submitButton.disabled = true;
+    const result = await faqPost(refs.screen.dataset.faqSaveUrl, {
+      Id: 0,
+      Type: values.type,
+      SortOrder: values.sortOrder,
+      Question: values.question,
+      Answer: values.answer,
+      IsActive: Boolean(activeInput?.checked)
+    });
+    submitButton.disabled = false;
+
+    if (!result.success) {
+      applyServerErrors(refs.createForm, "faqCreate", result.fieldErrors);
+      showToast(result.message);
+      return;
+    }
+
+    await reloadRows();
+    state.sortKey = "sortOrder";
+    state.sortDir = "asc";
+    state.page = getPageForRowId(result.row.id);
+    renderTable();
+    createModal?.hide();
+    showToast(result.message);
+  }
+
+  async function handleEditSubmit(event) {
     event.preventDefault();
     if (!validateForm(event.target)) return;
 
     const id = document.getElementById("faqEditId")?.value || "";
-    const row = rows.find((item) => item.dataset.faqId === id);
+    const row = findRowById(id);
     if (!row) return;
+
+    const submitButton = event.target.querySelector('button[type="submit"]');
     const values = getFormValues("faqEdit");
 
-    updateRow(row, {
-      ...values,
-      updatedAt: formatTimestamp()
+    submitButton.disabled = true;
+    const result = await faqPost(refs.screen.dataset.faqSaveUrl, {
+      Id: id,
+      Type: values.type,
+      SortOrder: values.sortOrder,
+      Question: values.question,
+      Answer: values.answer,
+      // 編輯 Modal 沒有啟用開關,要把該列目前的狀態帶回去,
+      // 否則後端會用 DTO 預設值 true,把停用中的問答又打開。
+      IsActive: row.dataset.active === "true"
     });
-    moveRowToSortOrder(row, values.sortOrder);
+    submitButton.disabled = false;
+
+    if (!result.success) {
+      applyServerErrors(refs.editForm, "faqEdit", result.fieldErrors);
+      showToast(result.message);
+      return;
+    }
+
+    await reloadRows();
     state.sortKey = "sortOrder";
     state.sortDir = "asc";
-    state.page = getPageForRow(row);
+    state.page = getPageForRowId(result.row.id);
     renderTable();
     editModal?.hide();
-    showToast("問答內容已更新");
-  }
-
-  function handleCreateSubmit(event) {
-    event.preventDefault();
-    if (!validateForm(event.target)) return;
-
-    const activeInput = document.getElementById("faqCreateActive");
-    const values = getFormValues("faqCreate");
-    const now = formatTimestamp();
-    const row = buildFaqRow({
-      id: getNextFaqId(),
-      ...values,
-      active: Boolean(activeInput?.checked),
-      createdAt: now,
-      updatedAt: "NULL"
-    });
-
-    refs.tableBody.appendChild(row);
-    collectRows();
-    moveRowToSortOrder(row, values.sortOrder);
-    state.sortKey = "sortOrder";
-    state.sortDir = "asc";
-    state.page = getPageForRow(row);
-    renderTable();
-    createModal?.hide();
-    showToast("已新增問答");
+    showToast(result.message);
   }
 
   function openStatusConfirm(row, nextActive) {
@@ -454,15 +508,32 @@
     pendingStatusChange = null;
   }
 
-  function applyStatusChange(row, nextActive) {
+  async function applyStatusChange(row, nextActive) {
+    const result = await faqPost(refs.screen.dataset.faqToggleUrl, {
+      id: row.dataset.faqId,
+      isActive: nextActive
+    });
+
+    if (!result.success) {
+      showToast(result.message);
+      return;
+    }
+
     const input = row.querySelector("[data-faq-status]");
-    if (input) input.checked = nextActive;
+    if (input) input.checked = result.row.active;
     syncStatusLabel(row);
-    row.dataset.updatedAt = formatTimestamp();
+
+    // 狀態變更會更新最後修改時間,用伺服器回傳的值才不會顯示舊資料
+    row.dataset.updatedAt = result.row.updatedAt;
     setCell(row, "updatedAt", getLastUpdatedAt(getFaqData(row)));
+
     if (state.sortKey === "active" || state.sortKey === "updatedAt") renderTable();
-    showToast("問答狀態已更新");
+    showToast(result.message);
   }
+
+  /* ---------------------------------------------------------------
+   * 事件綁定
+   * ------------------------------------------------------------- */
 
   function bindEvents() {
     createModal = document.getElementById("faqCreateModal") && window.bootstrap?.Modal
@@ -506,7 +577,7 @@
         if (state.sortKey === sortKey) state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
         else {
           state.sortKey = sortKey;
-          state.sortDir = sortKey === "sortOrder" ? "asc" : "asc";
+          state.sortDir = "asc";
         }
         state.page = 1;
         renderTable();
@@ -526,6 +597,7 @@
 
       const row = input.closest("[data-faq-row]");
       const nextActive = input.checked;
+      // 先還原,等使用者在確認視窗按下確認、伺服器也回覆成功後才真的改
       input.checked = !nextActive;
       openStatusConfirm(row, nextActive);
     });
@@ -546,11 +618,12 @@
     document.getElementById("faqEditModal")?.addEventListener("hidden.bs.modal", () => resetForm(refs.editForm));
     document.getElementById("faqCreateActive")?.addEventListener("change", updateCreateStatusLabel);
 
-    document.getElementById("faqStatusConfirm")?.addEventListener("click", () => {
+    document.getElementById("faqStatusConfirm")?.addEventListener("click", async () => {
       if (!pendingStatusChange) return;
-      applyStatusChange(pendingStatusChange.row, pendingStatusChange.nextActive);
+      const { row, nextActive } = pendingStatusChange;
       pendingStatusChange = null;
       statusModal?.hide();
+      await applyStatusChange(row, nextActive);
     });
 
     document.getElementById("faqStatusModal")?.addEventListener("hidden.bs.modal", () => {
@@ -560,6 +633,7 @@
 
   function init() {
     Object.assign(refs, {
+      screen: document.getElementById("managementScreen"),
       view: document.getElementById("faqManagementView"),
       tableBody: document.getElementById("faqTableBody"),
       searchForm: document.getElementById("faqSearchForm"),
@@ -572,8 +646,9 @@
     });
 
     if (!refs.view || !refs.tableBody) return;
+
+    // 排序號碼由資料庫決定,前端不再重新編號
     collectRows();
-    normalizeSortOrders();
     bindEvents();
     updateCreateStatusLabel();
     renderTable();

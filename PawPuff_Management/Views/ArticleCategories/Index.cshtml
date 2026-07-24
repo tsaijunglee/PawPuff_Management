@@ -1,4 +1,5 @@
-﻿@{
+@model PawPuff_Management.ViewModels.ArticleCategory.ArticleCategoryIndexVm
+@{
     ViewData["Title"] = "文章分類管理";
     ViewData["CurrentScreen"] = "article-category-management";
 }
@@ -60,76 +61,19 @@
                             </tr>
                         </thead>
                         <tbody id="categoryTableBody">
-                            <tr data-category-row data-id="1" data-name="官方公告" data-active="true">
-                                <td data-category-cell="id">1</td>
-                                <td data-category-cell="name">官方公告</td>
-                                <td>
-                                    <div class="form-check form-switch member-status-switch category-status-switch">
-                                        <input class="form-check-input" id="categoryStatus1" type="checkbox" role="switch" data-category-status="1" checked>
-                                        <label class="member-status-text" for="categoryStatus1">啟用</label>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr data-category-row data-id="2" data-name="醫療養護" data-active="true">
-                                <td data-category-cell="id">2</td>
-                                <td data-category-cell="name">醫療養護</td>
-                                <td>
-                                    <div class="form-check form-switch member-status-switch category-status-switch">
-                                        <input class="form-check-input" id="categoryStatus2" type="checkbox" role="switch" data-category-status="2" checked>
-                                        <label class="member-status-text" for="categoryStatus2">啟用</label>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr data-category-row data-id="3" data-name="飲食營養" data-active="true">
-                                <td data-category-cell="id">3</td>
-                                <td data-category-cell="name">飲食營養</td>
-                                <td>
-                                    <div class="form-check form-switch member-status-switch category-status-switch">
-                                        <input class="form-check-input" id="categoryStatus3" type="checkbox" role="switch" data-category-status="3" checked>
-                                        <label class="member-status-text" for="categoryStatus3">啟用</label>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr data-category-row data-id="4" data-name="行為訓練" data-active="true">
-                                <td data-category-cell="id">4</td>
-                                <td data-category-cell="name">行為訓練</td>
-                                <td>
-                                    <div class="form-check form-switch member-status-switch category-status-switch">
-                                        <input class="form-check-input" id="categoryStatus4" type="checkbox" role="switch" data-category-status="4" checked>
-                                        <label class="member-status-text" for="categoryStatus4">啟用</label>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr data-category-row data-id="5" data-name="寵物認養" data-active="true">
-                                <td data-category-cell="id">5</td>
-                                <td data-category-cell="name">寵物認養</td>
-                                <td>
-                                    <div class="form-check form-switch member-status-switch category-status-switch">
-                                        <input class="form-check-input" id="categoryStatus5" type="checkbox" role="switch" data-category-status="5" checked>
-                                        <label class="member-status-text" for="categoryStatus5">啟用</label>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr data-category-row data-id="6" data-name="美容美體" data-active="true">
-                                <td data-category-cell="id">6</td>
-                                <td data-category-cell="name">美容美體</td>
-                                <td>
-                                    <div class="form-check form-switch member-status-switch category-status-switch">
-                                        <input class="form-check-input" id="categoryStatus6" type="checkbox" role="switch" data-category-status="6" checked>
-                                        <label class="member-status-text" for="categoryStatus6">啟用</label>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr data-category-row data-id="7" data-name="走失求助" data-active="true">
-                                <td data-category-cell="id">7</td>
-                                <td data-category-cell="name">走失求助</td>
-                                <td>
-                                    <div class="form-check form-switch member-status-switch category-status-switch">
-                                        <input class="form-check-input" id="categoryStatus7" type="checkbox" role="switch" data-category-status="7" checked>
-                                        <label class="member-status-text" for="categoryStatus7">啟用</label>
-                                    </div>
-                                </td>
-                            </tr>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr data-category-row data-id="@item.Id" data-name="@item.Name" data-active="@item.IsActive.ToString().ToLower()">
+                                    <td data-category-cell="id">@item.Id</td>
+                                    <td data-category-cell="name">@item.Name</td>
+                                    <td>
+                                        <div class="form-check form-switch member-status-switch category-status-switch">
+                                            <input class="form-check-input" id="categoryStatus@(item.Id)" type="checkbox" role="switch" data-category-status="@item.Id" checked="@(item.IsActive ? "checked" : null)">
+                                            <label class="member-status-text" for="categoryStatus@(item.Id)">@(item.IsActive ? "啟用" : "停用")</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -186,9 +130,9 @@
 </div>
 
 @section Styles {
-    <link href="~/css/article-category-management.css" rel="stylesheet">
+    <link href="~/css/article-category-management.css" rel="stylesheet" asp-append-version="true">
 }
 
 @section Scripts {
-    <script src="~/js/article-category-management.js"></script>
+    <script src="~/js/article-category-management.js" asp-append-version="true"></script>
 }

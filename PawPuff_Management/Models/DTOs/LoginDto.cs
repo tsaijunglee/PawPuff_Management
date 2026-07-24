@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace PawPuff_Management.Models.DTOs
+namespace PawPuff_Management.Models.Dtos
 {
 	public class LoginDto
 	{

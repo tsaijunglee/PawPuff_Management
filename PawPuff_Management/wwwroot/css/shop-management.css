@@ -169,3 +169,13 @@
     width: 130px;
   }
 }
+
+/* Ajax 操作中：讓縮圖稍微淡出，表示此列正在更新 */
+.shop-product-thumb.is-updating {
+    opacity: .6;
+}
+
+/* Ajax 操作中：停用 switch 時顯示等待游標 */
+.shop-table .form-check-input:disabled {
+    cursor: wait;
+}
