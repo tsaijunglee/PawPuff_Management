@@ -34,10 +34,18 @@ namespace PawPuff_Management
 			builder.Services.AddScoped<ICombinationPreviewRepository, CombinationPreviewRepository>();
 			builder.Services.AddScoped<ICombinationPreviewService, CombinationPreviewService>();
 
-			//builder.Services.AddScoped<IMemberRepository, MemberRepository>();
-			//builder.Services.AddScoped<AuthService>();
+            // 商城管理三層式架構註冊。
+            // ShopRepository：資料庫存取。
+            // ShopImageService：商城圖片 URL 組合與呼叫既有 R2Service 上傳。
+            // ShopService：商業流程與 DTO 轉換。
+            builder.Services.AddScoped<IShopRepository, ShopRepository>();
+            builder.Services.AddScoped<IShopImageService, ShopImageService>();
+            builder.Services.AddScoped<IShopService, ShopService>();
 
-			//builder.Services.AddScoped<MemberService>();
+            //builder.Services.AddScoped<IMemberRepository, MemberRepository>();
+            //builder.Services.AddScoped<AuthService>();
+
+            //builder.Services.AddScoped<MemberService>();
 
 			// 目前操作者(開發用假身分;之後接上登入只換這一行的實作)
 			builder.Services.AddScoped<ICurrentUserService, DevCurrentUserService>();
@@ -65,25 +73,25 @@ namespace PawPuff_Management
 			//builder.Services.AddScoped<ProductRepository>();
 			//builder.Services.AddScoped<ProductService>();
 
-			// Cookie Authentication ===================
-			//builder.Services.AddAuthentication(options =>
-			//{
-			//	options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme; //"Cookies"名字可自訂
-			//	options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            // Cookie Authentication ===================
+            //builder.Services.AddAuthentication(options =>
+            //{
+            //	options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme; //"Cookies"名字可自訂
+            //	options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 
-			//})
-			//	.AddCookie(options =>
-			//	{
-			//		options.Cookie.Name = "estore"; // Set cookie name
-			//		options.LoginPath = "/Auth/Login"; // Set login path
-			//										   // options.AccessDeniedPath = "/Auth/AccessDenied"; // Set access denied path
-			//		options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // Set cookie expiration time
-			//		options.SlidingExpiration = true; // Enable sliding expiration
-			//	});
+            //})
+            //	.AddCookie(options =>
+            //	{
+            //		options.Cookie.Name = "estore"; // Set cookie name
+            //		options.LoginPath = "/Auth/Login"; // Set login path
+            //										   // options.AccessDeniedPath = "/Auth/AccessDenied"; // Set access denied path
+            //		options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // Set cookie expiration time
+            //		options.SlidingExpiration = true; // Enable sliding expiration
+            //	});
 
-			//==========================================
+            //==========================================
 
-			var app = builder.Build();
+            var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
