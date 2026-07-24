@@ -36,7 +36,6 @@ namespace PawPuff_Management
 
 			// 註冊持有組合一覽
 			builder.Services.AddScoped<IOwnedCombinationRepository,OwnedCombinationRepository>();
-
 			builder.Services.AddScoped<IOwnedCombinationService,OwnedCombinationService>();
 
 			// 註冊紙娃娃組合預覽
