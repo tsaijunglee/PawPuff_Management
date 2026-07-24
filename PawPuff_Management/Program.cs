@@ -47,8 +47,31 @@ namespace PawPuff_Management
 
             //builder.Services.AddScoped<MemberService>();
 
-            //builder.Services.AddScoped<ProductRepository>();
-            //builder.Services.AddScoped<ProductService>();
+			// 目前操作者(開發用假身分;之後接上登入只換這一行的實作)
+			builder.Services.AddScoped<ICurrentUserService, DevCurrentUserService>();
+
+			// 分類
+			builder.Services.AddScoped<IArticleCategoryRepository, ArticleCategoryRepository>();
+			builder.Services.AddScoped<IArticleCategoryService, ArticleCategoryService>();
+
+			// 文章 + 圖片 + 留言 + 按讚/收藏
+			builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
+			builder.Services.AddScoped<IArticleImageRepository, ArticleImageRepository>();
+			builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+			builder.Services.AddScoped<IArticleReactionRepository, ArticleReactionRepository>();
+
+			builder.Services.AddScoped<IArticleService, ArticleService>();
+			builder.Services.AddScoped<IArticleImageService, ArticleImageService>();
+			builder.Services.AddScoped<ICommentService, CommentService>();
+			builder.Services.AddScoped<IArticleReactionService, ArticleReactionService>();
+
+			// Fqa註冊
+			builder.Services.AddScoped<IFaqRepository, FaqRepository>();
+			builder.Services.AddScoped<IFaqService, FaqService>();
+
+
+			//builder.Services.AddScoped<ProductRepository>();
+			//builder.Services.AddScoped<ProductService>();
 
             // Cookie Authentication ===================
             //builder.Services.AddAuthentication(options =>
