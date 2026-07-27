@@ -98,17 +98,52 @@
     grid.className = "permission-check-grid";
     grid.setAttribute("aria-label", account + " 權限");
 
-    getPermissionTemplateValues().forEach((permission) => {
-      const label = document.createElement("label");
-      const checkbox = document.createElement("input");
-      label.className = "permission-check";
-      checkbox.className = "form-check-input";
-      checkbox.type = "checkbox";
-      checkbox.dataset.permissionCheck = "";
-      checkbox.value = permission;
-      label.append(checkbox, document.createTextNode(permission));
-      grid.appendChild(label);
-    });
+
+      const permissionLabels = {
+          Dashboard: "儀錶板",
+          Account: "帳號",
+          Articles: "文章",
+          Shop: "商城",
+          Points: "點數",
+          Doll: "紙娃娃",
+          Notification: "通知",
+          Support: "客服"
+      };
+
+      getPermissionTemplateValues().forEach((permission) => {
+          const label = document.createElement("label");
+          const checkbox = document.createElement("input");
+
+          label.className = "permission-check";
+          checkbox.className = "form-check-input";
+          checkbox.type = "checkbox";
+          checkbox.dataset.permissionCheck = "";
+          checkbox.value = permission;
+
+          label.append(
+              checkbox,
+              document.createTextNode(
+                  permissionLabels[permission] || permission
+              )
+          );
+
+          grid.appendChild(label);
+      });
+
+
+
+
+    //getPermissionTemplateValues().forEach((permission) => {
+    //  const label = document.createElement("label");
+    //  const checkbox = document.createElement("input");
+    //  label.className = "permission-check";
+    //  checkbox.className = "form-check-input";
+    //  checkbox.type = "checkbox";
+    //  checkbox.dataset.permissionCheck = "";
+    //  checkbox.value = permission;
+    //  label.append(checkbox, document.createTextNode(permission));
+    //  grid.appendChild(label);
+    //});
 
     permissionCell.appendChild(grid);
     row.appendChild(permissionCell);
@@ -120,9 +155,9 @@
       if (!tableBody) return;
 
       // Razor 已產生資料，不再從管理員表格複製
-      if (tableBody.querySelector("[data-permission-row]")) {
-          return;
-      }
+      //if (tableBody.querySelector("[data-permission-row]")) {
+      //    return;
+      //}
 
    
 

@@ -14,7 +14,10 @@
         }
     };
 
-    const actorAdmin = "admin01";
+    function getActorAdmin() {
+        return document.getElementById("articleManagementView")
+            ?.dataset.actorAdminAccount || "";
+    }
     let rows = [];
     let createModal = null;
     let editModal = null;
@@ -912,7 +915,8 @@
             if (input) input.checked = nextActive;
             row.dataset.adminComment = reason;
             row.dataset.adminUpdatedAt = formatDateTime();
-            row.dataset.modifiedByAdmin = actorAdmin;
+            row.dataset.modifiedByAdmin =
+                result.data?.modifiedByAdminAccount || getActorAdmin();
             syncStatusLabel(row);
             if (!document.getElementById("articleDetailView")?.classList.contains("d-none")) renderDetail(row);
             if (state.sortKey === "active") renderTable();
@@ -978,7 +982,8 @@
             commentNode.dataset.active = String(nextActive);
             commentNode.dataset.adminComment = reason;
             commentNode.dataset.adminUpdatedAt = formatDateTime();
-            commentNode.dataset.modifiedByAdmin = actorAdmin;
+            commentNode.dataset.modifiedByAdmin =
+                result.data?.modifiedByAdminAccount || getActorAdmin();
             renderComments(articleId);
             showToast("留言狀態已更新");
         } catch (error) {

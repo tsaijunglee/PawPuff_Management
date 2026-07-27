@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PawPuff_Management.Models.Dtos;
 using PawPuff_Management.Models.Services;
 using PawPuff_Management.ViewModels.Article;
+using System.Security.Claims;
 
 namespace PawPuff_Management.Controllers;
 #nullable enable
@@ -131,35 +132,54 @@ public class ArticlesController : Controller
 	private IActionResult JsonOk(object? data = null) => Json(new { success = true, data });
 	private IActionResult JsonFail(string? message) => Json(new { success = false, message });
 
+	private bool TryGetCurrentAdminId(out int adminId)
+	{
+		var adminIdText = User.FindFirstValue(ClaimTypes.NameIdentifier);
+		return int.TryParse(adminIdText, out adminId) && adminId > 0;
+	}
+
 	// POST: /Articles/SetActiveAjax  (停用/啟用文章,reason 寫進 admin_comment)
 	[HttpPost]
 	public async Task<IActionResult> SetActiveAjax(int id, bool isActive, string? reason)
 	{
-		var r1 = await _articleService.SetActiveAsync(id, isActive);
-		if (!r1.Success) return JsonFail(r1.Error);
-
-		if (!string.IsNullOrWhiteSpace(reason))
+		if (!TryGetCurrentAdminId(out var adminId))
 		{
-			var r2 = await _articleService.SetAdminNoteAsync(id, reason);
-			if (!r2.Success) return JsonFail(r2.Error);
+			return Unauthorized(new
+			{
+				success = false,
+				message = "無法取得目前登入管理員。"
+			});
 		}
-		return JsonOk();
-	
+
+		var result = await _articleService.SetActiveAsync(id, isActive, reason, adminId);
+		if (!result.Success) return JsonFail(result.Error);
+
+		return JsonOk(new
+		{
+			modifiedByAdminAccount = User.Identity?.Name
+		});
 	}
 
 	// POST: /Articles/SetCommentActiveAjax  (停用/啟用留言,reason 寫進 admin_comment)
 	[HttpPost]
 	public async Task<IActionResult> SetCommentActiveAjax(int commentId, bool isActive, string? reason)
 	{
-		var r1 = await _commentService.SetActiveAsync(commentId, isActive);
-		if (!r1.Success) return JsonFail(r1.Error);
-
-		if (!string.IsNullOrWhiteSpace(reason))
+		if (!TryGetCurrentAdminId(out var adminId))
 		{
-			var r2 = await _commentService.SetAdminNoteAsync(commentId, reason);
-			if (!r2.Success) return JsonFail(r2.Error);
+			return Unauthorized(new
+			{
+				success = false,
+				message = "無法取得目前登入管理員。"
+			});
 		}
-		return JsonOk();
+
+		var result = await _commentService.SetActiveAsync(commentId, isActive, reason, adminId);
+		if (!result.Success) return JsonFail(result.Error);
+
+		return JsonOk(new
+		{
+			modifiedByAdminAccount = User.Identity?.Name
+		});
 	}
 
 	// ---------------- 私有:組裝 Index 頁 ViewModel ----------------
