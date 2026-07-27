@@ -100,7 +100,7 @@ namespace PawPuff_Management
 
 
 					//已經登入，但沒有權限時，要導向哪一個頁面
-					// options.AccessDeniedPath = "/Auth/AccessDenied"; // Set access denied path
+					options.AccessDeniedPath = "/Error/AccessDenied"; // Set access denied path
 
 					options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // Set cookie expiration time
 																	   //設定登入有效期限為目前 UTC 時間的一小時後 => 過期後使用者需要重新登入
