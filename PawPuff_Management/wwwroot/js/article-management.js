@@ -592,7 +592,7 @@
         const statusId = "articleStatus" + article.id;
         row.dataset.articleRow = "";
         row.dataset.id = String(article.id);
-        row.dataset.account = article.account;
+        row.dataset.account = article.account ?? "官方人員";
         row.dataset.categoryName = article.categoryName;
         row.dataset.title = article.title;
         row.dataset.articleContent = article.articleContent;

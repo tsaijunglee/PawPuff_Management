@@ -66,7 +66,7 @@ public class ArticleService : IArticleService
 			ArticleContent = dto.ArticleContent.Trim(),
 			CategoryId = dto.CategoryId,
 			IsActive = dto.IsActive,
-			UserId = _currentUser.GetCurrentUserId(),  // 後台建立的文章掛在目前使用者名下
+			UserId = null,  // 後台建立的文章掛在目前使用者名下
 			CreatedAt = DateTime.Now,
 		};
 
