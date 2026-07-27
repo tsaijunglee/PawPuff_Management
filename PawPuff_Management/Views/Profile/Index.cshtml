@@ -1,4 +1,6 @@
-﻿@{
+﻿@model PawPuff_Management.Models.DTOs.AdminProfileDto
+
+@{
     ViewData["Title"] = "修改個人資料";
     ViewData["CurrentScreen"] = "profile-management";
 }
@@ -11,15 +13,18 @@
         </span>
         <h2 class="screen-title" id="managementTitle">修改個人資料</h2>
         <p class="screen-desc" id="managementDescription">
-            查看「蓉蓉」的個人資料。
+            查看「@Model.Nickname」的個人資料。
         </p>
 
         <div class="member-detail-view profile-detail-view" id="profileDetailView"
-             data-profile-account="admin01"
-             data-profile-nickname="蓉蓉">
+             data-profile-account="@Model.Account"
+             data-profile-nickname="@Model.Nickname" data-update-url="@Url.Action("Update", "Profile")">
+
+            @Html.AntiForgeryToken()
+
             <div class="member-detail-card profile-detail-card">
                 <div class="member-detail-head profile-detail-head">
-                    <strong><i class="bi bi-person-vcard me-2"></i><span id="profileDetailTitle">蓉蓉｜admin01</span></strong>
+                    <strong><i class="bi bi-person-vcard me-2"></i><span id="profileDetailTitle">@Model.Nickname｜@Model.Account</span></strong>
                     <div class="profile-detail-actions">
                         <button class="member-back-btn px-3" id="profileResetButton" type="button">
                             <i class="bi bi-arrow-counterclockwise me-1"></i>還原
@@ -30,32 +35,56 @@
                     </div>
                 </div>
 
+                @Html.AntiForgeryToken()
+
                 <div class="member-detail-grid profile-detail-grid">
                     <div class="member-detail-field">
                         <div class="member-detail-label">帳號</div>
-                        <div class="member-detail-value">admin01</div>
+                        <div class="member-detail-value">@Model.Account</div>
                     </div>
                     <div class="member-detail-field profile-edit-field">
                         <label class="member-detail-label" for="profileNickname">暱稱</label>
-                        <input class="form-control profile-edit-input" id="profileNickname" type="text" value="蓉蓉" autocomplete="nickname" required>
+                        <input class="form-control profile-edit-input"
+                               id="profileNickname"
+                               type="text"
+                               value="@Model.Nickname"
+                               maxlength="10"
+                               autocomplete="nickname"
+                               required>
                         <div class="invalid-feedback">請輸入暱稱。</div>
                     </div>
                     <div class="member-detail-field">
                         <div class="member-detail-label">信箱</div>
-                        <div class="member-detail-value">admin01@pawpuff.com</div>
+                        <div class="member-detail-value">@Model.Email</div>
                     </div>
                     <div class="member-detail-field">
                         <div class="member-detail-label">註冊日期</div>
-                        <div class="member-detail-value">2025-01-02 9:00:00</div>
+                        <div class="member-detail-value">
+                            @Model.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")
+                        </div>
                     </div>
                     <div class="member-detail-field profile-edit-field">
                         <label class="member-detail-label" for="profilePassword">新密碼</label>
-                        <input class="form-control profile-edit-input" id="profilePassword" type="password" autocomplete="new-password" placeholder="不修改請留空">
-                        <div class="invalid-feedback">請輸入新密碼。</div>
+                        <input class="form-control profile-edit-input"
+                               id="profilePassword"
+                               type="password"
+                               minlength="6"
+                               maxlength="20"
+                               autocomplete="new-password"
+                               placeholder="不修改請留空">
+                        <div class="invalid-feedback">請輸入新密碼，新密碼需為8～100個字。</div>
                     </div>
+
+                    @* 因為密碼可以不修改，所以不要直接加 required；只有使用者開始輸入新密碼時，JavaScript 才要求兩個欄位都有值且內容相同。 *@
                     <div class="member-detail-field profile-edit-field">
                         <label class="member-detail-label" for="profilePasswordConfirm">確認新密碼</label>
-                        <input class="form-control profile-edit-input" id="profilePasswordConfirm" type="password" autocomplete="new-password" placeholder="再次輸入新密碼">
+                        <input class="form-control profile-edit-input"
+                               id="profilePasswordConfirm"
+                               type="password"
+                               minlength="6"
+                               maxlength="20"
+                               autocomplete="new-password"
+                               placeholder="再次輸入新密碼">
                         <div class="invalid-feedback">兩次輸入的密碼需一致。</div>
                     </div>
                 </div>
@@ -70,5 +99,5 @@
 }
 
 @section Scripts {
-    <script src="~/js/profile-management.js"></script>
+    <script src="~/js/profile-management.js" asp-append-version="true"></script>
 }

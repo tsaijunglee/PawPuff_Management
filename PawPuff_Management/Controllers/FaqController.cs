@@ -1,16 +1,19 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PawPuff_Management.Models.DTOs;
 using PawPuff_Management.Models.Services;
 
 namespace PawPuff_Management.Controllers
 {
-    /// <summary>
-    /// FAQ 後台維護,對應網址 /Faq。
-    /// 篩選、排序、分頁由 faq-management.js 在前端處理,所以 Controller
-    /// 只提供「整份清單」與三個 JSON 端點,不做伺服器端分頁。
-    /// 目前不做登入驗證;之後要加,在類別上掛 [Authorize] 即可,其他層都不用動。
-    /// </summary>
-    public class FaqController : Controller
+	/// <summary>
+	/// FAQ 後台維護,對應網址 /Faq。
+	/// 篩選、排序、分頁由 faq-management.js 在前端處理,所以 Controller
+	/// 只提供「整份清單」與三個 JSON 端點,不做伺服器端分頁。
+	/// 目前不做登入驗證;之後要加,在類別上掛 [Authorize] 即可,其他層都不用動。
+	/// </summary>
+
+	[Authorize(Policy = "Support")]
+	public class FaqController : Controller
     {
         private readonly IFaqService _faqService;
 

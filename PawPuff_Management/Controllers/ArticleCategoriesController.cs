@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PawPuff_Management.Models.Dtos;
 using PawPuff_Management.Models.Services;
 using PawPuff_Management.ViewModels.ArticleCategory;
@@ -11,6 +12,8 @@ namespace PawPuff_Management.Controllers;
 /// 注意:換成「單一 Index」只動了這個 Controller 與 Index.cshtml,
 /// 下面的 Service / Repository / DTO / ViewModel 完全沒改 —— 這就是分層的好處。
 /// </summary>
+/// 
+[Authorize(Policy = "Articles")]
 public class ArticleCategoriesController : Controller
 {
 	private readonly IArticleCategoryService _categoryService;

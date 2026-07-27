@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PawPuff_Management.Models.DTOs;
 using PawPuff_Management.Models.Services;
 
 namespace PawPuff_Management.Controllers
 {
+	[Authorize(Policy = "Points")]
 	public class PointsController : Controller
 	{
 		// TODO [登入串接]

@@ -19,7 +19,9 @@
             檢視、建立、編輯與上下架文章內容。
         </p>
 
-        <div class="article-management-view" id="articleManagementView">
+        <div class="article-management-view"
+             id="articleManagementView"
+             data-actor-admin-account="@User.Identity?.Name">
             <div class="member-page-actions">
                 <button class="member-create-open-btn" id="articleCreateOpen" type="button" data-bs-toggle="modal" data-bs-target="#articleCreateModal">
                     <i class="bi bi-file-earmark-plus me-1"></i>新增文章

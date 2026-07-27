@@ -162,6 +162,28 @@
             color: #fca5a5;
             display: none;
         }
+
+
+
+
+        /* 登入失敗訊息 */
+        .login-container .login-error,
+        .login-container .login-error ul,
+        .login-container .login-error li {
+            color: red;
+        }
+
+        .login-error {
+            margin-bottom: 16px;
+            color: red;
+            text-align: center;
+            font-size: 14px;
+        }
+
+            .login-error ul {
+                padding: 0;
+                list-style: none;
+            }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -175,19 +197,30 @@
             <img src="~/img/Login_pic.PNG" alt="PawPuff 噗爪">
         </div>
         <p class="system-subtitle">後台管理系統</p>
-        <form method="post">
+
+        <form method="post"
+         asp-controller="Auth"
+         asp-action="Index">
+            
+         <div asp-validation-summary="ModelOnly"
+                 class="login-error"></div>
+
             <label asp-for="Account">管理員帳號</label>
             <div class="input-wrapper">
                 <input asp-for="Account" id="Account" placeholder="請輸入管理員帳號" required />
-                <span asp-validation-for="Account" class="text-danger"></span>
+  
                 <i class="fa-solid fa-user-astronaut input-icon"></i>
             </div>
+            <span asp-validation-for="Account" class="text-danger"></span>
+
             <label asp-for="Password">密碼</label>
             <div class="input-wrapper">
                 <input asp-for="Password" id="Password" type="password" placeholder="請輸入密碼" required />
-                <span asp-validation-for="Password" class="text-danger"></span>
+                
                 <i class="fa-solid fa-key input-icon"></i>
             </div>
+            <span asp-validation-for="Password" class="text-danger"></span>
+
             <button type="submit">登入系統</button>
         </form>
         <div id="message" class="message"></div>

@@ -13,6 +13,5 @@ public interface IArticleService
 	/// <summary>建立文章並上傳圖片(一次完成)。</summary>
 	Task<ServiceResult<int>> CreateWithImagesAsync(ArticleCreateDto dto, IReadOnlyList<IFormFile> files);
 	Task<ServiceResult> UpdateAsync(ArticleEditDto dto);
-	Task<ServiceResult> SetActiveAsync(int id, bool isActive);
-	Task<ServiceResult> SetAdminNoteAsync(int id, string? adminComment);
+	Task<ServiceResult> SetActiveAsync(int id, bool isActive, string? reason, int modifiedByAdminId);
 }

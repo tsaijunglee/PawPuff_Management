@@ -1,10 +1,19 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "儀錶板";
     ViewData["CurrentScreen"] = "dashboard";
 }
 
 <div class="dashboard-content" id="dashboardScreen" data-screen-panel="dashboard">
-    <section class="soft-panel attendance-panel attendance-dashboard-panel" aria-labelledby="attendanceTitle">
+    <section class="soft-panel attendance-panel attendance-dashboard-panel"
+             id="dashboardAttendance"
+             aria-labelledby="attendanceTitle"
+             data-records-url="@Url.Action("MyClockRecords", "AdminsClock")"
+             data-clock-in-url="@Url.Action("ClockIn", "AdminsClock")"
+             data-clock-out-url="@Url.Action("ClockOut", "AdminsClock")">
+
+        @Html.AntiForgeryToken()
+
         <div class="attendance-layout">
             <div class="attendance-copy">
                 <h2 class="section-title" id="attendanceTitle">
@@ -12,26 +21,68 @@
                     管理員打卡
                 </h2>
                 <div class="attendance-status">
-                    <span class="status-pill" id="dashboardAttendanceStatus"><i class="bi bi-person-dash"></i>今日狀態：未打卡</span>
-                    <span class="status-pill" id="dashboardClockInStatus"><i class="bi bi-clock"></i>上班 尚未打卡</span>
-                    <span class="status-pill" id="dashboardClockOutStatus"><i class="bi bi-box-arrow-right"></i>下班 尚未打卡</span>
+                    <span class="status-pill"
+                          id="dashboardAttendanceStatus">
+                        <i class="bi bi-hourglass-split"></i>
+                        今日狀態：載入中
+                    </span>
+
+                    <span class="status-pill"
+                          id="dashboardClockInStatus">
+                        <i class="bi bi-clock"></i>
+                        上班 載入中
+                    </span>
+
+                    <span class="status-pill"
+                          id="dashboardClockOutStatus">
+                        <i class="bi bi-box-arrow-right"></i>
+                        下班 載入中
+                    </span>
                 </div>
             </div>
 
             <div class="attendance-actions">
                 @* <a class="member-create-open-btn attendance-view-all-btn" href="./attendance-records.html"> *@
-                <a asp-controller="AdminsClock" asp-action="Index" class="member-create-open-btn attendance-view-all-btn" data-screen="dashboard2">
+                @* <a asp-controller="AdminsClock" asp-action="Index" class="member-create-open-btn attendance-view-all-btn" data-screen="dashboard2">
                     <i class="bi bi-card-list me-1"></i>檢視所有打卡紀錄
-                </a>
+                </a> *@
+
+              
+                @if (User.HasClaim("Permission", "Account"))
+                {
+                    <a asp-controller="AdminsClock"
+                       asp-action="Index"
+                       class="member-create-open-btn attendance-view-all-btn"
+                       data-screen="dashboard2">
+                        <i class="bi bi-card-list me-1"></i>
+                        檢視所有打卡紀錄
+                    </a>
+                }
+                else
+                {
+                    <button type="button"
+                            class="member-create-open-btn attendance-view-all-btn"
+                            disabled
+                            aria-disabled="true"
+                            title="你沒有檢視所有打卡紀錄的權限">
+                        <i class="bi bi-card-list me-1"></i>
+                        檢視所有打卡紀錄
+                    </button>
+                }
+
+
                 <button class="attendance-btn" type="button" id="dashboardClockInBtn"><i class="bi bi-box-arrow-in-right"></i>打卡上班</button>
                 <button class="attendance-btn" type="button" id="dashboardClockOutBtn"><i class="bi bi-box-arrow-right"></i>打卡下班</button>
             </div>
         </div>
 
-        <div class="attendance-dashboard-table-view" aria-label="admin01 打卡紀錄">
+        <div class="attendance-dashboard-table-view" aria-label="@User.Identity?.Name 打卡紀錄">
             <div class="member-table-card">
                 <div class="member-table-toolbar">
-                    <strong><i class="bi bi-calendar-check me-2"></i>admin01 打卡紀錄表</strong>
+                    <strong>
+                        <i class="bi bi-calendar-check me-2"></i>
+                        @User.Identity?.Name 打卡紀錄表
+                    </strong>
                     <span class="member-count" id="dashboardAttendanceResultCount">共 0 筆</span>
                 </div>
                 <div class="table-responsive">
@@ -50,6 +101,8 @@
                             </tr>
                         </thead>
                         <tbody id="dashboardAttendanceTableBody">
+                        </tbody>
+                        @* <tbody id="dashboardAttendanceTableBody">
                             <tr data-dashboard-attendance-row data-date-key="2026-07-14" data-work-date="2026/7/14" data-clock-in="9:00" data-clock-out="18:10">
                                 <td data-dashboard-attendance-cell="date">2026/7/14</td>
                                 <td data-dashboard-attendance-cell="clockIn">9:00</td>
@@ -105,12 +158,12 @@
                                 <td data-dashboard-attendance-cell="clockIn">8:45</td>
                                 <td data-dashboard-attendance-cell="clockOut">18:34</td>
                             </tr>
-                        </tbody>
+                        </tbody> *@
                     </table>
                 </div>
                 <div class="member-pagination-wrap">
                     <span class="member-page-info" id="dashboardAttendancePageInfo">第 1 頁</span>
-                    <nav aria-label="admin01 打卡紀錄表格分頁">
+                    <nav aria-label="@User.Identity?.Name 打卡紀錄表格分頁">
                         <ul class="pagination member-pagination" id="dashboardAttendancePagination"></ul>
                     </nav>
                 </div>
@@ -124,5 +177,5 @@
 }
 
 @section Scripts {
-    <script src="~/js/attendance-management.js"></script>
+    <script src="~/js/attendance-management.js" asp-append-version="true"></script>
 }
