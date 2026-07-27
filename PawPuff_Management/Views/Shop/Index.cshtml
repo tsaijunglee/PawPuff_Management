@@ -1,7 +1,21 @@
-﻿@{
+﻿@model PawPuff_Management.Models.ViewModels.ShopIndexViewModel
+@using System.Globalization
+@{
     ViewData["Title"] = "商城管理";
     ViewData["CurrentScreen"] = "product-list";
 }
+@functions {
+    // 將 null 或空字串統一輸出成 "NULL"，讓既有 JS normalizeNullable 可以沿用。
+    string N(string? value) => string.IsNullOrWhiteSpace(value) ? "NULL" : value;
+
+    // 將可為 null 的 Id 輸出成字串，沒有值時輸出 "NULL"。
+    string N(int? value) => value?.ToString(CultureInfo.InvariantCulture) ?? "NULL";
+
+    // 頭像框 IsSquare 給 JS 使用：
+    // 1 = 方形，0 = 圓形，NULL = 非頭像框。
+    string N(bool? value) => value is null ? "NULL" : value.Value ? "1" : "0";
+}
+
 
 <div class="dashboard-content management-screen" id="managementScreen" data-screen-panel="management">
     <section class="soft-panel management-panel">
@@ -20,7 +34,17 @@
             <button class="member-create-open-btn" type="button" data-shop-create-open="染劑"><i class="bi bi-palette me-1"></i>新增染劑</button>
         </div>
 
-        <div class="shop-management-view" id="shopManagementView" data-actor-admin-account="admin01">
+        <div class="shop-management-view"
+             id="shopManagementView"
+             data-actor-admin-account="@Model.ActorAdminAccount"
+             data-create-url="@Url.Action("Create", "Shop")"
+             data-update-status-url="@Url.Action("UpdateStatus", "Shop")"
+             data-update-price-url="@Url.Action("UpdatePrice", "Shop")"
+             data-update-sort-url="@Url.Action("UpdateSortOrder", "Shop")">
+
+            @* Ajax POST 會從這個 hidden input 讀取防偽 Token。 *@
+            @Html.AntiForgeryToken()
+
             <form class="member-search-panel shop-search-panel" id="shopSearchForm">
                 <div class="member-search-row shop-search-row">
                     <div class="member-search-field">
@@ -84,7 +108,70 @@
                             </tr>
                         </thead>
                         <tbody id="shopTableBody">
-                            <tr data-shop-row data-id="1" data-product-type="底圖" data-body-id="1" data-accessory-id="NULL" data-frames-id="NULL" data-colors-id="NULL" data-name="底圖1" data-image-name="b1.png" data-line-image-name="NULL" data-mask-image-name="NULL" data-sort-order="NULL" data-is-square="NULL" data-hex-code="NULL" data-price="2000" data-active="true" data-admin-comment="上架" data-admin-updated-at="2026-06-05 13:03:12" data-modified-by-admin="admin01">
+                            @foreach (var item in Model.Products)
+                            {
+                                // 染劑用色塊顯示；其他類型用圖片。
+                                var colorClass = item.ProductType == "染劑" ? " is-color" : "";
+                                var colorStyle = item.ProductType == "染劑" && !string.IsNullOrWhiteSpace(item.HexCode)
+                                ? $"--shop-color:{item.HexCode}"
+                                : "";
+
+                                // 表格縮圖 fallback 文字。
+                                // 底圖/頭像框顯示 ImageName；配件顯示 LineImageName；染劑顯示 HexCode。
+                                var previewLabel = item.ProductType == "染劑" ? item.HexCode :
+                                item.ProductType == "配件" ? item.LineImageName :
+                                item.ImageName;
+
+                                <tr data-shop-row
+                                    data-id="@item.Id"
+                                    data-product-type="@item.ProductType"
+                                    data-body-id="@N(item.BodyId)"
+                                    data-accessory-id="@N(item.AccessoryId)"
+                                    data-frames-id="@N(item.FramesId)"
+                                    data-colors-id="@N(item.ColorsId)"
+                                    data-name="@item.Name"
+                                    data-image-name="@N(item.ImageName)"
+                                    data-image-src="@item.ImageSrc"
+                                    data-line-image-name="@N(item.LineImageName)"
+                                    data-line-image-src="@item.LineImageSrc"
+                                    data-mask-image-name="@N(item.MaskImageName)"
+                                    data-mask-image-src="@item.MaskImageSrc"
+                                    data-sort-order="@N(item.SortOrder)"
+                                    data-is-square="@N(item.IsSquare)"
+                                    data-hex-code="@N(item.HexCode)"
+                                    data-price="@item.Price"
+                                    data-active="@item.IsActive.ToString().ToLowerInvariant()"
+                                    data-admin-comment="@N(item.AdminComment)"
+                                    data-admin-updated-at="@item.AdminUpdatedAtText"
+                                    data-modified-by-admin="@N(item.ModifiedByAdminAccount)">
+                                    <td data-shop-cell="id">@item.Id</td>
+                                    <td>
+                                        <div class="shop-product-thumb@colorClass" data-shop-thumb style="@colorStyle">
+                                            <span>@N(previewLabel)</span>
+                                        </div>
+                                    </td>
+                                    <td data-shop-cell="name">@item.Name</td>
+                                    <td data-shop-cell="type">@item.ProductType</td>
+                                    <td data-shop-cell="price">@item.PriceFormatted</td>
+                                    <td>
+                                        <button class="member-detail-btn" type="button" data-shop-detail="@item.Id">
+                                            查看 <i class="bi bi-chevron-right"></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <div class="form-check form-switch member-status-switch shop-status-switch">
+                                            <input class="form-check-input"
+                                                   id="shopStatus@item.Id"
+                                                   type="checkbox"
+                                                   role="switch"
+                                                   data-shop-status="@item.Id"
+                                                   @(item.IsActive ? "checked" : "")>
+                                            <label class="member-status-text" for="shopStatus@item.Id">@item.ActiveText</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                            @* <tr data-shop-row data-id="1" data-product-type="底圖" data-body-id="1" data-accessory-id="NULL" data-frames-id="NULL" data-colors-id="NULL" data-name="底圖1" data-image-name="b1.png" data-line-image-name="NULL" data-mask-image-name="NULL" data-sort-order="NULL" data-is-square="NULL" data-hex-code="NULL" data-price="2000" data-active="true" data-admin-comment="上架" data-admin-updated-at="2026-06-05 13:03:12" data-modified-by-admin="admin01">
                                 <td data-shop-cell="id">1</td>
                                 <td><div class="shop-product-thumb" data-shop-thumb><span>b1.png</span></div></td>
                                 <td data-shop-cell="name">底圖1</td>
@@ -191,7 +278,7 @@
                                 <td data-shop-cell="price">500</td>
                                 <td><button class="member-detail-btn" type="button" data-shop-detail="12">查看 <i class="bi bi-chevron-right"></i></button></td>
                                 <td><div class="form-check form-switch member-status-switch shop-status-switch"><input class="form-check-input" id="shopStatus12" type="checkbox" role="switch" data-shop-status="12"><label class="member-status-text" for="shopStatus12">停用</label></div></td>
-                            </tr>
+                            </tr> *@
                         </tbody>
                     </table>
                 </div>
@@ -243,12 +330,12 @@
                     <div class="member-detail-field" id="shopSortOrderField">
                         <div class="member-detail-label">圖層排序</div>
                         <select class="form-select shop-modal-select" id="shopDetailSortOrder">
-                            <option value="0">0 最下層</option>
-                            <option value="1">1</option>
+                            <option value="1">1 最底層</option>
                             <option value="2">2</option>
-                            <option value="4">4</option>
+                            <option value="3">3</option>
                             <option value="5">5</option>
-                            <option value="6">6 最上層</option>
+                            <option value="6">6</option>
+                            <option value="7">7 最上層</option>
                         </select>
                     </div>
                     <div class="member-detail-field" id="shopFrameShapeField">
@@ -296,37 +383,37 @@
 
                         <div class="col-12" data-shop-create-panel="底圖">
                             <label class="form-label fw-bold" for="shopCreateBodyImage">上傳圖片</label>
-                            <input class="form-control" id="shopCreateBodyImage" type="file" accept="image/*">
+                            <input class="form-control" id="shopCreateBodyImage" type="file" accept="image/*" required>
                             <div class="invalid-feedback">請上傳一張圖片。</div>
                         </div>
 
                         <div class="col-12 col-md-6" data-shop-create-panel="配件">
                             <label class="form-label fw-bold" for="shopCreateAccessoryLineImage">上傳線稿圖片</label>
-                            <input class="form-control" id="shopCreateAccessoryLineImage" type="file" accept="image/*">
+                            <input class="form-control" id="shopCreateAccessoryLineImage" type="file" accept="image/*" required>
                             <div class="invalid-feedback">請上傳一張線稿圖片。</div>
                         </div>
                         <div class="col-12 col-md-6" data-shop-create-panel="配件">
                             <label class="form-label fw-bold" for="shopCreateAccessoryMaskImage">上傳遮罩圖片</label>
-                            <input class="form-control" id="shopCreateAccessoryMaskImage" type="file" accept="image/*">
+                            <input class="form-control" id="shopCreateAccessoryMaskImage" type="file" accept="image/*" required>
                             <div class="invalid-feedback">請上傳一張遮罩圖片。</div>
                         </div>
                         <div class="col-12 col-md-6" data-shop-create-panel="配件">
                             <label class="form-label fw-bold" for="shopCreateAccessorySort">圖層排序</label>
-                            <select class="form-select shop-modal-select" id="shopCreateAccessorySort">
+                            <select class="form-select shop-modal-select" id="shopCreateAccessorySort" required>
                                 <option value="">請選擇排序</option>
-                                <option value="0">0 最下層</option>
-                                <option value="1">1</option>
+                                <option value="1">1 最底層</option>
                                 <option value="2">2</option>
-                                <option value="4">4</option>
+                                <option value="3">3</option>
                                 <option value="5">5</option>
-                                <option value="6">6 最上層</option>
+                                <option value="6">6</option>
+                                <option value="7">7 最上層</option>
                             </select>
                             <div class="invalid-feedback">請選擇圖層排序。</div>
                         </div>
 
                         <div class="col-12 col-md-6" data-shop-create-panel="頭像框">
                             <label class="form-label fw-bold" for="shopCreateFrameImage">上傳圖片</label>
-                            <input class="form-control" id="shopCreateFrameImage" type="file" accept="image/*">
+                            <input class="form-control" id="shopCreateFrameImage" type="file" accept="image/*" required>
                             <div class="invalid-feedback">請上傳一張圖片。</div>
                         </div>
                         <div class="col-12 col-md-6" data-shop-create-panel="頭像框">
@@ -341,7 +428,7 @@
                             <label class="form-label fw-bold" for="shopCreateColorPicker">顏色選擇</label>
                             <div class="shop-color-input-row">
                                 <input class="form-control form-control-color" id="shopCreateColorPicker" type="color" value="#FF44AA" title="選擇染劑顏色">
-                                <input class="form-control" id="shopCreateColorHex" type="text" value="#FF44AA" maxlength="7" placeholder="#RRGGBB">
+                                <input class="form-control" id="shopCreateColorHex" type="text" value="#FF44AA" maxlength="7" placeholder="#RRGGBB" required>
                             </div>
                             <div class="invalid-feedback d-none" id="shopCreateColorError">請輸入有效色碼，例如 #FF44AA。</div>
                         </div>
@@ -349,7 +436,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="submit" class="btn btn-warning fw-bold text-brown">新增商品</button>
+                    <button type="submit" class="btn btn-warning fw-bold text-brown" id="shopCreateSubmit">新增商品</button>
                 </div>
             </form>
         </div>
@@ -402,9 +489,9 @@
 </div>
 
 @section Styles {
-    <link href="~/css/shop-management.css" rel="stylesheet">
+    <link href="~/css/shop-management.css" rel="stylesheet" asp-append-version="true">
 }
 
 @section Scripts {
-    <script src="~/js/shop-management.js"></script>
+    <script src="~/js/shop-management.js" asp-append-version="true"></script>
 }

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace PawPuff_Management.Models.DTOs
+namespace PawPuff_Management.Models.Dtos
 {
 	public class LoginDto
 	{

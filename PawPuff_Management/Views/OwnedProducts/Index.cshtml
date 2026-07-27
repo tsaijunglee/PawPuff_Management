@@ -1,4 +1,6 @@
-﻿@{
+﻿@model PawPuff_Management.Models.ViewModels.OwnedProductsIndexViewModel
+
+@{
     ViewData["Title"] = "持有商品一覽";
     ViewData["CurrentScreen"] = "owned-product-list";
 }
@@ -13,33 +15,70 @@
         <p class="screen-desc" id="managementDescription">
             檢視帳號持有的紙娃娃商品。
         </p>
+
         <div class="owned-product-view" id="ownedProductView">
-            <form class="member-search-panel" id="ownedProductSearchForm">
+            <form class="member-search-panel"
+                  id="ownedProductSearchForm">
                 <div class="member-search-row owned-product-search-row">
                     <div class="member-search-field">
-                        <label class="form-label" for="ownedProductFilterId">編號</label>
-                        <input class="form-control" id="ownedProductFilterId" type="text" data-owned-product-filter="id" placeholder="輸入編號">
+                        <label class="form-label"
+                               for="ownedProductFilterId">
+                            編號
+                        </label>
+                        <input class="form-control"
+                               id="ownedProductFilterId"
+                               type="text"
+                               inputmode="numeric"
+                               data-owned-product-filter="id"
+                               placeholder="輸入編號">
                     </div>
+
                     <div class="member-search-field">
-                        <label class="form-label" for="ownedProductFilterAccount">帳號</label>
-                        <input class="form-control" id="ownedProductFilterAccount" type="text" data-owned-product-filter="account" placeholder="輸入帳號">
+                        <label class="form-label"
+                               for="ownedProductFilterAccount">
+                            帳號
+                        </label>
+                        <input class="form-control"
+                               id="ownedProductFilterAccount"
+                               type="text"
+                               data-owned-product-filter="account"
+                               placeholder="輸入帳號">
                     </div>
+
                     <div class="member-search-field is-wide">
-                        <label class="form-label" for="ownedProductFilterName">商品名</label>
-                        <input class="form-control" id="ownedProductFilterName" type="text" data-owned-product-filter="name" placeholder="輸入商品名">
+                        <label class="form-label"
+                               for="ownedProductFilterName">
+                            商品名
+                        </label>
+                        <input class="form-control"
+                               id="ownedProductFilterName"
+                               type="text"
+                               data-owned-product-filter="name"
+                               placeholder="輸入商品名">
                     </div>
+
                     <div class="member-search-field">
-                        <label class="form-label" for="ownedProductFilterType">商品類型</label>
-                        <select class="form-select owned-product-filter-select" id="ownedProductFilterType" data-owned-product-filter="type">
+                        <label class="form-label"
+                               for="ownedProductFilterType">
+                            商品類型
+                        </label>
+                        <select class="form-select owned-product-filter-select"
+                                id="ownedProductFilterType"
+                                data-owned-product-filter="type">
                             <option value="">全部</option>
-                            <option value="底圖">底圖</option>
-                            <option value="配件">配件</option>
-                            <option value="頭像框">頭像框</option>
-                            <option value="染劑">染劑</option>
+                            @foreach (var productType in Model.ProductTypes)
+                            {
+                                <option value="@productType.Value">
+                                    @productType.Text
+                                </option>
+                            }
                         </select>
                     </div>
+
                     <div class="member-search-field">
-                        <button class="member-reset-btn px-3" id="ownedProductFilterReset" type="button">
+                        <button class="member-reset-btn px-3"
+                                id="ownedProductFilterReset"
+                                type="button">
                             <i class="bi bi-arrow-counterclockwise me-1"></i>重設
                         </button>
                     </div>
@@ -48,150 +87,121 @@
 
             <div class="member-table-card">
                 <div class="member-table-toolbar">
-                    <strong><i class="bi bi-bag-heart me-2"></i>持有商品資料表</strong>
-                    <span class="member-count" id="ownedProductResultCount">共 0 筆</span>
+                    <strong>
+                        <i class="bi bi-bag-heart me-2"></i>持有商品資料表
+                    </strong>
+                    <span class="member-count"
+                          id="ownedProductResultCount">
+                        共 @Model.TotalCount 筆
+                    </span>
                 </div>
+
                 <div class="table-responsive">
                     <table class="table table-hover member-table owned-product-table align-middle">
                         <thead>
                             <tr>
                                 <th scope="col">
-                                    <button class="sort-btn" type="button" data-owned-product-sort="id">編號 <i class="bi bi-arrow-down-up"></i></button>
+                                    <button class="sort-btn"
+                                            type="button"
+                                            data-owned-product-sort="id">
+                                        編號 <i class="bi bi-sort-up"></i>
+                                    </button>
                                 </th>
                                 <th scope="col">
-                                    <button class="sort-btn" type="button" data-owned-product-sort="account">帳號 <i class="bi bi-arrow-down-up"></i></button>
-                                </th>
-                                <th scope="col"><span class="sort-static-label">商品圖</span></th>
-                                <th scope="col">
-                                    <button class="sort-btn" type="button" data-owned-product-sort="name">商品名稱 <i class="bi bi-arrow-down-up"></i></button>
-                                </th>
-                                <th scope="col">
-                                    <button class="sort-btn" type="button" data-owned-product-sort="type">商品類型 <i class="bi bi-arrow-down-up"></i></button>
+                                    <button class="sort-btn"
+                                            type="button"
+                                            data-owned-product-sort="account">
+                                        帳號 <i class="bi bi-arrow-down-up"></i>
+                                    </button>
                                 </th>
                                 <th scope="col">
-                                    <button class="sort-btn" type="button" data-owned-product-sort="purchasedAt">購買時間 <i class="bi bi-arrow-down-up"></i></button>
+                                    <span class="sort-static-label">商品圖</span>
                                 </th>
                                 <th scope="col">
-                                    <button class="sort-btn" type="button" data-owned-product-sort="price">價格快照 <i class="bi bi-arrow-down-up"></i></button>
+                                    <button class="sort-btn"
+                                            type="button"
+                                            data-owned-product-sort="name">
+                                        商品名稱 <i class="bi bi-arrow-down-up"></i>
+                                    </button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn"
+                                            type="button"
+                                            data-owned-product-sort="type">
+                                        商品類型 <i class="bi bi-arrow-down-up"></i>
+                                    </button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn"
+                                            type="button"
+                                            data-owned-product-sort="purchasedAt">
+                                        購買時間 <i class="bi bi-arrow-down-up"></i>
+                                    </button>
+                                </th>
+                                <th scope="col">
+                                    <button class="sort-btn"
+                                            type="button"
+                                            data-owned-product-sort="price">
+                                        價格快照 <i class="bi bi-arrow-down-up"></i>
+                                    </button>
                                 </th>
                             </tr>
                         </thead>
+
                         <tbody id="ownedProductTableBody">
-                            <tr data-owned-product-row data-id="1" data-account="sunny01" data-image="b1.png" data-name="底圖1" data-type="底圖" data-purchased-at="2026-06-05 13:03:12" data-price="2000">
-                                <td data-owned-product-cell="id">1</td>
-                                <td data-owned-product-cell="account">sunny01</td>
-                                <td><div class="shop-product-thumb" data-owned-product-thumb><span>b1.png</span></div></td>
-                                <td data-owned-product-cell="name">底圖1</td>
-                                <td data-owned-product-cell="type">底圖</td>
-                                <td data-owned-product-cell="purchasedAt">2026-06-05 13:03:12</td>
-                                <td data-owned-product-cell="price">2,000</td>
-                            </tr>
-                            <tr data-owned-product-row data-id="2" data-account="sunny01" data-image="b3.png" data-name="底圖3" data-type="底圖" data-purchased-at="2026-06-05 13:03:12" data-price="2000">
-                                <td data-owned-product-cell="id">2</td>
-                                <td data-owned-product-cell="account">sunny01</td>
-                                <td><div class="shop-product-thumb" data-owned-product-thumb><span>b3.png</span></div></td>
-                                <td data-owned-product-cell="name">底圖3</td>
-                                <td data-owned-product-cell="type">底圖</td>
-                                <td data-owned-product-cell="purchasedAt">2026-06-05 13:03:12</td>
-                                <td data-owned-product-cell="price">2,000</td>
-                            </tr>
-                            <tr data-owned-product-row data-id="3" data-account="sunny01" data-image="al1.png" data-name="配件1" data-type="配件" data-purchased-at="2026-06-05 13:03:12" data-price="1000">
-                                <td data-owned-product-cell="id">3</td>
-                                <td data-owned-product-cell="account">sunny01</td>
-                                <td><div class="shop-product-thumb" data-owned-product-thumb><span>al1.png</span></div></td>
-                                <td data-owned-product-cell="name">配件1</td>
-                                <td data-owned-product-cell="type">配件</td>
-                                <td data-owned-product-cell="purchasedAt">2026-06-05 13:03:12</td>
-                                <td data-owned-product-cell="price">1,000</td>
-                            </tr>
-                            <tr data-owned-product-row data-id="4" data-account="sunny01" data-image="al2.png" data-name="配件2" data-type="配件" data-purchased-at="2026-06-12 13:03:12" data-price="500">
-                                <td data-owned-product-cell="id">4</td>
-                                <td data-owned-product-cell="account">sunny01</td>
-                                <td><div class="shop-product-thumb" data-owned-product-thumb><span>al2.png</span></div></td>
-                                <td data-owned-product-cell="name">配件2</td>
-                                <td data-owned-product-cell="type">配件</td>
-                                <td data-owned-product-cell="purchasedAt">2026-06-12 13:03:12</td>
-                                <td data-owned-product-cell="price">500</td>
-                            </tr>
-                            <tr data-owned-product-row data-id="5" data-account="sunny01" data-image="al3.png" data-name="配件3" data-type="配件" data-purchased-at="2026-06-12 13:03:12" data-price="1000">
-                                <td data-owned-product-cell="id">5</td>
-                                <td data-owned-product-cell="account">sunny01</td>
-                                <td><div class="shop-product-thumb" data-owned-product-thumb><span>al3.png</span></div></td>
-                                <td data-owned-product-cell="name">配件3</td>
-                                <td data-owned-product-cell="type">配件</td>
-                                <td data-owned-product-cell="purchasedAt">2026-06-12 13:03:12</td>
-                                <td data-owned-product-cell="price">1,000</td>
-                            </tr>
-                            <tr data-owned-product-row data-id="6" data-account="sunny01" data-image="f1.png" data-name="頭像框1" data-type="頭像框" data-purchased-at="2026-06-12 13:03:12" data-price="1500">
-                                <td data-owned-product-cell="id">6</td>
-                                <td data-owned-product-cell="account">sunny01</td>
-                                <td><div class="shop-product-thumb" data-owned-product-thumb><span>f1.png</span></div></td>
-                                <td data-owned-product-cell="name">頭像框1</td>
-                                <td data-owned-product-cell="type">頭像框</td>
-                                <td data-owned-product-cell="purchasedAt">2026-06-12 13:03:12</td>
-                                <td data-owned-product-cell="price">1,500</td>
-                            </tr>
-                            <tr data-owned-product-row data-id="7" data-account="sunny01" data-image="f2.png" data-name="頭像框2" data-type="頭像框" data-purchased-at="2026-06-12 13:03:12" data-price="750">
-                                <td data-owned-product-cell="id">7</td>
-                                <td data-owned-product-cell="account">sunny01</td>
-                                <td><div class="shop-product-thumb" data-owned-product-thumb><span>f2.png</span></div></td>
-                                <td data-owned-product-cell="name">頭像框2</td>
-                                <td data-owned-product-cell="type">頭像框</td>
-                                <td data-owned-product-cell="purchasedAt">2026-06-12 13:03:12</td>
-                                <td data-owned-product-cell="price">750</td>
-                            </tr>
-                            <tr data-owned-product-row data-id="8" data-account="sunny01" data-image="#FF44AA" data-name="染劑1" data-type="染劑" data-purchased-at="2026-06-12 13:03:12" data-price="500">
-                                <td data-owned-product-cell="id">8</td>
-                                <td data-owned-product-cell="account">sunny01</td>
-                                <td><div class="shop-product-thumb is-color" data-owned-product-thumb><span>#FF44AA</span></div></td>
-                                <td data-owned-product-cell="name">染劑1</td>
-                                <td data-owned-product-cell="type">染劑</td>
-                                <td data-owned-product-cell="purchasedAt">2026-06-12 13:03:12</td>
-                                <td data-owned-product-cell="price">500</td>
-                            </tr>
-                            <tr data-owned-product-row data-id="9" data-account="milktea04" data-image="b1.png" data-name="底圖1" data-type="底圖" data-purchased-at="2026-06-05 13:03:12" data-price="2000">
-                                <td data-owned-product-cell="id">9</td>
-                                <td data-owned-product-cell="account">milktea04</td>
-                                <td><div class="shop-product-thumb" data-owned-product-thumb><span>b1.png</span></div></td>
-                                <td data-owned-product-cell="name">底圖1</td>
-                                <td data-owned-product-cell="type">底圖</td>
-                                <td data-owned-product-cell="purchasedAt">2026-06-05 13:03:12</td>
-                                <td data-owned-product-cell="price">2,000</td>
-                            </tr>
-                            <tr data-owned-product-row data-id="10" data-account="milktea04" data-image="al3.png" data-name="配件3" data-type="配件" data-purchased-at="2026-06-05 13:03:12" data-price="1000">
-                                <td data-owned-product-cell="id">10</td>
-                                <td data-owned-product-cell="account">milktea04</td>
-                                <td><div class="shop-product-thumb" data-owned-product-thumb><span>al3.png</span></div></td>
-                                <td data-owned-product-cell="name">配件3</td>
-                                <td data-owned-product-cell="type">配件</td>
-                                <td data-owned-product-cell="purchasedAt">2026-06-05 13:03:12</td>
-                                <td data-owned-product-cell="price">1,000</td>
-                            </tr>
-                            <tr data-owned-product-row data-id="11" data-account="milktea04" data-image="#5555FF" data-name="染劑2" data-type="染劑" data-purchased-at="2026-06-05 13:03:12" data-price="500">
-                                <td data-owned-product-cell="id">11</td>
-                                <td data-owned-product-cell="account">milktea04</td>
-                                <td><div class="shop-product-thumb is-color" data-owned-product-thumb><span>#5555FF</span></div></td>
-                                <td data-owned-product-cell="name">染劑2</td>
-                                <td data-owned-product-cell="type">染劑</td>
-                                <td data-owned-product-cell="purchasedAt">2026-06-05 13:03:12</td>
-                                <td data-owned-product-cell="price">500</td>
-                            </tr>
-                            <tr data-owned-product-row data-id="12" data-account="milktea04" data-image="#000000" data-name="染劑3" data-type="染劑" data-purchased-at="2026-06-05 13:03:12" data-price="500">
-                                <td data-owned-product-cell="id">12</td>
-                                <td data-owned-product-cell="account">milktea04</td>
-                                <td><div class="shop-product-thumb is-color" data-owned-product-thumb><span>#000000</span></div></td>
-                                <td data-owned-product-cell="name">染劑3</td>
-                                <td data-owned-product-cell="type">染劑</td>
-                                <td data-owned-product-cell="purchasedAt">2026-06-05 13:03:12</td>
-                                <td data-owned-product-cell="price">500</td>
-                            </tr>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr data-owned-product-row
+                                    data-id="@item.Id"
+                                    data-account="@item.UserAccount"
+                                    data-name="@item.ProductName"
+                                    data-type="@item.ProductType"
+                                    data-purchased-at="@item.BoughtAtDisplay"
+                                    data-price="@item.PriceSnapshot"
+                                    data-preview-kind="@item.PreviewKind"
+                                    data-image-url="@(item.ImageUrl ?? string.Empty)"
+                                    data-hex-code="@(item.HexCode ?? string.Empty)"
+                                    data-asset-label="@item.AssetLabel">
+                                    <td data-owned-product-cell="id">
+                                        @item.Id
+                                    </td>
+                                    <td data-owned-product-cell="account">
+                                        @item.UserAccount
+                                    </td>
+                                    <td>
+                                        <div class="shop-product-thumb"
+                                             data-owned-product-thumb>
+                                            <span>@item.AssetLabel</span>
+                                        </div>
+                                    </td>
+                                    <td data-owned-product-cell="name">
+                                        @item.ProductName
+                                    </td>
+                                    <td data-owned-product-cell="type">
+                                        <span class="owned-product-type-badge">
+                                            @item.ProductType
+                                        </span>
+                                    </td>
+                                    <td data-owned-product-cell="purchasedAt">
+                                        @item.BoughtAtDisplay
+                                    </td>
+                                    <td data-owned-product-cell="price">
+                                        @item.PriceSnapshot.ToString("N0")
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
+
                 <div class="member-pagination-wrap">
-                    <span class="member-page-info" id="ownedProductPageInfo">第 1 頁</span>
+                    <span class="member-page-info"
+                          id="ownedProductPageInfo">
+                        第 1 頁
+                    </span>
                     <nav aria-label="持有商品表格分頁">
-                        <ul class="pagination member-pagination" id="ownedProductPagination"></ul>
+                        <ul class="pagination member-pagination"
+                            id="ownedProductPagination"></ul>
                     </nav>
                 </div>
             </div>
@@ -200,11 +210,10 @@
 </div>
 
 @section Styles {
-    <link href="~/css/shop-management.css" rel="stylesheet">
-    <link href="~/css/owned-product-list.css" rel="stylesheet">
+    <link href="~/css/shop-management.css" rel="stylesheet" asp-append-version="true">
+    <link href="~/css/owned-product-list.css" rel="stylesheet" asp-append-version="true">
 }
 
 @section Scripts {
-    <script src="~/js/shop-management.js"></script>
-    <script src="~/js/owned-product-list.js"></script>
+    <script src="~/js/owned-product-list.js" asp-append-version="true"></script>
 }
