@@ -5,7 +5,7 @@ using System.Security.Claims;
 
 namespace PawPuff_Management.Controllers
 {
-	[Authorize]
+	//[Authorize(Policy = "Dashboard")]
 	public class AdminsClockController : Controller
 	{
 		private readonly AdminClockService _clockservice; //處理：打卡紀錄 ,上班打卡 ,下班打卡

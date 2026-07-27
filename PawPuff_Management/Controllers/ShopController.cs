@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PawPuff_Management.Models.DTOs;
 using PawPuff_Management.Models.Services;
 
 namespace PawPuff_Management.Controllers
 {
-    public class ShopController : Controller
+	[Authorize(Policy = "Shop")]
+	public class ShopController : Controller
     {
         //用途：
         //將 ShopController 從單純 return View() 改成：

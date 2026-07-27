@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PawPuff_Management.Models.Services;
 
 namespace PawPuff_Management.Controllers
 {
+	[Authorize(Policy = "Doll")]
 	public class CombinationPreviewController : Controller
 	{
 		private readonly ICombinationPreviewService _service;

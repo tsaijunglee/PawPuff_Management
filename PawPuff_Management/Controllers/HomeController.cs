@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PawPuff_Management.Models;
+using PawPuff_Management.Models.Services;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace PawPuff_Management.Controllers
 {
@@ -10,7 +12,7 @@ namespace PawPuff_Management.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+		public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
@@ -55,5 +57,9 @@ namespace PawPuff_Management.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-    }
+
+
+
+		
+	}
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PawPuff_Management.Models.Dtos;
 using PawPuff_Management.Models.DTOs;
 using PawPuff_Management.Models.Services;
 using System.Security.Claims;

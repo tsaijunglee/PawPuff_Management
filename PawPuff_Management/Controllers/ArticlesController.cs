@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PawPuff_Management.Models.Dtos;
 using PawPuff_Management.Models.Services;
 using PawPuff_Management.ViewModels.Article;
@@ -9,6 +10,8 @@ namespace PawPuff_Management.Controllers;
 /// <summary>
 /// 文章後台(全 Ajax):清單 + 詳情面板。Controller 保持薄,只轉呼叫 Service、回 JSON。
 /// </summary>
+
+[Authorize(Policy = "Articles")]
 public class ArticlesController : Controller
 {
 	private readonly IArticleService _articleService;

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using PawPuff_Management.Models.Authorization;
 using PawPuff_Management.Models.EfModels;
 using PawPuff_Management.Models.Repositories;
 using PawPuff_Management.Models.Services;
@@ -36,11 +37,15 @@ namespace PawPuff_Management
 			// µù¥U Policy  Åv­­¸õÂà¥Î ===========================
 			builder.Services.AddAuthorization(options =>
 			{
-				options.AddPolicy("Account", policy =>
+				foreach (var permission in Permissions.All)
 				{
-					policy.RequireClaim( "Permission","Account");
-				});
+					options.AddPolicy(permission, policy =>
+					{
+						policy.RequireClaim("Permission", permission);
+					});
+				}
 			});
+
 
 
 
