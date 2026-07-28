@@ -14,6 +14,20 @@ namespace PawPuff_Management.Models.Services
 			CreateAdminNotificationDto request,
 			int? senderAdminId,
 			CancellationToken cancellationToken = default);
+
+		Task<AdminNotificationCenterViewModel>
+			GetAdminNotificationCenterAsync(
+				int adminId,
+				CancellationToken cancellationToken = default);
+
+		Task<NotificationReadResultDto> MarkAsReadAsync(
+			int notificationId,
+			int adminId,
+			CancellationToken cancellationToken = default);
+
+		Task<NotificationReadResultDto> MarkAllAsReadAsync(
+			int adminId,
+			CancellationToken cancellationToken = default);
 	}
 
 	public class NotificationService : INotificationService
@@ -183,6 +197,143 @@ namespace PawPuff_Management.Models.Services
 			};
 		}
 
+		public async Task<AdminNotificationCenterViewModel>
+			GetAdminNotificationCenterAsync(
+				int adminId,
+				CancellationToken cancellationToken = default)
+		{
+			if (adminId <= 0)
+			{
+				return new AdminNotificationCenterViewModel();
+			}
+
+			var notificationDtos =
+				await _repository.GetAdminNotificationsAsync(
+					adminId,
+					cancellationToken);
+
+			// 同一次輸出使用相同的 now，避免清單在分鐘交界時顯示不一致。
+			var now = DateTime.Now;
+
+			var notifications = notificationDtos
+				.Select(dto => new AdminNotificationItemViewModel
+				{
+					Id = dto.Id,
+					Type = dto.Type,
+					NotificationContent = dto.NotificationContent,
+					IsRead = dto.IsRead,
+					LinkUrl = dto.LinkUrl,
+					CreatedAt = dto.CreatedAt,
+					CreatedAtDisplay = FormatCreatedAt(dto.CreatedAt, now),
+					SenderAdminId = dto.SenderAdminId,
+					SenderAdminNickname = dto.SenderAdminNickname,
+					SenderAdminAccount = dto.SenderAdminAccount
+				})
+				.ToList();
+
+			return new AdminNotificationCenterViewModel
+			{
+				Notifications = notifications,
+				UnreadCount = notifications.Count(item => !item.IsRead)
+			};
+		}
+
+		public async Task<NotificationReadResultDto> MarkAsReadAsync(
+			int notificationId,
+			int adminId,
+			CancellationToken cancellationToken = default)
+		{
+			if (notificationId <= 0 || adminId <= 0)
+			{
+				return ReadFailure(
+					NotificationReadStatus.ValidationFailed,
+					"通知編號或管理員編號不正確。");
+			}
+
+			var updated = await _repository.MarkAsReadAsync(
+				notificationId,
+				adminId,
+				cancellationToken);
+
+			if (!updated)
+			{
+				return ReadFailure(
+					NotificationReadStatus.NotificationNotFound,
+					"找不到屬於目前管理員的通知。");
+			}
+
+			var unreadCount = await _repository.GetAdminUnreadCountAsync(
+				adminId,
+				cancellationToken);
+
+			return new NotificationReadResultDto
+			{
+				Status = NotificationReadStatus.Success,
+				Message = "通知已設為已讀。",
+				UnreadCount = unreadCount
+			};
+		}
+
+		public async Task<NotificationReadResultDto> MarkAllAsReadAsync(
+			int adminId,
+			CancellationToken cancellationToken = default)
+		{
+			if (adminId <= 0)
+			{
+				return ReadFailure(
+					NotificationReadStatus.ValidationFailed,
+					"管理員編號不正確。");
+			}
+
+			await _repository.MarkAllAsReadAsync(
+				adminId,
+				cancellationToken);
+
+			var unreadCount = await _repository.GetAdminUnreadCountAsync(
+				adminId,
+				cancellationToken);
+
+			return new NotificationReadResultDto
+			{
+				Status = NotificationReadStatus.Success,
+				Message = "所有通知已設為已讀。",
+				UnreadCount = unreadCount
+			};
+		}
+
+		private static string FormatCreatedAt(
+			DateTime createdAt,
+			DateTime now)
+		{
+			var elapsed = now - createdAt;
+
+			if (elapsed <= TimeSpan.Zero ||
+				elapsed < TimeSpan.FromMinutes(1))
+			{
+				return "剛剛";
+			}
+
+			if (elapsed < TimeSpan.FromHours(1))
+			{
+				var minutes = Math.Max(
+					1,
+					(int)Math.Floor(elapsed.TotalMinutes));
+
+				return $"{minutes} 分鐘前";
+			}
+
+			if (elapsed < TimeSpan.FromDays(1))
+			{
+				var hours = Math.Max(
+					1,
+					(int)Math.Floor(elapsed.TotalHours));
+
+				return $"{hours} 小時前";
+			}
+
+			return createdAt.ToString("yyyy-MM-dd");
+		}
+
 		private static NotificationSendResultDto ValidationFailure(
 			string message)
 		{
@@ -199,6 +350,17 @@ namespace PawPuff_Management.Models.Services
 			return new NotificationSendResultDto
 			{
 				Status = NotificationSendStatus.RecipientNotFound,
+				Message = message
+			};
+		}
+
+		private static NotificationReadResultDto ReadFailure(
+			NotificationReadStatus status,
+			string message)
+		{
+			return new NotificationReadResultDto
+			{
+				Status = status,
 				Message = message
 			};
 		}

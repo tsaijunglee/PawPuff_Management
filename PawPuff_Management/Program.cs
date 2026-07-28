@@ -63,7 +63,7 @@ namespace PawPuff_Management
 			builder.Services.AddScoped<IPointRepository, PointRepository>();
 			builder.Services.AddScoped<IPointService, PointService>();
 
-			// 註冊發送通知
+			// 註冊發送通知與 Layout 通知中心
 			builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 			builder.Services.AddScoped<INotificationService, NotificationService>();
 

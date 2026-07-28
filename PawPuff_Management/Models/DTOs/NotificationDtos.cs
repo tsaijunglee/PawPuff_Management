@@ -73,6 +73,33 @@ namespace PawPuff_Management.Models.DTOs
 		public int? SenderAdminId { get; set; }
 	}
 
+	public class AdminNotificationListItemDto
+	{
+		public int Id { get; set; }
+
+		public string Type { get; set; } = string.Empty;
+
+		public string NotificationContent { get; set; } = string.Empty;
+
+		public bool IsRead { get; set; }
+
+		public string? LinkUrl { get; set; }
+
+		public DateTime CreatedAt { get; set; }
+
+		public int? SenderAdminId { get; set; }
+
+		public string? SenderAdminNickname { get; set; }
+
+		public string? SenderAdminAccount { get; set; }
+	}
+
+	public class MarkNotificationReadDto
+	{
+		[Range(1, int.MaxValue, ErrorMessage = "通知編號不正確。")]
+		public int NotificationId { get; set; }
+	}
+
 	public enum NotificationSendStatus
 	{
 		Success,
@@ -89,5 +116,21 @@ namespace PawPuff_Management.Models.DTOs
 		public string Message { get; set; } = string.Empty;
 
 		public NotificationDto? Notification { get; set; }
+	}
+
+	public enum NotificationReadStatus
+	{
+		Success,
+		ValidationFailed,
+		NotificationNotFound
+	}
+
+	public class NotificationReadResultDto
+	{
+		public NotificationReadStatus Status { get; set; }
+
+		public string Message { get; set; } = string.Empty;
+
+		public int UnreadCount { get; set; }
 	}
 }

@@ -25,6 +25,24 @@ namespace PawPuff_Management.Models.Repositories
 			int adminId,
 			CancellationToken cancellationToken = default);
 
+		Task<List<AdminNotificationListItemDto>>
+			GetAdminNotificationsAsync(
+				int adminId,
+				CancellationToken cancellationToken = default);
+
+		Task<int> GetAdminUnreadCountAsync(
+			int adminId,
+			CancellationToken cancellationToken = default);
+
+		Task<bool> MarkAsReadAsync(
+			int notificationId,
+			int adminId,
+			CancellationToken cancellationToken = default);
+
+		Task<int> MarkAllAsReadAsync(
+			int adminId,
+			CancellationToken cancellationToken = default);
+
 		Task<NotificationDto?> CreateAsync(
 			NotificationCreateRecordDto request,
 			CancellationToken cancellationToken = default);
@@ -106,6 +124,84 @@ namespace PawPuff_Management.Models.Repositories
 				.AsNoTracking()
 				.AnyAsync(
 					admin => admin.Id == adminId && admin.IsActive,
+					cancellationToken);
+		}
+
+		public async Task<List<AdminNotificationListItemDto>>
+			GetAdminNotificationsAsync(
+				int adminId,
+				CancellationToken cancellationToken = default)
+		{
+			return await _context.Notifications
+				.AsNoTracking()
+				.Where(notification => notification.AdminId == adminId)
+				.OrderByDescending(notification => notification.CreatedAt)
+				.ThenByDescending(notification => notification.Id)
+				.Select(notification => new AdminNotificationListItemDto
+				{
+					Id = notification.Id,
+					Type = notification.Type,
+					NotificationContent = notification.NotificationContent,
+					IsRead = notification.IsRead,
+					LinkUrl = notification.LinkUrl,
+					CreatedAt = notification.CreatedAt,
+					SenderAdminId = notification.SenderAdminId,
+					SenderAdminNickname = notification.SenderAdmin == null
+						? null
+						: notification.SenderAdmin.Nickname,
+					SenderAdminAccount = notification.SenderAdmin == null
+						? null
+						: notification.SenderAdmin.Account
+				})
+				.ToListAsync(cancellationToken);
+		}
+
+		public async Task<int> GetAdminUnreadCountAsync(
+			int adminId,
+			CancellationToken cancellationToken = default)
+		{
+			return await _context.Notifications
+				.AsNoTracking()
+				.CountAsync(
+					notification =>
+						notification.AdminId == adminId &&
+						!notification.IsRead,
+					cancellationToken);
+		}
+
+		public async Task<bool> MarkAsReadAsync(
+			int notificationId,
+			int adminId,
+			CancellationToken cancellationToken = default)
+		{
+			// 同時比對 Notification.Id 與目前登入的 Admin.Id，
+			// 避免管理員修改不屬於自己的通知。
+			var affectedRows = await _context.Notifications
+				.Where(notification =>
+					notification.Id == notificationId &&
+					notification.AdminId == adminId)
+				.ExecuteUpdateAsync(
+					setters => setters.SetProperty(
+						notification => notification.IsRead,
+						true),
+					cancellationToken);
+
+			// 已讀通知再次點選仍會找到該筆資料，因此此操作具冪等性。
+			return affectedRows == 1;
+		}
+
+		public async Task<int> MarkAllAsReadAsync(
+			int adminId,
+			CancellationToken cancellationToken = default)
+		{
+			return await _context.Notifications
+				.Where(notification =>
+					notification.AdminId == adminId &&
+					!notification.IsRead)
+				.ExecuteUpdateAsync(
+					setters => setters.SetProperty(
+						notification => notification.IsRead,
+						true),
 					cancellationToken);
 		}
 
