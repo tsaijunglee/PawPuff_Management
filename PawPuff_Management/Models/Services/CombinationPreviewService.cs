@@ -12,9 +12,12 @@ namespace PawPuff_Management.Models.Services
 	public class CombinationPreviewService : ICombinationPreviewService
 	{
 		private const int BodySortOrder = 4;
-		private const string BodyFolder = "tmp/body";
-		private const string AccessoryLineFolder = "tmp/accessory/line";
-		private const string AccessoryMaskFolder = "tmp/accessory/mask";
+		//private const string BodyFolder = "tmp/body";
+		//private const string AccessoryLineFolder = "tmp/accessory/line";
+		//private const string AccessoryMaskFolder = "tmp/accessory/mask";
+		private const string BodyFolder = "webshop/body";
+		private const string AccessoryLineFolder = "webshop/accessory/line";
+		private const string AccessoryMaskFolder = "webshop/accessory/mask";
 
 		private readonly ICombinationPreviewRepository _repository;
 		private readonly string _publicUrl;
