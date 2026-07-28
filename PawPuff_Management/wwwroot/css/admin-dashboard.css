@@ -486,7 +486,7 @@ a {
   justify-content: space-between;
   gap: 12px;
   color: #a07145;
-  font-size: .84rem;
+  font-size: 1rem;
   font-weight: 900;
 }
 
@@ -512,6 +512,52 @@ a {
   color: #9a5d2d;
   font-weight: 900;
 }
+
+/* 資料庫通知中心補充樣式 */
+.notification-item {
+    font: inherit;
+    cursor: pointer;
+}
+
+.notification-item.is-busy {
+    pointer-events: none;
+    opacity: .72;
+}
+
+.notification-content {
+    color: #64422d;
+    font-weight: 700;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+    white-space: pre-line;
+}
+
+.notification-name {
+    overflow-wrap: anywhere;
+    white-space: pre-line;
+}
+
+.mark-all-read:disabled {
+    cursor: default;
+    opacity: .55;
+}
+
+.notification-empty {
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #a08670;
+    font-weight: 800;
+    text-align: center;
+}
+
+.notification-empty i {
+    font-size: 2rem;
+}
+/*                      */
 
 .admin-toggle {
   min-width: 235px;

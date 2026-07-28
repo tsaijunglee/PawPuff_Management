@@ -136,6 +136,9 @@
                 </div>
 
                 <div class="header-actions flex-shrink-0">
+                    @*
+                    原本的前端假資料通知已停用，保留於此方便對照：
+
                     <div class="notification-wrap">
                         <button class="icon-btn" type="button" id="notificationToggle" aria-label="通知" aria-expanded="false" aria-controls="notificationPanel">
                             <i class="bi bi-bell"></i>
@@ -160,6 +163,8 @@
                             </ul>
                         </div>
                     </div>
+                    *@
+                    @await Component.InvokeAsync("AdminNotification")
 
                     <div class="dropdown">
                         <button class="admin-toggle dropdown-toggle" type="button" id="adminMenuToggle" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="adminMenu">

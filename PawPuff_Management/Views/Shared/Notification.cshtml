@@ -1,0 +1,104 @@
+﻿@model PawPuff_Management.Models.ViewModels.AdminNotificationCenterViewModel
+
+<div class="notification-wrap"
+     id="adminNotificationCenter"
+     data-notification-center
+     data-mark-read-url="@Url.Action("MarkAsRead", "Notifications")"
+     data-mark-all-read-url="@Url.Action("MarkAllAsRead", "Notifications")">
+    <form class="d-none" id="notificationAntiForgeryForm">
+        @Html.AntiForgeryToken()
+    </form>
+
+    <button class="icon-btn"
+            type="button"
+            id="notificationToggle"
+            aria-label="通知，@Model.UnreadCount 筆未讀"
+            aria-expanded="false"
+            aria-controls="notificationPanel">
+        <i class="bi bi-bell"></i>
+        <span class="notice-badge @(Model.UnreadCount == 0 ? "is-empty" : null)"
+              id="notificationBadge">
+            @Model.UnreadCount
+        </span>
+    </button>
+
+    <div class="notification-panel d-none" id="notificationPanel">
+        <div class="notification-head">
+            <h2 class="notification-title">
+                <i class="bi bi-bell"></i>通知中心
+            </h2>
+
+            <button class="mark-all-read"
+                    type="button"
+                    id="markAllRead"
+                    disabled="@(Model.UnreadCount == 0 ? "disabled" : null)">
+                全部已讀
+            </button>
+        </div>
+
+        <ul class="notification-list"
+            id="notificationList"
+            aria-label="通知列表">
+            @if (Model.Notifications.Count == 0)
+            {
+                <li class="notification-empty" id="notificationEmpty">
+                    <i class="bi bi-bell-slash" aria-hidden="true"></i>
+                    <span>目前沒有通知</span>
+                </li>
+            }
+            else
+            {
+                @foreach (var notification in Model.Notifications)
+                {
+                    <li>
+                        <button class="notification-item @(notification.IsRead ? "is-read" : "is-unread")"
+                                type="button"
+                                data-notification
+                                data-notification-id="@notification.Id"
+                                data-link-url="@(notification.LinkUrl ?? string.Empty)"
+                                aria-label="@(notification.IsAdminSendMessage? notification.SenderDisplayName: notification.Type)，@(notification.IsRead ? "已讀" : "未讀")">
+                            <span class="notification-dot"
+                                  aria-hidden="true"></span>
+
+                            <span class="notification-meta">
+                                @if (notification.IsAdminSendMessage)
+                                {
+                                    <span>@notification.SenderDisplayName</span>
+                                }
+                                else
+                                {
+                                    <span>@notification.Type</span>
+                                }
+
+                                <span>@notification.CreatedAtDisplay</span>
+                            </span>
+
+                            @if (notification.IsAdminSendMessage)
+                            {
+                                <span class="notification-content">
+                                    @notification.NotificationContent
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="notification-name">
+                                    @notification.NotificationContent
+                                </span>
+                            }
+
+                            @if (notification.HasLink)
+                            {
+                                <span class="notification-jump">
+                                    查看內容
+                                    <i class="bi bi-chevron-right"
+                                       aria-hidden="true"></i>
+                                </span>
+                            }
+                        </button>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+</div>
+
