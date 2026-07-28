@@ -83,7 +83,7 @@
                                 var imageNames = string.Join("|", a.ImageNames);
                                 var imageSrcs = string.Join("|", a.ImageNames.Select(n => $"{r2Base}/articles/{n}"));
                                 <tr data-article-row data-id="@a.Id"
-                                    data-account="@a.AuthorAccount"
+                                    data-account="@(a.AuthorAccount ?? "官方人員")"
                                     data-category-name="@a.CategoryName"
                                     data-title="@a.Title"
                                     data-article-content="@a.ArticleContent"
