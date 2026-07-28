@@ -338,9 +338,12 @@
     row.dataset.enabled = "true";
     row.dataset.createdAt = member.createdAt;
     row.dataset.adminComment = "NULL";
-    row.dataset.adminUpdatedAt = config.entityType === "admin" ? member.createdAt : "NULL";
-    row.dataset.modifiedByAdmin = config.entityType === "admin" ? config.actorAdminAccount : "NULL";
-    row.dataset.modifiedByAdminId = config.entityType === "admin" ? config.actorAdminId : "NULL";
+    row.dataset.adminUpdatedAt = "NULL";
+    row.dataset.modifiedByAdmin = "NULL";
+    row.dataset.modifiedByAdminId = "NULL";
+    //row.dataset.adminUpdatedAt = config.entityType === "admin" ? member.createdAt : "NULL";
+    //row.dataset.modifiedByAdmin = config.entityType === "admin" ? config.actorAdminAccount : "NULL";
+    //row.dataset.modifiedByAdminId = config.entityType === "admin" ? config.actorAdminId : "NULL";
 
     getTableColumns().forEach((column) => {
       appendMemberCell(row, column, getTableCellValue(member, column), column === "points" ? "text-nowrap" : "");

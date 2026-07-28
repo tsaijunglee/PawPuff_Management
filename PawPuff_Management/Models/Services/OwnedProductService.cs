@@ -13,14 +13,12 @@ namespace PawPuff_Management.Models.Services
 	public class OwnedProductService : IOwnedProductService
 	{
 		// 依需求直接封裝在本頁自己的 Service，不修改 appsettings 或既有 Service。
-		private const string BodyImageBaseUrl =
-			"https://pub-934f327ae0484cf6a6beb8efb5112015.r2.dev/tmp/body/";
-
-		private const string AccessoryLineImageBaseUrl =
-			"https://pub-934f327ae0484cf6a6beb8efb5112015.r2.dev/tmp/accessory/line/";
-
-		private const string FrameImageBaseUrl =
-			"https://pub-934f327ae0484cf6a6beb8efb5112015.r2.dev/tmp/frame/";
+		//private const string BodyImageBaseUrl = "https://pub-934f327ae0484cf6a6beb8efb5112015.r2.dev/tmp/body/";
+		//private const string AccessoryLineImageBaseUrl = "https://pub-934f327ae0484cf6a6beb8efb5112015.r2.dev/tmp/accessory/line/";
+		//private const string FrameImageBaseUrl = "https://pub-934f327ae0484cf6a6beb8efb5112015.r2.dev/tmp/frame/";
+		private const string BodyImageBaseUrl = "https://pub-934f327ae0484cf6a6beb8efb5112015.r2.dev/webshop/body/";
+		private const string AccessoryLineImageBaseUrl = "https://pub-934f327ae0484cf6a6beb8efb5112015.r2.dev/webshop/accessory/line/";
+		private const string FrameImageBaseUrl = "https://pub-934f327ae0484cf6a6beb8efb5112015.r2.dev/webshop/frame/";
 
 		private const string BodyType = "底圖";
 		private const string AccessoryType = "配件";
